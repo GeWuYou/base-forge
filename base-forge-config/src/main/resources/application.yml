@@ -1,0 +1,11 @@
+spring:
+  config:
+    import:
+      - classpath:conf/common-log.yml
+      - classpath:conf/base-forge-config/config-rabbitmq.yml
+      - classpath:conf/base-forge-config/base-forge-config.yml
+  profiles:
+    # 自行切换为git或者native
+    active: native
+  application:
+    name: base-forge-config
