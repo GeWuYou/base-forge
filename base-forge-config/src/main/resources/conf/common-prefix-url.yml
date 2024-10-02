@@ -1,0 +1,3 @@
+base-forge:
+  services:
+    admin: /admin

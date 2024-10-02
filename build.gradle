@@ -1,0 +1,237 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+subprojects {
+    apply {
+        plugin('java')
+        plugin('org.springframework.boot')
+        plugin('io.spring.dependency-management')
+        plugin('com.google.protobuf')
+        plugin('java-library')
+    }
+    group = 'com.gewuyou'
+    version = '0.1.0'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    ext {
+        set('springCloudVersion', "2023.0.3")
+        set('springBootVersion', "3.3.4")
+        set('lombokVersion', "1.18.34")
+        set('grpcVersion', "1.68.0")
+        set('protobufVersion', "3.25.5")
+        set('grpcSpringBootStarterVersion', "3.1.0.RELEASE")
+        set('tomcatVersion', "6.0.53")
+        set('mybatisPlusVersion', "3.5.8")
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/spring/'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/spring-plugin/'
+        }
+        maven {
+            url 'https://maven.aliyun.com/repository/gradle-plugin/'
+        }
+        mavenCentral()
+    }
+    dependencies {
+        /*
+         implementation：
+         用于声明项目的内部依赖。其他模块无法访问这些依赖。
+         优先用于代码中的实现逻辑。
+         适合大多数场景。
+
+         api：
+         用于声明库的公共 API 依赖。其他模块可以访问这些依赖。
+         适合用在库项目中，确保依赖能够被外部使用。
+
+         compileOnly：
+         用于声明编译时依赖，但不会在运行时包含这些依赖。
+         通常用于需要在编译时可用但在运行时不需要的依赖（如某些注解处理器）。
+
+         runtimeOnly：
+         用于声明在运行时需要，但在编译时不需要的依赖。
+         例如，某些数据库驱动可能在编译时不需要，但在运行时需要。
+
+         testImplementation：
+         用于声明测试代码的依赖。这些依赖仅在测试代码中可用。
+         类似于 implementation，但仅适用于测试。
+
+         testCompileOnly 和 testRuntimeOnly：
+         分别用于在测试时的编译和运行时依赖，具有与 compileOnly 和 runtimeOnly 相同的意义，但只适用于测试。
+
+         provided（在某些插件中）：
+         用于声明在编译时需要，但在运行时由容器提供的依赖（如某些 Web 应用）。
+
+         enforcedPlatform：
+         用于定义一个 BOM（Bill of Materials），确保所有相关的依赖使用相同的版本。
+
+         platform：
+         类似于 enforcedPlatform，但用于声明可以共享版本管理的依赖集合。
+         */
+        /**
+         * 声明模块
+         */
+        final base_forge_admin = project(":base-forge-admin")
+        final base_forge_auth = project(":base-forge-auth")
+        final base_forge_cache = project(":base-forge-cache")
+        final base_forge_common = project(":base-forge-common")
+        final base_forge_config = project(":base-forge-config")
+        final base_forge_data = project(":base-forge-data")
+        final base_forge_discovery = project(":base-forge-discovery")
+        final base_forge_file = project(":base-forge-file")
+        final base_forge_gateway = project(":base-forge-gateway")
+        final base_forge_log = project(":base-forge-log")
+        final base_forge_message = project(":base-forge-message")
+        final base_forge_scheduler = project(":base-forge-scheduler")
+        final base_forge_search = project(":base-forge-search")
+        // 设置需要grpc全部依赖的模块
+        Set<Project> GrpcAllProjects = [
+        ]
+        // 设置需要grpc基本依赖的模块
+        Set<Project> GrpcBaseProjects = [
+                base_forge_common
+        ]
+        // 设置需要grpc客户端依赖的模块
+        Set<Project> GrpcClientProjects = [
+
+        ]
+        // 设置需要grpc服务端依赖的模块
+        Set<Project> GrpcServerProjects = [
+        ]
+        // 设置需要公共模块依赖的模块
+        Set<Project> CommonProjects = [
+                base_forge_admin,
+                base_forge_auth,
+                base_forge_cache,
+                base_forge_config,
+                base_forge_data,
+                base_forge_discovery,
+                base_forge_file,
+                base_forge_gateway,
+                base_forge_log,
+                base_forge_message,
+                base_forge_scheduler,
+                base_forge_search
+        ]
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        if (project != base_forge_config) {
+            // 添加SpringConfig服务依赖
+            implementation('org.springframework.cloud:spring-cloud-starter-config')
+            implementation('org.springframework.cloud:spring-cloud-starter-bus-amqp')
+        }
+        if (project != base_forge_discovery) {
+            // 添加Eureka服务依赖
+            implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        }
+        if (CommonProjects.contains(project)) {
+            implementation base_forge_common
+        }
+
+        if (GrpcAllProjects.contains(project)) {
+            // gRPC核心库
+            runtimeOnly("io.grpc:grpc-netty-shaded")
+            implementation("io.grpc:grpc-netty")
+            implementation("io.grpc:grpc-protobuf")
+            implementation("io.grpc:grpc-stub")
+            implementation("io.grpc:grpc-services")
+
+            implementation('org.apache.tomcat:annotations-api')
+            // Spring Boot Starter 服务端依赖
+            implementation('net.devh:grpc-server-spring-boot-starter')
+            implementation('net.devh:grpc-client-spring-boot-starter')
+            // 序列化库
+            implementation("com.google.protobuf:protobuf-java")
+            implementation("com.google.protobuf:protobuf-java-util")
+        }
+        if (GrpcBaseProjects.contains(project)) {
+            implementation("io.grpc:grpc-netty")
+            implementation("io.grpc:grpc-protobuf")
+            implementation("io.grpc:grpc-stub")
+
+            implementation('org.apache.tomcat:annotations-api')
+        }
+        if (GrpcClientProjects.contains(project)) {
+            // gRPC核心库
+            runtimeOnly("io.grpc:grpc-netty-shaded")
+            implementation("io.grpc:grpc-netty")
+            implementation("io.grpc:grpc-protobuf")
+            implementation("io.grpc:grpc-stub")
+            implementation("io.grpc:grpc-services")
+
+            implementation('org.apache.tomcat:annotations-api')
+            // Spring Boot Starter 服务端依赖
+            implementation('net.devh:grpc-client-spring-boot-starter')
+            // 序列化库
+            implementation("com.google.protobuf:protobuf-java")
+            implementation("com.google.protobuf:protobuf-java-util")
+        }
+        if (GrpcServerProjects.contains(project)) {
+            // gRPC核心库
+            runtimeOnly("io.grpc:grpc-netty-shaded")
+            implementation("io.grpc:grpc-netty")
+            implementation("io.grpc:grpc-protobuf")
+            implementation("io.grpc:grpc-stub")
+            implementation("io.grpc:grpc-services")
+
+            implementation('org.apache.tomcat:annotations-api')
+            // Spring Boot Starter 服务端依赖
+            implementation('net.devh:grpc-server-spring-boot-starter')
+            // 序列化库
+            implementation("com.google.protobuf:protobuf-java")
+            implementation("com.google.protobuf:protobuf-java-util")
+        }
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("io.grpc:grpc-bom:${grpcVersion}")
+            mavenBom("com.google.protobuf:protobuf-bom:${protobufVersion}")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        }
+        dependencies {
+            dependency("org.projectlombok:lombok:${lombokVersion}")
+            dependency("net.devh:grpc-server-spring-boot-starter:${grpcSpringBootStarterVersion}")
+            dependency("net.devh:grpc-client-spring-boot-starter:${grpcSpringBootStarterVersion}")
+            dependency("org.apache.tomcat:annotations-api:${tomcatVersion}")
+            dependency("com.baomidou:mybatis-plus-generator:${mybatisPlusVersion}")
+            dependency("com.baomidou:mybatis-plus-spring-boot3-starter:${mybatisPlusVersion}")
+        }
+
+    }
+
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+
+}
+
+
+
+

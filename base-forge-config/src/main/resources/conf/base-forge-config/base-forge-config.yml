@@ -1,0 +1,15 @@
+server:
+  port: 8888
+
+spring:
+  cloud:
+    bus:
+      refresh:
+        enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      path-mapping:
+        busrefresh: bus-refresh

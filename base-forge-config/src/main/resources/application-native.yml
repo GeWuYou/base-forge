@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: >
+            classpath:/conf,
+            classpath:/conf/base-forge-discovery,
+            classpath:/conf/base-forge-gateway,
+            classpath:/conf/base-forge-rpc,

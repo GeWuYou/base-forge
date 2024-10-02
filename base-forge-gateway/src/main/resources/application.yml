@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: personal-blog-gateway # 模块名，与配置文件夹名一致
+  profiles:
+    active: dev
