@@ -17,12 +17,12 @@ include(
         'base-forge-log',
         // 8086端口
         'base-forge-cache',
+        'base-forge-cache-api',
         // 8087端口
-        'base-forge-data',
         // 8088端口
         'base-forge-auth',
         // 8089端口
         'base-forge-file',
         // 8090端口
-        'base-forge-scheduler'
+        'base-forge-scheduler',
 )

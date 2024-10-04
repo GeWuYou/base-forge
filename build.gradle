@@ -37,6 +37,7 @@ subprojects {
         set('grpcSpringBootStarterVersion', "3.1.0.RELEASE")
         set('tomcatVersion', "6.0.53")
         set('mybatisPlusVersion', "3.5.8")
+        set('springDocVersion', "2.6.0")
     }
     repositories {
         mavenLocal()
@@ -55,6 +56,7 @@ subprojects {
         mavenCentral()
     }
     dependencies {
+        //region 文档注释
         /*
          implementation：
          用于声明项目的内部依赖。其他模块无法访问这些依赖。
@@ -89,15 +91,14 @@ subprojects {
          platform：
          类似于 enforcedPlatform，但用于声明可以共享版本管理的依赖集合。
          */
-        /**
-         * 声明模块
-         */
+        //endregion
+        //region 声明模块
         final base_forge_admin = project(":base-forge-admin")
         final base_forge_auth = project(":base-forge-auth")
         final base_forge_cache = project(":base-forge-cache")
+        final base_forge_cache_api = project(":base-forge-cache-api")
         final base_forge_common = project(":base-forge-common")
         final base_forge_config = project(":base-forge-config")
-        final base_forge_data = project(":base-forge-data")
         final base_forge_discovery = project(":base-forge-discovery")
         final base_forge_file = project(":base-forge-file")
         final base_forge_gateway = project(":base-forge-gateway")
@@ -105,6 +106,8 @@ subprojects {
         final base_forge_message = project(":base-forge-message")
         final base_forge_scheduler = project(":base-forge-scheduler")
         final base_forge_search = project(":base-forge-search")
+        //endregion
+        //region 设置子模块需要的依赖
         // 设置需要grpc全部依赖的模块
         Set<Project> GrpcAllProjects = [
         ]
@@ -114,18 +117,19 @@ subprojects {
         ]
         // 设置需要grpc客户端依赖的模块
         Set<Project> GrpcClientProjects = [
-
+                base_forge_cache_api
         ]
         // 设置需要grpc服务端依赖的模块
         Set<Project> GrpcServerProjects = [
+                base_forge_cache
         ]
         // 设置需要公共模块依赖的模块
         Set<Project> CommonProjects = [
                 base_forge_admin,
                 base_forge_auth,
                 base_forge_cache,
+                base_forge_cache_api,
                 base_forge_config,
-                base_forge_data,
                 base_forge_discovery,
                 base_forge_file,
                 base_forge_gateway,
@@ -134,9 +138,18 @@ subprojects {
                 base_forge_scheduler,
                 base_forge_search
         ]
-
+        // 设置需要导入Swagger依赖的模块
+        Set<Project> SwaggerProjects = [
+                base_forge_common
+        ]
+        //endregion
+        //region 设置所有模块的依赖
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        //endregion
+        //region 设置导入依赖的逻辑
         if (project != base_forge_config) {
             // 添加SpringConfig服务依赖
             implementation('org.springframework.cloud:spring-cloud-starter-config')
@@ -145,6 +158,9 @@ subprojects {
         if (project != base_forge_discovery) {
             // 添加Eureka服务依赖
             implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        }
+        if (SwaggerProjects.contains(project)) {
+            implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
         }
         if (CommonProjects.contains(project)) {
             implementation base_forge_common
@@ -203,8 +219,7 @@ subprojects {
             implementation("com.google.protobuf:protobuf-java")
             implementation("com.google.protobuf:protobuf-java-util")
         }
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        //endregion
     }
 
     dependencyManagement {
@@ -221,6 +236,7 @@ subprojects {
             dependency("org.apache.tomcat:annotations-api:${tomcatVersion}")
             dependency("com.baomidou:mybatis-plus-generator:${mybatisPlusVersion}")
             dependency("com.baomidou:mybatis-plus-spring-boot3-starter:${mybatisPlusVersion}")
+            dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}")
         }
 
     }
