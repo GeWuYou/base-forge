@@ -6,7 +6,6 @@
      <tree path="/base-forge-cache" title="8086"/>
      <tree path="/base-forge-common" title="公共模块"/>
      <tree path="/base-forge-config" title="8888"/>
-     <tree path="/base-forge-data" title="8087"/>
      <tree path="/base-forge-discovery" title="8761"/>
      <tree path="/base-forge-file" title="8089"/>
      <tree path="/base-forge-gateway" title="8082"/>

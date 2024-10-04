@@ -18,11 +18,11 @@ import java.util.List;
  */
 public class CodeGenerator {
 
-    private static final String JDBC_URL = "jdbc:mysql://192.168.200.129:3306/personal_blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+    private static final String JDBC_URL = "jdbc:mysql://192.168.200.131:3306/personal_blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "root";
     private static final String AUTHOR = "gewuyou";
-    private static final String PARENT_PACKAGE = "com.gewuyou.blog";
+    private static final String PARENT_PACKAGE = "com.gewuyou";
 
     /**
      * 代码生成器
