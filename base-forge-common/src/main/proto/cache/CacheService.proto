@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package com.gewuyou.common.cache;
+
+import "google/protobuf/empty.proto";
+// 定义请求
+message SetRequest {
+  string key = 1;   // 键
+  string value = 2; // 值
+}
+message SetWithTimeoutRequest {
+  string key = 1;         // 键
+  string value = 2;       // 值
+  int64 timeout = 3;      // 过期时间
+}
+
+message StringRequest {
+  string key = 1; // 键
+}
+
+message BoolResponse {
+  bool success = 1; // 是否成功
+}
+message Int64Response {
+  int64 value = 1; // 值
+}
+message StringResponse {
+  string value = 1; // 值
+}
+message DoubleResponse {
+  double value = 1; // 值
+}
+message DelayDeleteRequest {
+  string key = 1; // 键
+  int64 delay = 2; // 延迟时间
+}
+message SetExpireRequest {
+  string key = 1; // 键
+  int64 time = 2; // 过期时间
+}
+message IncrRequest {
+  string key = 1; // 键
+  int64 delta = 2; // 增量
+}
+message HashGetRequest {
+  string key = 1; // 键
+  string hashKey = 2; // 哈希键
+}
+message HashSetRequest {
+  string key = 1; // 键
+  string hashKey = 2; // 哈希键
+  string value = 3; // 值
+  int64 timeout = 4; // 过期时间
+}
+message HashIncrRequest {
+  string key = 1; // 键
+  string hashKey = 2; // 哈希键
+  int64 delta = 3; // 增量
+}
+message ZSetRequest {
+  string key = 1; // 键
+  string value = 2; // 值
+  double score = 3; // 分数
+}
+message ZReversedRangeRequest {
+  string key = 1; // 键
+  int64 start = 2; // 开始索引
+  int64 end = 3; // 结束索引
+}
+message ZScoreRequest {
+  string key = 1; // 键
+  string value = 2; // 值
+}
+message SetAddRequest {
+  string key = 1; // 键
+  string value = 2; // 值
+}
+message SetIsMemberRequest {
+  string key = 1; // 键
+  string value = 2; // 值
+}
+message SetIfAbsentRequest {
+  string key = 1; // 键
+  string value = 2; // 值
+  int64 timeout = 3; // 过期时间
+}
+message HashSetWithTimeoutRequest {
+  string key = 1; // 键
+  string hashKey = 2; // 哈希键
+  string value = 3; // 值
+  int64 timeout = 4; // 过期时间
+}
+message HashDeleteRequest {
+  string key = 1; // 键
+  string hashKey = 2; // 哈希键/多个哈希键请注意如果有多个哈希键，请使用List<String>包裹并序列化为Json字符串
+}
+// 缓存服务
+service CacheService {
+  // 设置缓存
+  rpc Set(SetRequest) returns (google.protobuf.Empty);
+  // 设置缓存并设置过期时间(单位：秒)
+  rpc SetWithTimeoutBySec(SetWithTimeoutRequest) returns (google.protobuf.Empty);
+  // 设置缓存并设置过期时间(单位：毫秒)
+  rpc SetWithTimeoutByMs(SetWithTimeoutRequest) returns (google.protobuf.Empty);
+  // 获取缓存
+  rpc Get(StringRequest) returns (StringResponse);
+  // 删除缓存
+  rpc Delete(StringRequest) returns (BoolResponse);
+  // 延迟删除缓存(单位：秒)
+  rpc DelayedDeleteBySec(DelayDeleteRequest) returns (BoolResponse);
+  // 延迟删除缓存(单位：毫秒)
+  rpc DelayedDeleteByMs(DelayDeleteRequest) returns (BoolResponse);
+  // 设置缓存过期时间(单位：秒)
+  rpc SetExpireBySec(SetExpireRequest) returns (BoolResponse);
+  // 设置缓存过期时间(单位：毫秒)
+  rpc SetExpireByMs(SetExpireRequest) returns (BoolResponse);
+  // 获取缓存剩余过期时间(单位：秒)
+  rpc GetExpireBySec(StringRequest) returns (Int64Response);
+  // 获取缓存剩余过期时间(单位：毫秒)
+  rpc GetExpireByMs(StringRequest) returns (Int64Response);
+  // 判断对应键的缓存是否存在
+  rpc HasKey(StringRequest) returns (BoolResponse);
+  // 自增
+  rpc Incr(IncrRequest) returns (Int64Response);
+  // 自减
+  rpc Decr(IncrRequest) returns (Int64Response);
+  // 哈希设置
+  rpc HSet(HashSetRequest) returns (google.protobuf.Empty);
+  // 哈希设置并设置过期时间(单位：秒)
+  rpc HSetWithTimeoutBySec(HashSetWithTimeoutRequest) returns (BoolResponse);
+  // 哈希设置并设置过期时间(单位：毫秒)
+  rpc HSetWithTimeoutByMs(HashSetWithTimeoutRequest) returns (BoolResponse);
+  // 哈希获取
+  rpc HGet(HashGetRequest) returns (StringResponse);
+  // 哈希获取所有值
+  rpc HGetAll(StringRequest) returns (StringResponse);
+  // 哈希删除
+  rpc HDel(HashDeleteRequest) returns (Int64Response);
+  // 哈希自增
+  rpc HIncr(HashIncrRequest) returns (Int64Response);
+  // 哈希自减
+  rpc HDecr(HashIncrRequest) returns (Int64Response);
+  // 有序集合自增
+  rpc ZIncr(ZSetRequest) returns (DoubleResponse);
+  // 有序排序集合自减
+  rpc ZDecr(ZSetRequest) returns (DoubleResponse);
+  // 有序集合范围取反查询
+  rpc ZReversedRangWithScores(ZReversedRangeRequest) returns (StringResponse);
+  //有序集合获取指定键的分数
+  rpc ZScore(ZScoreRequest) returns (DoubleResponse);
+  // 有序集合获取所有值及分数
+  rpc ZAllScore(StringRequest) returns (StringResponse);
+  // 集合添加元素
+  rpc SAdd(SetAddRequest) returns (Int64Response);
+  // 判断集合中是否存在指定键值
+  rpc SIsMember(SetIsMemberRequest) returns (BoolResponse);
+  // 获取集合大小
+  rpc SSize(StringRequest) returns (Int64Response);
+  // 集合取交集
+  rpc SDiff(StringRequest) returns (StringResponse);
+  // 尝试设置集合元素，如果元素不存在则设置，并设置过期时间(单位：秒)
+  rpc sIfAbsentBySec(SetIfAbsentRequest) returns (BoolResponse);
+  // 尝试设置集合元素，如果元素不存在则设置，并设置过期时间(单位：毫秒)
+  rpc sIfAbsentByMs(SetIfAbsentRequest) returns (BoolResponse);
+}

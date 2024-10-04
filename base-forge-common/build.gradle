@@ -10,6 +10,7 @@ dependencies {
     implementation 'com.baomidou:mybatis-plus-generator'
     // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-spring-boot3-starter
     implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // 排除不需要的全局依赖
     configurations.configureEach {
