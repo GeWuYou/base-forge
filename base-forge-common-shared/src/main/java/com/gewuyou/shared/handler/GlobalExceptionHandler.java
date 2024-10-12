@@ -1,7 +1,8 @@
-package com.gewuyou.common.handler;
+package com.gewuyou.shared.handler;
 
 
 import com.gewuyou.common.entity.Result;
+import com.gewuyou.common.exception.GlobalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,7 +73,7 @@ public class GlobalExceptionHandler {
                     msg.append(oe.getDefaultMessage());
                 }
         );
-        return ResponseEntity.status(200).body(Result.failure(HttpStatusCode.BAD_REQUEST, msg.toString()));
+        return ResponseEntity.status(200).body(Result.failure(HttpStatus.BAD_REQUEST.value(), msg.toString()));
     }
 
     /**
@@ -85,7 +86,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(GlobalException.class)
     public Result<String> handleGlobalException(GlobalException e) {
-        log.error(e.getErrorMessage(), e);
+        log.error(e.getMessage(), e);
         return Result.failure(e.getResponseInformation());
     }
 

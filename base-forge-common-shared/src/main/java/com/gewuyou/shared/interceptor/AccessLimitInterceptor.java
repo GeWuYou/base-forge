@@ -1,16 +1,16 @@
-package com.gewuyou.common.interceptor;
+package com.gewuyou.shared.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.gewuyou.cache.client.ICacheClientGrpc;
 import com.gewuyou.common.annotation.AccessLimit;
 import com.gewuyou.common.entity.Result;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
@@ -19,8 +19,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import static com.gewuyou.blog.common.constant.CommonConstant.APPLICATION_JSON;
-import static io.netty.handler.codec.http.HttpHeaders.Values.APPLICATION_JSON;
 
 /**
  * 访问限制拦截器
@@ -31,16 +29,16 @@ import static io.netty.handler.codec.http.HttpHeaders.Values.APPLICATION_JSON;
 @Slf4j
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {
-    private final IRedisService redisService;
+    private final ICacheClientGrpc cacheClientGrpc;
 
     private final ObjectMapper objectMapper;
 
     @Autowired
     public AccessLimitInterceptor(
-            IRedisService redisService,
+            ICacheClientGrpc cacheClientGrpc,
             ObjectMapper objectMapper
     ) {
-        this.redisService = redisService;
+        this.cacheClientGrpc = cacheClientGrpc;
         this.objectMapper = objectMapper;
     }
 
@@ -66,7 +64,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
      * @throws Exception in case of errors
      */
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
@@ -81,7 +79,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         int maxCount = accessLimit.maxCount();
         // 设置键
         String key = "limit:" + System.currentTimeMillis() / 1000 + ":" + seconds;
-        Long l = redisService.incrExpire(key, seconds);
+        long l = cacheClientGrpc.incrExpireBySec(key,seconds);
         if (l > maxCount) {
             render(response, Result.failure(HttpStatus.TOO_MANY_REQUESTS.value(), "请求次数过多，请等待" + seconds + "秒后再试!"));
             log.warn("{}请求次数超过每{}秒{}次限制", key, seconds, maxCount);
