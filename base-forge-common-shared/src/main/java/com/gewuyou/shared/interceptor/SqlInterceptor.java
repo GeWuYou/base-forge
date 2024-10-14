@@ -1,4 +1,4 @@
-package com.gewuyou.common.interceptor;
+package com.gewuyou.shared.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.CacheKey;
