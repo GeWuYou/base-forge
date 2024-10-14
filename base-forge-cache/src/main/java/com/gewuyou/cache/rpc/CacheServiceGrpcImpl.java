@@ -37,6 +37,63 @@ public class CacheServiceGrpcImpl extends CacheServiceGrpc.CacheServiceImplBase 
 
     /**
      * <pre>
+     * 清理顶级命名空间下的缓存
+     * </pre>
+     *
+     * @param request          请求
+     * @param responseObserver  响应观察者
+     */
+    @Override
+    public void clearTopNamespace(CacheServiceOuterClass.TopNamespaceClearRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            cacheService.clearTopNamespace(request.getTopNamespace());
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 清理命名空间下的缓存
+     * </pre>
+     *
+     * @param request          请求
+     * @param responseObserver 响应观察者
+     */
+    @Override
+    public void clearNamespace(CacheServiceOuterClass.NamespaceClearRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            cacheService.clearNamespace(request.getTopNamespace(),request.getNamespace());
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 删除特定缓存
+     * </pre>
+     *
+     * @param request          请求
+     * @param responseObserver 响应观察者
+     */
+    @Override
+    public void deleteCache(CacheServiceOuterClass.DeleteCacheRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            cacheService.deleteCache(request.getTopNamespace(),request.getNamespace(),request.getKey());
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    /**
+     * <pre>
      * 设置缓存
      * </pre>
      *
@@ -694,6 +751,44 @@ public class CacheServiceGrpcImpl extends CacheServiceGrpc.CacheServiceImplBase 
         try {
             Boolean success = cacheService.setIfAbsent(request.getKey(), request.getValue(), Duration.ofMillis(request.getTimeout()));
             responseObserver.onNext(CacheServiceOuterClass.BoolResponse.newBuilder().setSuccess(success).build());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 自增并设置过期时间(单位：秒)
+     * </pre>
+     *
+     * @param request          请求
+     * @param responseObserver 响应观察者
+     */
+    @Override
+    public void incrExpireBySec(CacheServiceOuterClass.IncrExpireRequest request, StreamObserver<CacheServiceOuterClass.Int64Response> responseObserver) {
+        try {
+            Long result = cacheService.incrExpire(request.getKey(), request.getTimeout());
+            responseObserver.onNext(CacheServiceOuterClass.Int64Response.newBuilder().setValue(result).build());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    /**
+     * <pre>
+     * 自增并设置过期时间(单位：毫秒)
+     * </pre>
+     *
+     * @param request          请求
+     * @param responseObserver 响应观察者
+     */
+    @Override
+    public void incrExpireByMs(CacheServiceOuterClass.IncrExpireRequest request, StreamObserver<CacheServiceOuterClass.Int64Response> responseObserver) {
+        try {
+            Long result = cacheService.incrExpire(request.getKey(), request.getTimeout(), TimeUnit.MILLISECONDS);
+            responseObserver.onNext(CacheServiceOuterClass.Int64Response.newBuilder().setValue(result).build());
             responseObserver.onCompleted();
         } catch (Exception e) {
             responseObserver.onError(e);
