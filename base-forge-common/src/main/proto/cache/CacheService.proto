@@ -94,8 +94,30 @@ message HashDeleteRequest {
   string key = 1; // 键
   string hashKey = 2; // 哈希键/多个哈希键请注意如果有多个哈希键，请使用List<String>包裹并序列化为Json字符串
 }
+message IncrExpireRequest {
+  string key = 1; // 键
+  int64 timeout = 2; // 过期时间
+}
+message TopNamespaceClearRequest {
+  string topNamespace = 1; // 命名空间
+}
+message NamespaceClearRequest {
+  string topNamespace = 1; // 顶级命名空间
+  string namespace = 2; // 命名空间
+}
+message DeleteCacheRequest {
+  string topNamespace = 1; // 顶级命名空间
+  string namespace = 2; // 命名空间
+  string key = 3; // 键
+}
 // 缓存服务
 service CacheService {
+  // 清理顶级命名空间下的缓存
+  rpc clearTopNamespace(TopNamespaceClearRequest) returns (google.protobuf.Empty);
+  // 清理命名空间下的缓存
+  rpc clearNamespace(NamespaceClearRequest) returns (google.protobuf.Empty);
+  // 删除特定缓存
+  rpc deleteCache(DeleteCacheRequest) returns (google.protobuf.Empty);
   // 设置缓存
   rpc Set(SetRequest) returns (google.protobuf.Empty);
   // 设置缓存并设置过期时间(单位：秒)
@@ -122,6 +144,10 @@ service CacheService {
   rpc HasKey(StringRequest) returns (BoolResponse);
   // 自增
   rpc Incr(IncrRequest) returns (Int64Response);
+  // 自增并设置过期时间(单位：秒)
+  rpc IncrExpireBySec(IncrExpireRequest) returns (Int64Response);
+  // 自增并设置过期时间(单位：毫秒)
+  rpc IncrExpireByMs(IncrExpireRequest) returns (Int64Response);
   // 自减
   rpc Decr(IncrRequest) returns (Int64Response);
   // 哈希设置
