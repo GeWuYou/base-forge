@@ -1,7 +1,7 @@
-package com.gewuyou.common.interceptor;
+package com.gewuyou.shared.interceptor;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gewuyou.blog.common.utils.PageUtil;
+import com.gewuyou.common.utils.PageUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.gewuyou.blog.common.constant.CommonConstant.*;
+import static com.gewuyou.common.constant.CommonConstant.*;
 
 /**
  * 分页拦截器

@@ -1,4 +1,4 @@
-package com.gewuyou.common.config;
+package com.gewuyou.shared.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
