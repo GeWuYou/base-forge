@@ -1,0 +1,8 @@
+grpc:
+  server:
+    port: 9090
+    keep-alive-time: 10 # 空闲连接存活时间，默认10s
+    max-inbound-message-size: 1048576 # 最大接收消息大小，默认1MB
+    max-inbound-metadata-size: 1048576 # 最大接收元数据大小，默认4KB
+    health-service-enabled: true # 是否开启健康检查服务，默认开启
+    keep-alive-timeout: 10 # 空闲连接超时时间，默认10s

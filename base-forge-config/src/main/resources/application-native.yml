@@ -8,3 +8,4 @@ spring:
             classpath:/conf/base-forge-discovery,
             classpath:/conf/base-forge-gateway,
             classpath:/conf/base-forge-rpc,
+            classpath:/conf/base-forge-auth-client
