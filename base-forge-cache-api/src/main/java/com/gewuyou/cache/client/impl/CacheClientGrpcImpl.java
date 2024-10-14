@@ -34,12 +34,12 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      * grpc 缓存服务地址
      */
     @Value("${grpc.cache.host}")
-    private String host;
+    protected String host;
     /**
      * grpc 缓存服务端口
      */
     @Value("${grpc.cache.port}")
-    private int port;
+    protected int port;
     /**
      * grpc 缓存客户端管道
      */
@@ -47,7 +47,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
     /**
      * grpc 缓存客户端阻塞式 stub
      */
-    private CacheServiceGrpc.CacheServiceBlockingStub cacheServiceBlockingStub;
+    private CacheServiceGrpc.CacheServiceBlockingStub blockingStub;
 
     private final ObjectMapper objectMapper;
 
@@ -60,13 +60,68 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
     @Override
     public void init() {
         managedChannel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
-        cacheServiceBlockingStub = CacheServiceGrpc.newBlockingStub(managedChannel);
+        blockingStub = CacheServiceGrpc.newBlockingStub(managedChannel);
     }
 
     @PreDestroy
     @Override
     public void shutdown() {
         managedChannel.shutdown();
+    }
+
+    /**
+     * 清理顶级命名空间下的所有缓存
+     *
+     * @param topNamespace 顶级命名空间
+     */
+    @Override
+    public void clearTopNamespace(String topNamespace) {
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub
+                .clearTopNamespace(
+                        CacheServiceOuterClass.TopNamespaceClearRequest.newBuilder()
+                                .setTopNamespace(topNamespace)
+                                .build()
+                );
+    }
+
+    /**
+     * 清理特定命名空间下的所有缓存
+     *
+     * @apiNote 注意：如果命名空间不存在，则不会报错
+     * @param topNamespace 顶级命名空间
+     * @param namespace    子命名空间
+     */
+    @Override
+    public void clearNamespace(String topNamespace, String namespace) {
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub
+                .clearNamespace(
+                        CacheServiceOuterClass.NamespaceClearRequest.newBuilder()
+                                .setTopNamespace(topNamespace)
+                                .setNamespace(namespace)
+                                .build()
+                );
+    }
+
+    /**
+     * 删除特定的缓存项
+     *
+     * @param topNamespace 顶级命名空间
+     * @param namespace    子命名空间
+     * @param key          键
+     */
+    @Override
+    public void deleteCache(String topNamespace, String namespace, String key) {
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub
+                .deleteCache(
+                        CacheServiceOuterClass.DeleteCacheRequest.newBuilder()
+                                .setTopNamespace(topNamespace)
+                                .setNamespace(namespace)
+                                .setKey(key)
+                                .build()
+                );
     }
 
     /**
@@ -77,8 +132,8 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public void set(String key, String value) {
-        //noinspection ResultOfMethodCallIgnored
-        cacheServiceBlockingStub
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub
                 .set(CacheServiceOuterClass
                         .SetRequest
                         .newBuilder()
@@ -96,8 +151,8 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public void setWithExpireTimeBySec(String key, String value, long expireTime) {
-        //noinspection ResultOfMethodCallIgnored
-        cacheServiceBlockingStub
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub
                 .setWithTimeoutBySec(CacheServiceOuterClass
                         .SetWithTimeoutRequest
                         .newBuilder()
@@ -116,8 +171,8 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public void setWithExpireTimeByMills(String key, String value, long expireTime) {
-        //noinspection ResultOfMethodCallIgnored
-        cacheServiceBlockingStub
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub
                 .setWithTimeoutByMs(CacheServiceOuterClass
                         .SetWithTimeoutRequest
                         .newBuilder()
@@ -135,7 +190,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public String get(String key) {
-        return cacheServiceBlockingStub.get(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
+        return blockingStub.get(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
     }
 
     /**
@@ -146,7 +201,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean delete(String key) {
-        return cacheServiceBlockingStub.delete(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getSuccess();
+        return blockingStub.delete(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getSuccess();
     }
 
     /**
@@ -158,7 +213,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean delayedDeleteBySec(String key, long delayTime) {
-        return cacheServiceBlockingStub.delayedDeleteBySec(CacheServiceOuterClass.DelayDeleteRequest.newBuilder().setDelay(delayTime).build()).getSuccess();
+        return blockingStub.delayedDeleteBySec(CacheServiceOuterClass.DelayDeleteRequest.newBuilder().setDelay(delayTime).build()).getSuccess();
     }
 
     /**
@@ -170,7 +225,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean delayedDeleteByMills(String key, long delayTime) {
-        return cacheServiceBlockingStub.delayedDeleteByMs(CacheServiceOuterClass.DelayDeleteRequest.newBuilder().setDelay(delayTime).build()).getSuccess();
+        return blockingStub.delayedDeleteByMs(CacheServiceOuterClass.DelayDeleteRequest.newBuilder().setDelay(delayTime).build()).getSuccess();
     }
 
     /**
@@ -182,7 +237,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean setExpireTimeBySec(String key, long expireTime) {
-        return cacheServiceBlockingStub.setExpireBySec(CacheServiceOuterClass.SetExpireRequest.newBuilder().setKey(key).setTime(expireTime).build()).getSuccess();
+        return blockingStub.setExpireBySec(CacheServiceOuterClass.SetExpireRequest.newBuilder().setKey(key).setTime(expireTime).build()).getSuccess();
     }
 
     /**
@@ -194,7 +249,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean setExpireTimeByMills(String key, long expireTime) {
-        return cacheServiceBlockingStub.setExpireByMs(CacheServiceOuterClass.SetExpireRequest.newBuilder().setKey(key).setTime(expireTime).build()).getSuccess();
+        return blockingStub.setExpireByMs(CacheServiceOuterClass.SetExpireRequest.newBuilder().setKey(key).setTime(expireTime).build()).getSuccess();
     }
 
     /**
@@ -205,7 +260,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long getExpireTimeBySec(String key) {
-        return cacheServiceBlockingStub.getExpireBySec(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
+        return blockingStub.getExpireBySec(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
     }
 
     /**
@@ -216,7 +271,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long getExpireTimeByMills(String key) {
-        return cacheServiceBlockingStub.getExpireByMs(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
+        return blockingStub.getExpireByMs(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
     }
 
     /**
@@ -227,7 +282,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean hasKey(String key) {
-        return cacheServiceBlockingStub.hasKey(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getSuccess();
+        return blockingStub.hasKey(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getSuccess();
     }
 
     /**
@@ -239,7 +294,31 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long incr(String key, int delta) {
-        return cacheServiceBlockingStub.incr(CacheServiceOuterClass.IncrRequest.newBuilder().setKey(key).setDelta(delta).build()).getValue();
+        return blockingStub.incr(CacheServiceOuterClass.IncrRequest.newBuilder().setKey(key).setDelta(delta).build()).getValue();
+    }
+
+    /**
+     * 对指定的键进行自增操作，并设置过期时间（秒）。 从1开始自增
+     *
+     * @param key        缓存的键
+     * @param expireTime 过期时间（单位：秒）
+     * @return 增加后的值
+     */
+    @Override
+    public long incrExpireBySec(String key, long expireTime) {
+        return blockingStub.incrExpireBySec(CacheServiceOuterClass.IncrExpireRequest.newBuilder().setKey(key).setTimeout(expireTime).build()).getValue();
+    }
+
+    /**
+     * 对指定的键进行自增操作，并设置过期时间（毫秒）。从1开始自增
+     *
+     * @param key        缓存的键
+     * @param expireTime 过期时间（单位：毫秒）
+     * @return 增加后的值
+     */
+    @Override
+    public long incrExpireByMills(String key, long expireTime) {
+        return blockingStub.incrExpireByMs(CacheServiceOuterClass.IncrExpireRequest.newBuilder().setKey(key).setTimeout(expireTime).build()).getValue();
     }
 
     /**
@@ -251,7 +330,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long decr(String key, int delta) {
-        return cacheServiceBlockingStub.decr(CacheServiceOuterClass.IncrRequest.newBuilder().setKey(key).setDelta(delta).build()).getValue();
+        return blockingStub.decr(CacheServiceOuterClass.IncrRequest.newBuilder().setKey(key).setDelta(delta).build()).getValue();
     }
 
     /**
@@ -263,8 +342,8 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public void hSet(String key, String hashKey, String value) {
-        //noinspection ResultOfMethodCallIgnored
-        cacheServiceBlockingStub.hSet(CacheServiceOuterClass.HashSetRequest.newBuilder().setKey(key).setHashKey(hashKey).setValue(value).build());
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub.hSet(CacheServiceOuterClass.HashSetRequest.newBuilder().setKey(key).setHashKey(hashKey).setValue(value).build());
     }
 
     /**
@@ -277,8 +356,8 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public void hSetWithExpireTimeBySec(String key, String hashKey, String value, long expireTime) {
-        //noinspection ResultOfMethodCallIgnored
-        cacheServiceBlockingStub.hSetWithTimeoutBySec(CacheServiceOuterClass.HashSetWithTimeoutRequest.newBuilder().setKey(key).setHashKey(hashKey).setValue(value).setTimeout(expireTime).build());
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub.hSetWithTimeoutBySec(CacheServiceOuterClass.HashSetWithTimeoutRequest.newBuilder().setKey(key).setHashKey(hashKey).setValue(value).setTimeout(expireTime).build());
     }
 
     /**
@@ -291,8 +370,8 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public void hSetWithExpireTimeByMills(String key, String hashKey, String value, long expireTime) {
-        //noinspection ResultOfMethodCallIgnored
-        cacheServiceBlockingStub.hSetWithTimeoutByMs(CacheServiceOuterClass.HashSetWithTimeoutRequest.newBuilder().setKey(key).setHashKey(hashKey).setValue(value).setTimeout(expireTime).build());
+        // noinspection ResultOfMethodCallIgnored
+        blockingStub.hSetWithTimeoutByMs(CacheServiceOuterClass.HashSetWithTimeoutRequest.newBuilder().setKey(key).setHashKey(hashKey).setValue(value).setTimeout(expireTime).build());
     }
 
     /**
@@ -304,7 +383,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public String hGet(String key, String hashKey) {
-        return cacheServiceBlockingStub.hGet(CacheServiceOuterClass.HashGetRequest.newBuilder().setKey(key).setHashKey(hashKey).build()).getValue();
+        return blockingStub.hGet(CacheServiceOuterClass.HashGetRequest.newBuilder().setKey(key).setHashKey(hashKey).build()).getValue();
     }
 
     /**
@@ -315,7 +394,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public Map<String, Object> hGetAll(String key) {
-        String resultStr = cacheServiceBlockingStub.hGetAll(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
+        String resultStr = blockingStub.hGetAll(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
         Map<String, Object> result;
         try {
             result = objectMapper.readValue(resultStr, new TypeReference<>() {
@@ -336,7 +415,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
     @Override
     public long hDel(String key, String... hashKey) {
         if (hashKey.length <= 1) {
-            return cacheServiceBlockingStub.hDel(
+            return blockingStub.hDel(
                             CacheServiceOuterClass.HashDeleteRequest
                                     .newBuilder()
                                     .setKey(key)
@@ -346,7 +425,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
         } else {
             List<String> hashKeys = List.of(hashKey);
             try {
-                return cacheServiceBlockingStub.hDel(
+                return blockingStub.hDel(
                                 CacheServiceOuterClass.HashDeleteRequest
                                         .newBuilder()
                                         .setKey(key)
@@ -372,7 +451,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long hIncr(String key, String hashKey, int delta) {
-        return cacheServiceBlockingStub.hIncr(CacheServiceOuterClass.HashIncrRequest.newBuilder().setKey(key).setHashKey(hashKey).setDelta(delta).build()).getValue();
+        return blockingStub.hIncr(CacheServiceOuterClass.HashIncrRequest.newBuilder().setKey(key).setHashKey(hashKey).setDelta(delta).build()).getValue();
     }
 
     /**
@@ -385,7 +464,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long hDecr(String key, String hashKey, int delta) {
-        return cacheServiceBlockingStub.hDecr(CacheServiceOuterClass.HashIncrRequest.newBuilder().setKey(key).setHashKey(hashKey).setDelta(delta).build()).getValue();
+        return blockingStub.hDecr(CacheServiceOuterClass.HashIncrRequest.newBuilder().setKey(key).setHashKey(hashKey).setDelta(delta).build()).getValue();
     }
 
     /**
@@ -398,7 +477,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public double zIncr(String key, String value, double score) {
-        return cacheServiceBlockingStub.zIncr(CacheServiceOuterClass.ZSetRequest.newBuilder().setKey(key).setValue(value).setScore(score).build()).getValue();
+        return blockingStub.zIncr(CacheServiceOuterClass.ZSetRequest.newBuilder().setKey(key).setValue(value).setScore(score).build()).getValue();
     }
 
     /**
@@ -411,7 +490,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public double zDecr(String key, String value, double score) {
-        return cacheServiceBlockingStub.zDecr(CacheServiceOuterClass.ZSetRequest.newBuilder().setKey(key).setValue(value).setScore(score).build()).getValue();
+        return blockingStub.zDecr(CacheServiceOuterClass.ZSetRequest.newBuilder().setKey(key).setValue(value).setScore(score).build()).getValue();
     }
 
     /**
@@ -424,7 +503,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public Map<Object, Double> zReversedRangWithScores(String key, long start, long end) {
-        String resultStr = cacheServiceBlockingStub.zReversedRangWithScores(CacheServiceOuterClass.ZReversedRangeRequest.newBuilder().setKey(key).setStart(start).setEnd(end).build()).getValue();
+        String resultStr = blockingStub.zReversedRangWithScores(CacheServiceOuterClass.ZReversedRangeRequest.newBuilder().setKey(key).setStart(start).setEnd(end).build()).getValue();
         Map<Object, Double> result;
         try {
             result = objectMapper.readValue(resultStr, new TypeReference<>() {
@@ -445,7 +524,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public double zScore(String key, String value) {
-        return cacheServiceBlockingStub.zScore(CacheServiceOuterClass.ZScoreRequest.newBuilder().setKey(key).setValue(value).build()).getValue();
+        return blockingStub.zScore(CacheServiceOuterClass.ZScoreRequest.newBuilder().setKey(key).setValue(value).build()).getValue();
     }
 
     /**
@@ -456,7 +535,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public Map<Object, Double> zAllScore(String key) {
-        String resultStr = cacheServiceBlockingStub.zAllScore(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
+        String resultStr = blockingStub.zAllScore(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
         Map<Object, Double> result;
         try {
             result = objectMapper.readValue(resultStr, new TypeReference<>() {
@@ -478,7 +557,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
     @Override
     public long sAdd(String key, Object... values) {
         if (values.length <= 1) {
-            return cacheServiceBlockingStub.sAdd(
+            return blockingStub.sAdd(
                             CacheServiceOuterClass.SetAddRequest
                                     .newBuilder()
                                     .setKey(key)
@@ -488,7 +567,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
         } else {
             List<Object> valuesList = List.of(values);
             try {
-                return cacheServiceBlockingStub.sAdd(
+                return blockingStub.sAdd(
                                 CacheServiceOuterClass.SetAddRequest
                                         .newBuilder()
                                         .setKey(key)
@@ -511,7 +590,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean sisMember(String key, String value) {
-        return cacheServiceBlockingStub.sIsMember(CacheServiceOuterClass.SetIsMemberRequest.newBuilder().setKey(key).setValue(value).build()).getSuccess();
+        return blockingStub.sIsMember(CacheServiceOuterClass.SetIsMemberRequest.newBuilder().setKey(key).setValue(value).build()).getSuccess();
     }
 
     /**
@@ -522,7 +601,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public long sSize(String key) {
-        return cacheServiceBlockingStub.sSize(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
+        return blockingStub.sSize(CacheServiceOuterClass.StringRequest.newBuilder().setKey(key).build()).getValue();
     }
 
     /**
@@ -536,7 +615,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
         if (keys.length > 1) {
             List<String> keysList = List.of(keys);
             try {
-                return objectMapper.readValue(cacheServiceBlockingStub
+                return objectMapper.readValue(blockingStub
                         .sDiff(
                                 CacheServiceOuterClass.StringRequest
                                         .newBuilder()
@@ -562,7 +641,7 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean sIfAbsentBySec(String key, String value, long expireTime) {
-        return cacheServiceBlockingStub.sIfAbsentBySec(CacheServiceOuterClass.SetIfAbsentRequest.newBuilder().setKey(key).setValue(value).setTimeout(expireTime).build()).getSuccess();
+        return blockingStub.sIfAbsentBySec(CacheServiceOuterClass.SetIfAbsentRequest.newBuilder().setKey(key).setValue(value).setTimeout(expireTime).build()).getSuccess();
     }
 
     /**
@@ -575,6 +654,6 @@ public class CacheClientGrpcImpl implements ClientGrpc, ICacheClientGrpc {
      */
     @Override
     public boolean sIfAbsentByMills(String key, String value, long expireTime) {
-        return cacheServiceBlockingStub.sIfAbsentByMs(CacheServiceOuterClass.SetIfAbsentRequest.newBuilder().setKey(key).setValue(value).setTimeout(expireTime).build()).getSuccess();
+        return blockingStub.sIfAbsentByMs(CacheServiceOuterClass.SetIfAbsentRequest.newBuilder().setKey(key).setValue(value).setTimeout(expireTime).build()).getSuccess();
     }
 }

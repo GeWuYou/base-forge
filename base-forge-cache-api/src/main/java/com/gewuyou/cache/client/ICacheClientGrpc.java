@@ -11,6 +11,26 @@ import java.util.Set;
  * @since 2024-10-03 22:49:15
  */
 public interface ICacheClientGrpc {
+    /**
+     * 清理顶级命名空间下的所有缓存
+     * @param topNamespace 顶级命名空间
+     */
+    void clearTopNamespace(String topNamespace) ;
+
+    /**
+     * 清理特定命名空间下的所有缓存
+     * @param topNamespace 顶级命名空间
+     * @param namespace 子命名空间
+     */
+    void clearNamespace(String topNamespace, String namespace);
+
+    /**
+     * 删除特定的缓存项
+     * @param topNamespace 顶级命名空间
+     * @param namespace 子命名空间
+     * @param key 键
+     */
+    void deleteCache(String topNamespace, String namespace, String key);
 
     /**
      * 设置缓存值。
@@ -122,6 +142,22 @@ public interface ICacheClientGrpc {
      * @return 增加后的值
      */
     long incr(String key, int delta);
+
+    /**
+     * 对指定的键进行自增操作，并设置过期时间（秒）。 从1开始自增
+     * @param key       缓存的键
+     * @param expireTime 过期时间（单位：秒）
+     * @return 增加后的值
+     */
+    long incrExpireBySec(String key,  long expireTime);
+
+    /**
+     * 对指定的键进行自增操作，并设置过期时间（毫秒）。从1开始自增
+     * @param key       缓存的键
+     * @param expireTime 过期时间（单位：毫秒）
+     * @return 增加后的值
+     */
+    long incrExpireByMills(String key,  long expireTime);
 
     /**
      * 对指定的键进行自减操作。

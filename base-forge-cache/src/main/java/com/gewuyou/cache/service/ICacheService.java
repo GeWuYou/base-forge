@@ -20,7 +20,26 @@ import java.util.concurrent.TimeUnit;
  * @since 2024-10-03 14:36:22
  */
 public interface ICacheService {
+    /**
+     * 清理顶级命名空间下的所有缓存
+     * @param topNamespace 顶级命名空间
+     */
+    void clearTopNamespace(String topNamespace) ;
 
+    /**
+     * 清理特定命名空间下的所有缓存
+     * @param topNamespace 顶级命名空间
+     * @param namespace 子命名空间
+     */
+    void clearNamespace(String topNamespace, String namespace);
+
+    /**
+     * 删除特定的缓存项
+     * @param topNamespace 顶级命名空间
+     * @param namespace 子命名空间
+     * @param key 键
+     */
+    void deleteCache(String topNamespace, String namespace, String key);
     /**
      * 设置字符串
      *
@@ -165,6 +184,15 @@ public interface ICacheService {
      * @apiNote 时间单位：秒
      */
     Long incrExpire(String key, long time);
+
+    /**
+     * 自增指定键的值，并设置过期时间
+     * @param key   键
+     * @param time 过期时间
+     * @param unit 时间单位
+     * @return 增量后的结果
+     */
+    Long incrExpire(String key, long time, TimeUnit unit);
 
     /**
      * 自减指定键的值

@@ -42,6 +42,41 @@ public class CacheServiceImpl implements ICacheService {
     }
 
     /**
+     * 清理顶级命名空间下的所有缓存
+     * @param topNamespace 顶级命名空间
+     */
+    public void clearTopNamespace(String topNamespace) {
+        String pattern = topNamespace + ":*";
+        Set<String> keys = redisTemplate.keys(pattern);
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+    }
+
+    /**
+     * 清理特定命名空间下的所有缓存
+     * @param topNamespace 顶级命名空间
+     * @param namespace 子命名空间
+     */
+    public void clearNamespace(String topNamespace, String namespace) {
+        String pattern = topNamespace + ":" + namespace + ":*";
+        Set<String> keys = redisTemplate.keys(pattern);
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+    }
+
+    /**
+     * 删除特定的缓存项
+     * @param topNamespace 顶级命名空间
+     * @param namespace 子命名空间
+     * @param key 键
+     */
+    public void deleteCache(String topNamespace, String namespace, String key) {
+        String redisKey = topNamespace + ":" + namespace + ":" + key;
+        redisTemplate.delete(redisKey);
+    }
+    /**
      * 设置字符串
      *
      * @param key   键
@@ -225,6 +260,23 @@ public class CacheServiceImpl implements ICacheService {
         Long count = redisTemplate.opsForValue().increment(key, 1);
         if (count != null && count == 1) {
             redisTemplate.expire(key, time, TimeUnit.SECONDS);
+        }
+        return count;
+    }
+
+    /**
+     * 自增指定键的值，并设置过期时间
+     *
+     * @param key  键
+     * @param time 过期时间
+     * @param unit 时间单位
+     * @return 增量后的结果
+     */
+    @Override
+    public Long incrExpire(String key, long time, TimeUnit unit) {
+        Long count = redisTemplate.opsForValue().increment(key, 1);
+        if (count != null && count == 1) {
+            redisTemplate.expire(key, time, unit);
         }
         return count;
     }
