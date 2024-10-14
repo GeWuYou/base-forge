@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class CodeGenerator {
 
-    private static final String JDBC_URL = "jdbc:mysql://192.168.200.131:3306/personal_blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+    private static final String JDBC_URL = "jdbc:mysql://192.168.200.131:3306/base_forge?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "root";
     private static final String AUTHOR = "gewuyou";
@@ -75,15 +75,15 @@ public class CodeGenerator {
                     builder
                             .addInclude(tableNames)
                             // 设置过滤表前缀
-                            .addTablePrefix("tb_")
+                            .addTablePrefix("tb_", "sys_")
                             // 实体配置
                             .entityBuilder()
-                            .enableFileOverride()
+                            // .enableFileOverride()
                             // 开启生成字段注解
                             .enableTableFieldAnnotation()
                             // 开启lombok插件
                             .enableLombok()
-                            .disable()
+                            // .disable()
                             // 服务配置
                             .serviceBuilder()
                             // .enableFileOverride()
@@ -103,41 +103,53 @@ public class CodeGenerator {
                 .execute();
     }
 
-    private static void serverCodeGeneration() {
-        String outputDir = "personal-blog-server\\src\\main\\java";
-        String xmlOutputDir = "personal-blog-server\\src\\main\\resources\\mapper";
-        String moduleName = "server";
+
+    /**
+     * 日志模块代码生成器
+     */
+    private static void logCodeGeneration() {
+        String outputDir = "base-forge-log\\src\\main\\java";
+        String xmlOutputDir = "base-forge-log\\src\\main\\resources\\mapper";
+        String moduleName = "log";
         generation(outputDir, xmlOutputDir, moduleName, List.of(
-                "tb_article", "tb_article_category",
-                "tb_article_like_statistic",
-                "tb_article_tag", "tb_category",
-                "tb_comment", "tb_photo", "tb_photo_album",
-                "tb_tag", "tb_talk", "tb_friend_link",
-                "tb_user_info"
+                "tb_operation_log",
+                "tb_exception_log"
         ));
     }
 
-    private static void adminCodeGeneration() {
-        String outputDir = "personal-blog-admin\\src\\main\\java";
-        String xmlOutputDir = "personal-blog-admin\\src\\main\\resources\\mapper";
-        String moduleName = "admin";
+
+    /**
+     * 权限客户端模块代码生成器
+     */
+    private static void authClientCodeGeneration() {
+        String outputDir = "base-forge-auth-client\\src\\main\\java";
+        String xmlOutputDir = "base-forge-auth-client\\src\\main\\resources\\mapper";
+        String moduleName = "client";
         generation(outputDir, xmlOutputDir, moduleName, List.of(
-                "tb_exception_log", "tb_job",
-                "tb_job_log", "tb_menu", "tb_operation_log",
-                "tb_resource", "tb_role", "tb_role_menu",
-                "tb_role_resource", "tb_user_auth",
-                "tb_about", "tb_website_config",
+                "tb_user_auth",
+                "tb_user_info",
                 "tb_user_role",
-                "tb_unique_view"
+                "tb_user_social",
+                "tb_menu",
+                "tb_menu_role",
+                "tb_role",
+                "tb_role_resource"
         ));
     }
 
+    private static void configCodeGeneration() {
+        String outputDir = "base-forge-config\\src\\main\\java";
+        String xmlOutputDir = "base-forge-config\\src\\main\\resources\\mapper";
+        String moduleName = "config";
+        generation(outputDir, xmlOutputDir, moduleName, List.of(
+                "sys_application_config"
+        ));
+    }
     public static void main(String[] args) {
-        // String outputDir = "D:\\Project\\JAVA\\personal-blog\\temp";
-        // String xmlOutputDir = "D:\\Project\\JAVA\\personal-blog\\temp\\mapper";
-        // String moduleName = "";
-        // generation(outputDir, xmlOutputDir, moduleName, List.of("^tb_.*"));
         // serverCodeGeneration();
-        adminCodeGeneration();
+        // adminCodeGeneration();
+        // logCodeGeneration();
+        // authClientCodeGeneration();
+        configCodeGeneration();
     }
 }

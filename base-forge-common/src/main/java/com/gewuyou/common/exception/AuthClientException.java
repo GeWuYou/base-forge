@@ -1,22 +1,21 @@
 package com.gewuyou.common.exception;
 
-
 import com.gewuyou.common.enums.ResponseInformation;
 
 /**
- * 全局异常
+ * 认证客户端异常
  *
  * @author gewuyou
  * @since 2024-04-13 下午1:44:14
  */
+public class AuthClientException extends BaseException {
 
-public class GlobalException extends BaseException {
-
-    public GlobalException(ResponseInformation responseInformation) {
+    public AuthClientException(ResponseInformation responseInformation) {
         super(responseInformation);
     }
 
-    public GlobalException(Throwable cause, ResponseInformation responseInformation) {
+
+    public AuthClientException(ResponseInformation responseInformation, Throwable cause) {
         super(responseInformation, cause);
     }
 }

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package com.gewuyou.common.log;
+
+
+
+message ExceptionLogEntry {
+  // 异常日志json字符串
+  string exceptionLogJsonStr = 1;
+}
+message OperationLogEntry {
+  // 操作日志json字符串
+  string operationLogJsonStr = 1;
+}
+service LogService {
+  // 保存异常日志
+  rpc saveExceptionLog (ExceptionLogEntry) returns (ExceptionLogEntry);
+  // 保存操作日志
+  rpc saveOperationLog (OperationLogEntry) returns (OperationLogEntry);
+}

@@ -1,7 +1,9 @@
 package com.gewuyou.common.exception;
 
 import com.gewuyou.common.enums.ResponseInformation;
+import lombok.Getter;
 
+@Getter
 public class BaseException extends RuntimeException {
 
     private final ResponseInformation responseInformation;
@@ -28,7 +30,7 @@ public class BaseException extends RuntimeException {
      *              unknown.)
      * @since 1.4
      */
-    public BaseException(Throwable cause, ResponseInformation responseInformation) {
+    public BaseException( ResponseInformation responseInformation,Throwable cause) {
         super(cause);
         this.responseInformation = responseInformation;
     }
@@ -41,7 +43,4 @@ public class BaseException extends RuntimeException {
         return responseInformation.getMessage();
     }
 
-    public ResponseInformation getResponseInformation() {
-        return responseInformation;
-    }
 }

@@ -15,6 +15,6 @@ public class CacheException extends BaseException {
     }
 
     public CacheException(Throwable cause, ResponseInformation responseInformation) {
-        super(cause, responseInformation);
+        super(responseInformation, cause);
     }
 }

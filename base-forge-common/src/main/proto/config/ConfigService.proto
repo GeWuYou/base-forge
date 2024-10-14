@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package com.gewuyou.common.config;
+
+
+message GetRequest {
+  string namespace = 1; // 命名空间
+  string key = 2; // 键
+}
+message GetResponse {
+  string value = 1; // 值
+}
+message DeleteByNamespaceAndKeyRequest {
+  string namespace = 1; // 命名空间
+  string key = 2; // 键
+}
+message LongResponse {
+  int64 value = 1; // 值
+}
+message DeleteByNamespaceRequest {
+  string namespace = 1; // 命名空间
+}
+service ConfigService {
+  // 获取配置
+  rpc get(GetRequest) returns (GetResponse);
+  // 根据命名空间和key删除某个配置
+  rpc deleteByNamespaceAndKey(DeleteByNamespaceAndKeyRequest) returns (LongResponse);
+  // 删除某个命名空间下的所有配置
+  rpc deleteByNamespace(DeleteByNamespaceRequest) returns (LongResponse);
+}
