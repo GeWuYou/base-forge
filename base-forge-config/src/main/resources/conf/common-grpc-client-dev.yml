@@ -1,0 +1,10 @@
+grpc:
+  cache:
+    host: localhost
+    port: 9090
+  log:
+    host: localhost
+    port: 9091
+  config:
+    host: localhost
+    port: 9094

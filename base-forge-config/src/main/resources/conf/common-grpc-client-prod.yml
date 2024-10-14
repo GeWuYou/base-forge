@@ -1,0 +1,10 @@
+grpc:
+  cache:
+    host: 192.168.200.131
+    port: 9090
+  log:
+    host: 192.168.200.131
+    port: 9091
+  config:
+    host: 192.168.200.131
+    port: 9094
