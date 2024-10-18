@@ -1,4 +1,4 @@
-package com.gewuyou.mail;
+package com.gewuyou.mail.client;
 
 import com.gewuyou.common.dto.HTMLAttachmentsMailDTO;
 import com.gewuyou.common.dto.HTMLMailDTO;

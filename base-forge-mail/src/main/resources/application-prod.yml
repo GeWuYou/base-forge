@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: configserver:http://192.168.200.131:8888/
+  cloud:
+    config:
+      profile: prod
+      name: >
+        ${spring.application.name},common-log,common-eureka,
+        common-rabbitmq,common-bus,common-mail-private

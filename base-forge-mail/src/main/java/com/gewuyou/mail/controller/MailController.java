@@ -34,49 +34,53 @@ public class MailController {
 
     /**
      * 发送简单邮件
+     *
      * @param simpleMailDTO 邮件DTO
      * @return 响应信息
      */
     @Operation(summary = "发送简单邮件", description = "发送简单邮件")
     @PostMapping("/send")
     public Result<String> sendSimpleMail(@RequestBody SimpleMailDTO simpleMailDTO) {
-        mailService.sendSimpleMail(simpleMailDTO.getTo(), simpleMailDTO.getSubject(), simpleMailDTO.getContent());
+        mailService.sendSimpleMail(simpleMailDTO);
         return Result.success(ResponseInformation.MAIL_SEND_SUCCESS);
     }
 
     /**
      * 发送HTML邮件
+     *
      * @param htmlMailDTO 邮件DTO
      * @return 响应信息
      */
     @Operation(summary = "发送HTML邮件", description = "发送HTML邮件")
     @PostMapping("/sendHtml")
     public Result<String> sendHtmlMail(@RequestBody HTMLMailDTO htmlMailDTO) {
-        mailService.sendHtmlMail(htmlMailDTO.getTo(), htmlMailDTO.getSubject(), htmlMailDTO.getContentMap(), htmlMailDTO.getTemplate());
+        mailService.sendHtmlMail(htmlMailDTO);
         return Result.success(ResponseInformation.MAIL_SEND_SUCCESS);
     }
 
     /**
      * 发送带附件的邮件
+     *
      * @param simpleWithAttachmentsMailDTO 邮件DTO
      * @return 响应信息
      */
     @Operation(summary = "发送带附件的邮件", description = "发送带附件的邮件")
     @PostMapping("/sendAttachment")
     public Result<String> sendSimpleWithAttachmentsMail(@RequestBody SimpleAttachmentsMailDTO simpleWithAttachmentsMailDTO) {
-        mailService.sendSimpleWithAttachmentsMail(simpleWithAttachmentsMailDTO.getTo(), simpleWithAttachmentsMailDTO.getSubject(), simpleWithAttachmentsMailDTO.getContent(), simpleWithAttachmentsMailDTO.getAttachments());
+        mailService.sendSimpleWithAttachmentsMail(simpleWithAttachmentsMailDTO);
         return Result.success(ResponseInformation.MAIL_SEND_SUCCESS);
     }
 
     /**
      * 发送HTML带附件的邮件
+     *
      * @param htmlWithAttachmentsMailDTO 邮件DTO
      * @return 响应信息
      */
     @Operation(summary = "发送HTML带附件的邮件", description = "发送HTML带附件的邮件")
     @PostMapping("/sendHtmlAttachment")
     public Result<String> sendHtmlWithAttachmentsMail(@RequestBody HTMLAttachmentsMailDTO htmlWithAttachmentsMailDTO) {
-        mailService.sendHtmlWithAttachmentsMail(htmlWithAttachmentsMailDTO.getTo(), htmlWithAttachmentsMailDTO.getSubject(), htmlWithAttachmentsMailDTO.getContentMap(), htmlWithAttachmentsMailDTO.getTemplate(), htmlWithAttachmentsMailDTO.getAttachments());
+        mailService.sendHtmlWithAttachmentsMail(htmlWithAttachmentsMailDTO);
         return Result.success(ResponseInformation.MAIL_SEND_SUCCESS);
     }
 }

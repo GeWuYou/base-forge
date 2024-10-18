@@ -1,9 +1,9 @@
 package com.gewuyou.mail.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.Map;
+import com.gewuyou.common.dto.HTMLAttachmentsMailDTO;
+import com.gewuyou.common.dto.HTMLMailDTO;
+import com.gewuyou.common.dto.SimpleAttachmentsMailDTO;
+import com.gewuyou.common.dto.SimpleMailDTO;
 
 /**
  * 邮件服务接口
@@ -15,41 +15,29 @@ public interface IMailService {
     /**
      * 发送简单邮件
      *
-     * @param to      收件人
-     * @param subject 主题
-     * @param content 内容
+     * @param simpleMailDTO 简单邮件DTO
      */
-    void sendSimpleMail(String to, String subject, String content);
+    void sendSimpleMail(SimpleMailDTO simpleMailDTO);
 
 
     /**
      * 发送HTML邮件
      *
-     * @param to         收件人
-     * @param subject    主题
-     * @param contentMap 内容
-     * @param template   模板
+     * @param htmlMailDTO HTML邮件DTO
      */
-    void sendHtmlMail(String to, String subject, Map<String, Object> contentMap, String template);
+    void sendHtmlMail(HTMLMailDTO htmlMailDTO);
 
     /**
      * 发送简单带附件的邮件
      *
-     * @param to      收件人
-     * @param subject 主题
-     * @param content 内容
-     * @param attachments    附件
+     * @param simpleAttachmentsMailDTO 简单带附件的邮件DTO
      */
-    void sendSimpleWithAttachmentsMail(String to, String subject, String content, List<MultipartFile> attachments);
+    void sendSimpleWithAttachmentsMail(SimpleAttachmentsMailDTO simpleAttachmentsMailDTO);
 
     /**
      * 发送HTML带附件的邮件
      *
-     * @param to         收件人
-     * @param subject    主题
-     * @param contentMap 内容
-     * @param template   模板
-     * @param attachments    附件
+     * @param htmlAttachmentsMailDTO HTML带附件的邮件DTO
      */
-    void sendHtmlWithAttachmentsMail(String to, String subject, Map<String, Object> contentMap, String template, List<MultipartFile> attachments);
+    void sendHtmlWithAttachmentsMail(HTMLAttachmentsMailDTO htmlAttachmentsMailDTO);
 }
