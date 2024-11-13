@@ -1,0 +1,18 @@
+{
+  "avatar": "avatar",
+  "cancel": "cancel",
+  "changePassword": "changePassword",
+  "confirm": "confirm",
+  "logo": {
+    "value": "logo"
+  },
+  "logoText": "PersonalBlogManagementSystem",
+  "logout": {
+    "message": {
+      "success": "logout successfu !"
+    },
+    "value": "logout"
+  },
+  "logout.message.content": "whether or not you confirm to log out?",
+  "logout.message.title": "reminder"
+}

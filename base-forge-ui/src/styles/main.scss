@@ -1,0 +1,17 @@
+// 重置样式表
+@use '@/styles/reset.scss';
+// 导入公共样式表
+@use '@/styles/common.scss';
+// 导入图标字体样式表
+@use '@/styles/iconfont';
+// 导入el message 和el message-box 样式表
+@use 'element-plus/theme-chalk/src/message.scss';
+@use 'element-plus/theme-chalk/src/message-box.scss';
+// 导入el tree 样式表
+@use 'element-plus/theme-chalk/src/tree.scss';
+// 导入暗色主题
+@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
+// 导入自定义暗色主题
+@use '@/styles/theme/dark-theme.scss' as *;
+// 导入自定义亮色主题
+@use '@/styles/theme/light-theme.scss';
