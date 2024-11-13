@@ -1,0 +1,24 @@
+{
+  "avatar": "头像",
+  "cancel": "取消",
+  "changePassword": "修改密码",
+  "confirm": "确认",
+  "logo": {
+    "value": "Logo"
+  },
+  "logoText": "个人博客管理系统",
+  "logout": {
+    "message": {
+      "success": "退出登录成功！"
+    },
+    "value": "退出登录"
+  },
+  "logout.message.content": "您是否确认退出登录?",
+  "logout.message.title": "温馨提醒",
+  "menuManagement": "菜单管理",
+  "permissionManagement": "权限管理",
+  "personalInformation": "个人信息",
+  "resourceManagement": "资源管理",
+  "roleManagement": "角色管理",
+  "userManagement": "用户管理"
+}

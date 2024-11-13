@@ -1,0 +1,58 @@
+.toolbar-icon.iconfont {
+  font-size: 22px;
+}
+
+body {
+  font-family: Inter, system-ui, Avenir, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+  "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/*图标字体样式*/
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: "iconfont"; /* Project id 4738220 */
+  src: url('//at.alicdn.com/t/c/font_4738220_gv304ctblcb.woff2?t=1730969802440') format('woff2'),
+  url('//at.alicdn.com/t/c/font_4738220_gv304ctblcb.woff?t=1730969802440') format('woff'),
+  url('//at.alicdn.com/t/c/font_4738220_gv304ctblcb.ttf?t=1730969802440') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont", serif !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shousuo:before {
+  content: "\e75f";
+}
+
+.icon-zhankai:before {
+  content: "\e762";
+}
+
+.icon-yonghuuser:before {
+  content: "\e70e";
+}
+
+.icon-a-xinzengyonghuadduser:before {
+  content: "\e70f";
+}
+
+.icon-caidanmenu:before {
+  content: "\e710";
+}
+
+.icon-chakanview:before {
+  content: "\e711";
+}
+
+.icon-lishijiluhistory:before {
+  content: "\e712";
+}
+
+.icon-yibiaopandashboard:before {
+  content: "\e713";
+}

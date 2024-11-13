@@ -1,0 +1,63 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    // 指定编译JavaScript的版本
+    "target": "ES2023",
+
+    // 使用define 语法为类字段赋值
+    "useDefineForClassFields": true,
+
+    // 生成模块系统的类型
+    "module": "ESNext",
+
+    // 定义编译时包含的库文件
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // 跳过库文件的类型检查以加快编译速度
+//    "skipLibCheck": true,
+    /* Bundler mode */
+    // 指定模块解析模式
+    "moduleResolution": "bundler",
+    // 允许导入时使用.ts后缀
+    "allowImportingTsExtensions": true,
+
+    // 允许导入JSON模块
+    "resolveJsonModule": true,
+
+    // 启用孤立模块编译
+    "isolatedModules": true,
+    // 不生成输出文件，仅进行类型检查
+    "noEmit": true,
+
+    // 设置路径映射的基准目录
+    "baseUrl": "./",
+    "paths": {
+      "@": ["src"],
+      "@/*": ["src/*"]
+    },
+    /* Linting */
+    // 启用严格模式
+    "strict": true,
+    // 不允许隐式的 any 类型
+    "noImplicitAny": true,
+    // 允许对 null 和 undefined 进行严格检查
+    "strictNullChecks": true,
+    // 不允许未使用的局部变量
+    "noUnusedLocals": true,
+    // 不允许未使用的参数
+    "noUnusedParameters": true,
+    // 不允许switch语句中漏掉case分支
+    "noFallthroughCasesInSwitch": true
+  },
+  // 指定要包含的文件或目录
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+}
