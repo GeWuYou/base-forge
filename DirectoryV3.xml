@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?> 
  <trees>
-     <tree path="/base-forge-admin" title="8081" extension="" presentableText="" tooltipTitle="" icon=""
-           textColor="" backgroundColor=""/>
-     <tree path="/base-forge-auth" title="8088"/>
-     <tree path="/base-forge-cache" title="8086"/>
-     <tree path="/base-forge-common" title="公共模块"/>
-     <tree path="/base-forge-config" title="8888"/>
-     <tree path="/base-forge-discovery" title="8761"/>
-     <tree path="/base-forge-file" title="8089"/>
-     <tree path="/base-forge-gateway" title="8082"/>
-     <tree path="/base-forge-log" title="8085"/>
-    <tree path="/base-forge-message" title="8083"/>
-    <tree path="/base-forge-rpc" title="8084"/>
-    <tree path="/base-forge-scheduler" title="8090"/>
-    <tree path="/base-forge-search" title="8084"/>
+    <tree path="/base-forge-admin" title="8081"/>
+    <tree path="/base-forge-gateway" title="8082"/>
+    <tree path="/base-forge-search" title="8083"/>
+    <tree path="/base-forge-log" title="8084"/>
+    <tree path="/base-forge-cache" title="8085"/>
+    <tree path="/base-forge-file" title="8086"/>
+    <tree path="/base-forge-scheduler" title="8087"/>
+    <tree path="/base-forge-discovery" title="8761"/>
+    <tree path="/base-forge-config" title="8888"/>
+    <tree path="/base-forge-common" title="公共模块"/>
 </trees>
