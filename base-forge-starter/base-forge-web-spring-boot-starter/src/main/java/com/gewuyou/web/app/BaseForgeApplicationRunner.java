@@ -1,4 +1,4 @@
-package com.gewuyou.shared.app;
+package com.gewuyou.web.app;
 
 
 import lombok.extern.slf4j.Slf4j;
