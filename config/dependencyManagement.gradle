@@ -14,6 +14,7 @@ ext {
     set('easyEsVersion', "1.1.1")
     set('mybatisExtensionStarterVersion', "1.0.1")
     set('jjwtVersion', '0.12.6')
+
     set('baseForgeI18nVersion', '1.0.4')
     set('baseForgeUtilVersion', "1.0.1")
     set('baseForgeCoreVersion', "1.0.0")
@@ -22,8 +23,8 @@ ext {
     set('baseForgeAsyncVersion', '1.0.0')
     set('baseForgeRedisVersion', '1.0.1')
     set('baseForgeWebVersion', '1.0.0')
-    set('baseForgeSecurityVersion', '1.0.0')
     set('baseForgeMybatisExtensionVersion', '1.0.0')
+    set('baseForgeGrpcVersion', '1.0.0')
 }
 dependencyManagement {
     imports {
@@ -57,14 +58,16 @@ dependencyManagement {
         // base-forge-spring-boot-starter
         dependency("com.gewuyou:base-forge-redis-spring-boot-starter:${baseForgeRedisVersion}")
         dependency("com.gewuyou:base-forge-web-spring-boot-starter:${baseForgeWebVersion}")
+        dependency("com.gewuyou:base-forge-web-spring-boot-starter-autoconfigure:${baseForgeWebVersion}")
         dependency("com.gewuyou:base-forge-i18n-spring-boot-starter:${baseForgeI18nVersion}")
         dependency("com.gewuyou:base-forge-util-spring-boot-starter:${baseForgeUtilVersion}")
         dependency("com.gewuyou:base-forge-core-spring-boot-starter:${baseForgeCoreVersion}")
-        dependency("com.gewuyou:base-forge-security-spring-boot-starter:${baseForgeSecurityVersion}")
         dependency("com.gewuyou:base-forge-mybatis-extension-spring-boot-starter:${baseForgeMybatisExtensionVersion}")
         dependency("com.gewuyou:base-forge-json-spring-boot-starter:${baseForgeJsonVersion}")
         dependency("com.gewuyou:base-forge-log-spring-boot-starter:${baseForgeLogVersion}")
+        dependency("com.gewuyou:base-forge-log-spring-boot-starter-autoconfigure:${baseForgeLogVersion}")
         dependency("com.gewuyou:base-forge-async-spring-boot-starter:${baseForgeAsyncVersion}")
+        dependency("com.gewuyou:base-forge-grpc-spring-boot-starter:${baseForgeGrpcVersion}")
     }
     jar {
         enabled = true

@@ -1,0 +1,45 @@
+// 定义一个方法，用于构建项目
+def building(String mainClassPath, String jarPackageName, String charset = 'utf-8') {
+    bootJar {
+        archiveBaseName = jarPackageName
+        manifest {
+            attributes(
+                    // 指定入口主类
+                    'Start-Class': mainClassPath,
+                    'Main-Class': mainClassPath
+            )
+        }
+        manifestContentCharset charset
+        metadataCharset charset
+        enabled = true
+        // from configurations.runtimeClasspath.collect {
+        //     it.isDirectory() ? it : zipTree(it)
+        // }
+    }
+}
+
+class BuildProject {
+    String artifactId
+    String mainClassPath
+    String jarPackageName
+
+    BuildProject(String artifactId, String mainClassPath) {
+        this.artifactId = artifactId
+        this.mainClassPath = mainClassPath
+        this.jarPackageName = artifactId
+    }
+
+    BuildProject(String artifactId, String mainClassPath, String jarPackageName) {
+        this.artifactId = artifactId
+        this.mainClassPath = mainClassPath
+        this.jarPackageName = jarPackageName
+    }
+}
+// build project
+List.of(
+        new BuildProject('base-forge.base-forge-gateway', 'com.gewuyou.gateway.BaseForgeGatewayApplication')
+).stream()
+        .filter { (project.name == it.artifactId) }
+        .forEach { it ->
+            building(it.mainClassPath, it.jarPackageName + project.version)
+        }
