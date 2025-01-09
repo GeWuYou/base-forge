@@ -1,4 +1,4 @@
-package com.gewuyou.common.grpc;
+package com.gewuyou.baseforge.autoconfigure.grpc;
 
 /**
  * 客户端 gRPC
