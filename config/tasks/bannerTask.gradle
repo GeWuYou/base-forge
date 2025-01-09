@@ -6,7 +6,7 @@ def bannerOperation = "bannerOperation"
 // 注册复制任务
 tasks.register('copyBanner', Copy, { Copy copy ->
     def bannerFile = file("${rootDir.path}/resources/banner.txt")
-    def destination = file("${it.projectDir.path}/src/main/resources/banner.txt")
+    def destination = file("${projectDir.path}/src/main/resources/banner.txt")
     if (bannerFile.exists() && !destination.exists()) {
         copy.from(bannerFile)
         println("正在复制 banner.txt 到 ${it.projectDir.path}")

@@ -1,9 +1,15 @@
 plugins {
+    // 用于生成 IntelliJ IDEA 的项目文件，便于在 IDEA 中打开和管理项目
     id 'idea'
+    // 应用 Java 插件，提供基本的 Java 代码编译和构建能力
     id 'java'
+    // 应用 Java Library 插件，支持库开发，提供 API 和实现分离的能力
     id 'java-library'
+    // 应用 Spring Boot 插件，提供 Spring Boot 应用的开发和运行能力
     id 'org.springframework.boot' version '3.3.4'
+    // Spring 依赖管理插件，简化依赖版本管理
     id 'io.spring.dependency-management' version '1.1.6'
+    // 应用 Protobuf 插件，提供 Protobuf 文件的编译和生成能力
     id 'com.google.protobuf' version '0.9.4'
 }
 
@@ -48,7 +54,6 @@ subprojects {
     final base_forge_admin_api = project(":base-forge-admin-api")
     final base_forge_common = project(":base-forge-common")
     final base_forge_config = project(":base-forge-config")
-    final base_forge_config_api = project(":base-forge-config-api")
     final base_forge_discovery = project(":base-forge-discovery")
     final base_forge_file = project(":base-forge-file")
     final base_forge_gateway = project(":base-forge-gateway")
@@ -56,8 +61,8 @@ subprojects {
     final base_forge_log_api = project(":base-forge-log-api")
     final base_forge_scheduler = project(":base-forge-scheduler")
     final base_forge_search = project(":base-forge-search")
-    final base_forge_mail = project(":base-forge-mail")
-    final base_forge_mail_api = project(":base-forge-mail-api")
+    final base_forge_notification = project(":base-forge-notification")
+    final base_forge_notification_api = project(":base-forge-notification-api")
     // endregion
 
 
@@ -72,24 +77,22 @@ subprojects {
             base_forge_scheduler,
             base_forge_search,
             base_forge_config,
-            base_forge_mail
+            base_forge_notification
     ]
     // endregion
     // region 注册任务
     def tasksDir = "$rootDir/config/tasks/"
     if (NeedCopyBannerResourceProjects.contains(project)) {
-        apply{
+        apply {
             from("${tasksDir}/bannerTask.gradle")
-        }
-        // 注册banner复制到资源目录的依赖
-        tasks.named('processResources').configure {
-            it.doFirst {
-                dependsOn copyBanner
-            }
         }
     }
     // endregion
     // region 设置子模块需要的依赖
+    // 设置需要 actuator 依赖的模块
+    Set<Project> ActuatorProjects = [
+            base_forge_gateway,
+    ]
     // 设置需要grpc基本依赖的模块
     Set<Project> GrpcBaseProjects = [
             base_forge_common,
@@ -97,25 +100,24 @@ subprojects {
     // 设置需要grpc客户端依赖的模块
     Set<Project> GrpcClientProjects = [
             base_forge_log_api,
-            base_forge_config_api,
             base_forge_admin_api
     ]
     // 设置需要grpc服务端依赖的模块
     Set<Project> GrpcServerProjects = [
             // 9090
+            base_forge_admin,
             // 9091
             base_forge_log,
             // 9092
             base_forge_config,
             // 9093
-            base_forge_admin
+
     ]
     // 设置需要公共模块依赖的模块
     Set<Project> CommonProjects = [
             base_forge_admin,
             base_forge_admin_api,
             base_forge_config,
-            base_forge_config_api,
             base_forge_discovery,
             base_forge_file,
             base_forge_gateway,
@@ -123,8 +125,8 @@ subprojects {
             base_forge_log_api,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_mail,
-            base_forge_mail_api
+            base_forge_notification,
+            base_forge_notification_api
     ]
     // 设置需要公共共享模块依赖的模块
     Set<Project> CommonSharedProjects = [
@@ -136,17 +138,21 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_mail,
-            base_forge_mail_api
+            base_forge_notification,
+            base_forge_notification_api
     ]
     // 设置需要导入Admin api依赖的模块
     Set<Project> AdminProjects = [
-
+            base_forge_gateway
+    ]
+    // 设置需要启用配置提示处理的模块
+    Set<Project> ConfigProcessorProjects = [
+            base_forge_admin_api
     ]
     // 设置需要导入Swagger依赖的模块
     Set<Project> SwaggerProjects = [
             base_forge_common,
-            base_forge_mail,
+            base_forge_notification,
             base_forge_scheduler
     ]
     // 设置需要导入日志服务的模块
@@ -171,7 +177,7 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_mail
+            base_forge_notification
     ]
     // 设置需要导入配置中心客户端依赖的模块
     Set<Project> ConfigClientProjects = [
@@ -182,17 +188,25 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_mail
+            base_forge_notification
     ]
     // 设置需要导入openfeign依赖的模块
     Set<Project> OpenFeignProjects = [
-            base_forge_mail_api,
-            base_forge_admin_api
+            base_forge_notification_api,
+            base_forge_admin_api,
+            base_forge_log_api
     ]
     // 设置需要导入rabbitmq依赖的模块
     Set<Project> RabbitmqProjects = [
-            base_forge_mail,
-            base_forge_mail_api
+            base_forge_notification,
+            base_forge_notification_api
+    ]
+    // 设置需要导入security core依赖的模块
+    Set<Project> SecurityCoreProjects = [
+            base_forge_admin,
+            base_forge_admin_api,
+            base_forge_gateway,
+            base_forge_common
     ]
 
     // region base-forge-spring-boot-starter
@@ -206,7 +220,7 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_mail
+            base_forge_notification
     ]
     // 设置需要导入redisStarter依赖的模块
     Set<Project> RedisStarterProjects = [
@@ -216,6 +230,21 @@ subprojects {
     Set<Project> MybatisStarterProjects = [
 
     ]
+    // 设置需要导入grpcStarter依赖的模块
+    Set<Project> GrpcStarterProjects = [
+            base_forge_admin_api,
+            base_forge_log_api,
+            base_forge_notification_api
+    ]
+    // 设置需要打包成可执行jar的模块
+    Set<Project> ExecutableJarProjects = [
+            base_forge_admin,
+    ]
+    if(ExecutableJarProjects.contains(project)){
+        apply {
+            from("${configDir}/bulid.gradle")
+        }
+    }
     // endregion
     // endregion
     // region 设置依赖
@@ -257,7 +286,6 @@ subprojects {
          */
         // endregion
         // region 设置公共的依赖
-
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -266,8 +294,22 @@ subprojects {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         // endregion
         // region 设置导入依赖的逻辑
+        if(ActuatorProjects.contains(project)){
+            // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
+            implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+        }
+        if (GrpcStarterProjects.contains(project)) {
+            implementation('com.gewuyou:base-forge-grpc-spring-boot-starter')
+        }
         if (WebStarterProjects.contains(project)) {
+            implementation('com.gewuyou:base-forge-web-spring-boot-starter-autoconfigure')
             implementation('com.gewuyou:base-forge-web-spring-boot-starter')
+        }
+        if (SecurityCoreProjects.contains(project)) {
+            // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+            implementation 'org.springframework.security:spring-security-core'
+
         }
         if (ConfigClientProjects.contains(project)) {
             // 添加SpringConfig服务依赖
@@ -277,6 +319,10 @@ subprojects {
         if (EurekaClientProjects.contains(project)) {
             // 添加Eureka服务依赖
             implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        }
+        if (ConfigProcessorProjects.contains(project)) {
+            // 添加配置提示处理依赖
+            annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         }
         if (SwaggerProjects.contains(project)) {
             implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
@@ -288,7 +334,6 @@ subprojects {
             implementation("io.grpc:grpc-netty")
             implementation("io.grpc:grpc-protobuf")
             implementation("io.grpc:grpc-stub")
-
             implementation('org.apache.tomcat:annotations-api')
         }
         if (GrpcClientProjects.contains(project)) {
@@ -326,9 +371,6 @@ subprojects {
         }
         if (LogProjects.contains(project)) {
             implementation base_forge_log_api
-        }
-        if (ConfigProjects.contains(project)) {
-            implementation base_forge_config_api
         }
         if (MybatisPlusProjects.contains(project)) {
             // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-spring-boot3-starter
