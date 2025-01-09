@@ -1,12 +1,9 @@
 rootProject.name = 'base-forge'
 include(
         'base-forge-common',
-        // 'base-forge-common-shared',
-        // 8888端口
-        'base-forge-config',
-        'base-forge-config-api',
-        // 8761端口
-        'base-forge-discovery',
+        'base-forge-auth',
+        'base-forge-user',
+        'base-forge-user-api',
         // 8081端口
         'base-forge-admin',
         'base-forge-admin-api',
@@ -17,15 +14,17 @@ include(
         // 8084端口
         'base-forge-log',
         'base-forge-log-api',
-        // // 8085端口
-        // 'base-forge-cache',
-        // 'base-forge-cache-api',
-        // 8088端口
-        'base-forge-file',
-        // 8089端口
+        // 8085端口
         'base-forge-scheduler',
-        // 8090端口
-        'base-forge-mail',
-        'base-forge-mail-api'
+        // 8086端口
+        'base-forge-notification',
+        'base-forge-notification-api',
+        // 8087端口
+        'base-forge-file',
+        // 8761端口
+        'base-forge-discovery',
+        // 8888端口
+        'base-forge-config',
+        // 'base-forge-config-api',
 )
 
