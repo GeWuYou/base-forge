@@ -19,10 +19,9 @@ plugins {
 /**
  * 由于 Kotlin 插件被引入时会自动添加依赖，但根项目不需要 Kotlin 依赖，因此需要排除 Kotlin 依赖
  */
-configurations.configureEach {
+configurations.implementation {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
 }
-
 subprojects {
     idea {
         project {
