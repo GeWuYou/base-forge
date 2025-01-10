@@ -63,6 +63,8 @@ subprojects {
     // region 声明模块
     final base_forge_admin = project(":base-forge-admin")
     final base_forge_admin_api = project(":base-forge-admin-api")
+    final base_forge_auth = project(":base-forge-auth")
+    // final base_forge_auth_api = project(":base-forge-auth-api")
     final base_forge_user = project(':base-forge-user')
     final base_forge_user_api = project(':base-forge-user-api')
     final base_forge_common = project(":base-forge-common")
@@ -195,6 +197,7 @@ subprojects {
             base_forge_search,
             base_forge_notification,
             base_forge_user,
+            base_forge_auth
     ]
     // 设置需要导入配置中心客户端依赖的模块
     Set<Project> ConfigClientProjects = [
@@ -207,6 +210,7 @@ subprojects {
             base_forge_search,
             base_forge_notification,
             base_forge_user,
+            base_forge_auth
     ]
     // 设置需要导入openfeign依赖的模块
     Set<Project> OpenFeignProjects = [
@@ -240,11 +244,16 @@ subprojects {
             base_forge_scheduler,
             base_forge_search,
             base_forge_notification,
-            base_forge_user
+            base_forge_user,
+            base_forge_auth
     ]
     // 设置需要导入redisStarter依赖的模块
     Set<Project> RedisStarterProjects = [
 
+    ]
+    // 设置需要导入security 认证和鉴权 starter依赖的模块
+    Set<Project> SecurityStarterProjects = [
+            base_forge_auth
     ]
     // 设置需要导入grpcStarter依赖的模块
     Set<Project> GrpcStarterProjects = [
@@ -262,7 +271,6 @@ subprojects {
         }
     }
 
-    // endregion
     // endregion
     // region 设置依赖
     dependencies {
@@ -410,6 +418,12 @@ subprojects {
         }
         if(MybatisExtensionStarterProjects.contains(project)){
             implementation('com.gewuyou:base-forge-mybatis-extension-spring-boot-starter')
+        }
+        if(SecurityStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-security-authentication-spring-boot-starter')
+            implementation('com.gewuyou:base-forge-security-authentication-spring-boot-starter-autoconfigure')
+            implementation('com.gewuyou:base-forge-security-authorization-spring-boot-starter')
+            implementation('com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure')
         }
         // endregion
     }
