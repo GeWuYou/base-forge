@@ -28,7 +28,7 @@ tasks.register("cleanBanner", Delete, { Delete delete ->
     }
 }).configure {
     group = bannerOperation
-    description = '删除资源目录下的 banner.txt 文件'
+    description = '删除资源目录下的 banner.txt 文件,需要手动添加 runCleanBanner 属性即 run cleanBanner -runCleanBanner=true'
     // 仅在手动传递特定属性时执行
     onlyIf { project.hasProperty('runCleanBanner') }
 }
