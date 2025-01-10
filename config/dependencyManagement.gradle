@@ -12,8 +12,8 @@ ext {
     set('commonsLang3Version', "3.4.0")
     set('redissonVersion', "3.37.0")
     set('easyEsVersion', "1.1.1")
-    set('mybatisExtensionStarterVersion', "1.0.1")
     set('jjwtVersion', '0.12.6')
+    set('kotlinVersion', '2.1.0')
 
     set('baseForgeI18nVersion', '1.0.4')
     set('baseForgeUtilVersion', "1.0.1")
@@ -25,7 +25,8 @@ ext {
     set('baseForgeWebVersion', '1.0.0')
     set('baseForgeMybatisExtensionVersion', '1.0.0')
     set('baseForgeGrpcVersion', '1.0.0')
-    set('kotlinVersion', '2.1.0')
+    set('baseForgeSecurityAuthenticationVersion', '1.0.0')
+    set('baseForgeSecurityAuthorizationVersion', '1.0.0')
     // set('postgresqlVersion','42.7.4')
 }
 dependencyManagement {
@@ -73,6 +74,10 @@ dependencyManagement {
         dependency("com.gewuyou:base-forge-log-spring-boot-starter-autoconfigure:${baseForgeLogVersion}")
         dependency("com.gewuyou:base-forge-async-spring-boot-starter:${baseForgeAsyncVersion}")
         dependency("com.gewuyou:base-forge-grpc-spring-boot-starter:${baseForgeGrpcVersion}")
+        dependency("com.gewuyou:base-forge-security-authentication-spring-boot-starter:${baseForgeSecurityAuthenticationVersion}")
+        dependency("com.gewuyou:base-forge-security-authentication-spring-boot-starter-autoconfigure:${baseForgeSecurityAuthenticationVersion}")
+        dependency("com.gewuyou:base-forge-security-authorization-spring-boot-starter:${baseForgeSecurityAuthorizationVersion}")
+        dependency("com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure:${baseForgeSecurityAuthorizationVersion}")
     }
     jar {
         enabled = true
