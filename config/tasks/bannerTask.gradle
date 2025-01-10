@@ -9,7 +9,7 @@ tasks.register('copyBanner', Copy, { Copy copy ->
     def destination = file("${projectDir.path}/src/main/resources/banner.txt")
     if (bannerFile.exists() && !destination.exists()) {
         copy.from(bannerFile)
-        println("正在复制 banner.txt 到 ${it.projectDir.path}")
+        println("正在复制 banner.txt 到 ${projectDir.path}")
         copy.into(destination.parent)
     } else {
         println("banner.txt 已存在，跳过复制。")
@@ -22,7 +22,6 @@ tasks.register('copyBanner', Copy, { Copy copy ->
 tasks.register("cleanBanner", Delete, { Delete delete ->
     def targetFile = file("${projectDir.path}/src/main/resources/banner.txt")
     if (targetFile.exists()) {
-        println("正在从 ${projectDir.path} 中删除 banner.txt 文件")
         delete.delete(targetFile)
     } else {
         println("banner.txt 文件不存在，无需删除。")
@@ -30,4 +29,6 @@ tasks.register("cleanBanner", Delete, { Delete delete ->
 }).configure {
     group = bannerOperation
     description = '删除资源目录下的 banner.txt 文件'
+    // 仅在手动传递特定属性时执行
+    onlyIf { project.hasProperty('runCleanBanner') }
 }
