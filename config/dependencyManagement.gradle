@@ -25,10 +25,13 @@ ext {
     set('baseForgeWebVersion', '1.0.0')
     set('baseForgeMybatisExtensionVersion', '1.0.0')
     set('baseForgeGrpcVersion', '1.0.0')
+    set('kotlinVersion', '2.1.0')
+    // set('postgresqlVersion','42.7.4')
 }
 dependencyManagement {
     imports {
         mavenBom("io.grpc:grpc-bom:${grpcVersion}")
+        mavenBom("org.jetbrains.kotlin:kotlin-bom:${kotlinVersion}")
         mavenBom("com.google.protobuf:protobuf-bom:${protobufVersion}")
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
         mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
@@ -40,6 +43,8 @@ dependencyManagement {
         dependency("org.redisson:redisson-spring-boot-starter:${redissonVersion}")
         dependency("cn.easy-es:easy-es-boot-starter:${easyEsVersion}")
 
+        // postgresql
+        // dependency("org.postgresql:postgresql:${postgresqlVersion}")
         // grpc need to add this dependency
         dependency("org.apache.tomcat:annotations-api:${tomcatVersion}")
         // grpc by net.devh

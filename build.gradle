@@ -1,3 +1,4 @@
+
 plugins {
     // 用于生成 IntelliJ IDEA 的项目文件，便于在 IDEA 中打开和管理项目
     id 'idea'
@@ -11,6 +12,15 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.6'
     // 应用 Protobuf 插件，提供 Protobuf 文件的编译和生成能力
     id 'com.google.protobuf' version '0.9.4'
+    // 引入kt
+    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
+    id 'org.jetbrains.kotlin.plugin.spring' version '2.1.0'
+}
+/**
+ * 由于 Kotlin 插件被引入时会自动添加依赖，但根项目不需要 Kotlin 依赖，因此需要排除 Kotlin 依赖
+ */
+configurations.configureEach {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
 }
 
 subprojects {
@@ -32,6 +42,8 @@ subprojects {
         plugin('org.springframework.boot')
         plugin('com.google.protobuf')
         plugin('io.spring.dependency-management')
+        plugin('org.jetbrains.kotlin.jvm')
+        plugin('org.jetbrains.kotlin.plugin.spring')
         from(file("$configDir/repositories.gradle"))
         from(file("$configDir/dependencyManagement.gradle"))
     }
@@ -52,6 +64,8 @@ subprojects {
     // region 声明模块
     final base_forge_admin = project(":base-forge-admin")
     final base_forge_admin_api = project(":base-forge-admin-api")
+    final base_forge_user = project(':base-forge-user')
+    final base_forge_user_api = project(':base-forge-user-api')
     final base_forge_common = project(":base-forge-common")
     final base_forge_config = project(":base-forge-config")
     final base_forge_discovery = project(":base-forge-discovery")
@@ -128,19 +142,6 @@ subprojects {
             base_forge_notification,
             base_forge_notification_api
     ]
-    // 设置需要公共共享模块依赖的模块
-    Set<Project> CommonSharedProjects = [
-            base_forge_admin,
-            base_forge_config,
-            base_forge_discovery,
-            base_forge_file,
-            base_forge_gateway,
-            base_forge_log,
-            base_forge_scheduler,
-            base_forge_search,
-            base_forge_notification,
-            base_forge_notification_api
-    ]
     // 设置需要导入Admin api依赖的模块
     Set<Project> AdminProjects = [
             base_forge_gateway
@@ -153,7 +154,8 @@ subprojects {
     Set<Project> SwaggerProjects = [
             base_forge_common,
             base_forge_notification,
-            base_forge_scheduler
+            base_forge_scheduler,
+            base_forge_user,
     ]
     // 设置需要导入日志服务的模块
     Set<Project> LogProjects = [
@@ -167,8 +169,23 @@ subprojects {
             base_forge_log,
             base_forge_config,
             base_forge_scheduler,
-            base_forge_admin
+            base_forge_admin,
+            base_forge_user
     ]
+    // 设置需要导入mybatisStarter依赖的模块
+    Set<Project> MybatisExtensionStarterProjects = [
+            base_forge_user,
+    ]
+    // 设置需要导入Jpa依赖的模块
+    Set<Project> JpaProjects = [
+            base_forge_user,
+    ]
+
+    // 设置需要导入postgresql依赖的模块
+    Set<Project> PostgresqlProjects = [
+            base_forge_user,
+    ]
+
     // 设置需要导入尤里卡客户端依赖的模块
     Set<Project> EurekaClientProjects = [
             base_forge_admin,
@@ -177,7 +194,8 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_notification
+            base_forge_notification,
+            base_forge_user,
     ]
     // 设置需要导入配置中心客户端依赖的模块
     Set<Project> ConfigClientProjects = [
@@ -188,13 +206,15 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_notification
+            base_forge_notification,
+            base_forge_user,
     ]
     // 设置需要导入openfeign依赖的模块
     Set<Project> OpenFeignProjects = [
             base_forge_notification_api,
             base_forge_admin_api,
-            base_forge_log_api
+            base_forge_log_api,
+            base_forge_user_api
     ]
     // 设置需要导入rabbitmq依赖的模块
     Set<Project> RabbitmqProjects = [
@@ -220,14 +240,11 @@ subprojects {
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
-            base_forge_notification
+            base_forge_notification,
+            base_forge_user
     ]
     // 设置需要导入redisStarter依赖的模块
     Set<Project> RedisStarterProjects = [
-
-    ]
-    // 设置需要导入mybatisStarter依赖的模块
-    Set<Project> MybatisStarterProjects = [
 
     ]
     // 设置需要导入grpcStarter依赖的模块
@@ -240,11 +257,12 @@ subprojects {
     Set<Project> ExecutableJarProjects = [
             base_forge_admin,
     ]
-    if(ExecutableJarProjects.contains(project)){
+    if (ExecutableJarProjects.contains(project)) {
         apply {
             from("${configDir}/bulid.gradle")
         }
     }
+
     // endregion
     // endregion
     // region 设置依赖
@@ -294,7 +312,7 @@ subprojects {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         // endregion
         // region 设置导入依赖的逻辑
-        if(ActuatorProjects.contains(project)){
+        if (ActuatorProjects.contains(project)) {
             // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
             implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
@@ -375,7 +393,6 @@ subprojects {
         if (MybatisPlusProjects.contains(project)) {
             // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-spring-boot3-starter
             implementation 'com.baomidou:mybatis-plus-spring-boot3-starter'
-            runtimeOnly 'com.mysql:mysql-connector-j'
         }
         if (OpenFeignProjects.contains(project)) {
             // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
@@ -384,6 +401,16 @@ subprojects {
         if (RabbitmqProjects.contains(project)) {
             implementation 'org.springframework.boot:spring-boot-starter-amqp'
             testImplementation 'org.springframework.amqp:spring-rabbit-test'
+        }
+        if (PostgresqlProjects.contains(project)) {
+            // https://mvnrepository.com/artifact/org.postgresql/postgresql
+            implementation 'org.postgresql:postgresql'
+        }
+        if (JpaProjects.contains(project)) {
+            implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        }
+        if(MybatisExtensionStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-mybatis-extension-spring-boot-starter')
         }
         // endregion
     }
