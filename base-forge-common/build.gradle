@@ -1,4 +1,9 @@
 dependencies {
+    api("com.gewuyou:base-forge-i18n-spring-boot-starter")
+    api("com.gewuyou:base-forge-core-spring-boot-starter")
+    api("com.gewuyou:base-forge-util-spring-boot-starter")
+    api("com.gewuyou:base-forge-json-spring-boot-starter")
+
     api("org.springframework.boot:spring-boot-starter-web")
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
     api 'org.springframework.boot:spring-boot-configuration-processor'
@@ -9,16 +14,8 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-aop'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-freemarker
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
-    implementation 'org.springframework.security:spring-security-core'
-    implementation 'org.springframework.security:spring-security-oauth2-core'
     // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-generator
     implementation 'com.baomidou:mybatis-plus-generator'
-    // 排除不需要的全局依赖
-    configurations.configureEach {
-        exclude(group: 'org.springframework.cloud', module: 'spring-cloud-starter-config')
-        exclude(group: 'org.springframework.cloud', module: 'spring-cloud-starter-bus-amqp')
-        exclude(group: 'org.springframework.cloud', module: 'spring-cloud-starter-netflix-eureka-client')
-    }
 }
 protobuf {
     protoc {
@@ -30,20 +27,30 @@ protobuf {
         }
     }
     generateProtoTasks {
-        all().each { task ->
+        all()*.each {
+            task ->
             task.builtins {
                 java {}
             }
             task.plugins {
                 grpc {}
             }
+            task.group = "grpc"
+            task.description = "从 protobuf 文件生成 Java 和 gRPC 代码"
         }
     }
 }
 sourceSets {
     main {
         java {
-            srcDirs += ["build/generated/source/proto/main/grpc", "build/generated/source/proto/main/java"]
+            srcDirs{
+                "build/generated/source/proto/main/grpc"
+                "build/generated/source/proto/main/java"
+            }
+            // srcDirs += ["build/generated/source/proto/main/grpc", "build/generated/source/proto/main/java"]
         }
     }
+}
+jar {
+    enabled = true
 }
