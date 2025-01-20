@@ -1,5 +1,8 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
   application:
-    name: personal-blog-gateway # 模块名，与配置文件夹名一致
+    name: base-forge-gateway # 模块名，与配置文件夹名一致
   profiles:
     active: dev

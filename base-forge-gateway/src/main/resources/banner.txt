@@ -1,10 +1,9 @@
-
  ██████╗ ███████╗██╗    ██╗██╗   ██╗██╗   ██╗ ██████╗ ██╗   ██╗
 ██╔════╝ ██╔════╝██║    ██║██║   ██║╚██╗ ██╔╝██╔═══██╗██║   ██║
 ██║  ███╗█████╗  ██║ █╗ ██║██║   ██║ ╚████╔╝ ██║   ██║██║   ██║
 ██║   ██║██╔══╝  ██║███╗██║██║   ██║  ╚██╔╝  ██║   ██║██║   ██║
 ╚██████╔╝███████╗╚███╔███╔╝╚██████╔╝   ██║   ╚██████╔╝╚██████╔╝
  ╚═════╝ ╚══════╝ ╚══╝╚══╝  ╚═════╝    ╚═╝    ╚═════╝  ╚═════╝
-version 0.1.0
 name: Base Forge
-description: A foundational development platform for web microservices projects
+description: A foundational platform for rapid build development
+version: 1.0.0
