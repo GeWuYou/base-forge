@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+
+package com.gewuyou.common.admin;
+// 空消息
+message Empty {}
+// 角色列表DTO
+message RoleDTO{
+  string roleName = 1;// 角色名称
+  bool isDisabled = 2;// 是否禁用
+}
+// 资源角色DTO
+message ResourceRoleDTO{
+  string url = 1;// 资源URL
+  string requestMethod = 2;// 请求方法
+  bool isAnonymous = 3;// 是否匿名访问
+  repeated RoleDTO roleList = 4;// 角色列表
+}
+message ResourceRoleListDTO{
+  repeated ResourceRoleDTO resourceRoleList = 1;// 资源角色列表
+}
+
+service AdminService {
+  // 获取资源角色列表
+  rpc getResourceRoles(Empty) returns (ResourceRoleListDTO);
+}
