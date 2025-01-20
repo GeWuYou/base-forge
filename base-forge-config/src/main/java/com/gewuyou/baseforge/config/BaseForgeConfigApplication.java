@@ -1,8 +1,9 @@
-package com.gewuyou.config;
+package com.gewuyou.baseforge.config;
 
 
 
-import com.gewuyou.web.app.BaseForgeApplicationRunner;
+
+import com.gewuyou.baseforge.core.app.BaseForgeApplicationRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

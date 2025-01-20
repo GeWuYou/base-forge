@@ -9,14 +9,13 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: base-forge-admin
-          uri: lb://base-forge-admin
+        - id: base-forge-data-dictionary
+          uri: lb://base-forge-data-dictionary
           predicates:
-            - Path=/api/v1/admin/**
+            - Path=/api/v1/dictionary/**
           filters:
             - StripPrefix=2
-
-
+            - name: RequestId
       # 全局的跨域处理
       global-cors:
         # 解决options请求被拦截问题

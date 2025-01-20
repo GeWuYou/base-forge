@@ -1,0 +1,21 @@
+base-forge:
+  url:
+    admin: "http://192.168.200.131:8081"
+    gateway: "http://192.168.200.131:8082"
+    message: "http://192.168.200.131:8083"
+    search: "http://192.168.200.131:8084"
+    log: "http://192.168.200.131:8085"
+    cache: "http://192.168.200.131:8086"
+    authClient: "http://192.168.200.131:8087"
+    authServer: "http://192.168.200.131:8088"
+    file: "http://192.168.200.131:8089"
+    scheduler: "http://192.168.200.131:8090"
+    email: "http://192.168.200.131:8091"
+  prefix: /api/v1
+  services:
+    admin: /admin
+    auth: /auth
+    config: /config
+    message: /message
+    cache: /cache
+    log: /log

@@ -1,11 +1,6 @@
 server:
   port: 8888
-
 spring:
-  cloud:
-    bus:
-      refresh:
-        enabled: true
   rabbitmq:
     host: 192.168.200.131
     port: 5672
@@ -18,17 +13,10 @@ spring:
           max-attempts: 3
           initial-interval: 3000
     virtual-host: /base-forge
-  datasource:
-    url: jdbc:mysql://192.168.200.131:3306/base_forge?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  data:
-    redis:
-      # 数据库设置为0号数据库
-      database: 0
-      host: 192.168.200.131
-      port: 6379
+  cloud:
+    bus:
+      refresh:
+        enabled: true
 management:
   endpoints:
     web:
@@ -36,3 +24,6 @@ management:
         include: '*'
       path-mapping:
         busrefresh: bus-refresh
+  endpoint:
+    busrefresh:
+      enabled: true
