@@ -1,0 +1,12 @@
+spring:
+  config:
+    import: configserver:http://192.168.200.131:8888 # 导入Config Server配置
+  cloud:
+    config:
+      profile: prod                # 使用的配置文件环境
+      name: >
+        ${spring.application.name},
+        common-log,common-eureka,
+        common-rabbitmq,common-bus,
+        common-url,common-redis,
+        common-datasource
