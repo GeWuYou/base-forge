@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BaseForgeUserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="base-forge.base-forge-user.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.gewuyou.baseforge.user.BaseForgeUserApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+  <configuration default="false" name="BaseForgeUserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="待分配" nameIsGenerated="true">
+    <module name="base-forge.base-forge-user.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.gewuyou.baseforge.user.BaseForgeUserApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
