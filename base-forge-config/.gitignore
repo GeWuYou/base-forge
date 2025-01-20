@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/conf/base-forge-auth-client/
+src/main/resources/conf/common-mail-private.yml
 ### STS ###
 .apt_generated
 .classpath
