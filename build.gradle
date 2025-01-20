@@ -1,4 +1,3 @@
-
 plugins {
     // 用于生成 IntelliJ IDEA 的项目文件，便于在 IDEA 中打开和管理项目
     id 'idea'
@@ -15,6 +14,9 @@ plugins {
     // 引入kt
     id 'org.jetbrains.kotlin.jvm' version '2.1.0'
     id 'org.jetbrains.kotlin.plugin.spring' version '2.1.0'
+    // 让kt支持访问java的lombok注解
+    id 'org.jetbrains.kotlin.plugin.lombok' version '2.1.0'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '2.1.0'
 }
 /**
  * 由于 Kotlin 插件被引入时会自动添加依赖，但根项目不需要 Kotlin 依赖，因此需要排除 Kotlin 依赖
@@ -35,6 +37,7 @@ subprojects {
     }
     def configDir = "$rootDir/config/"
     apply {
+        from(file("$configDir/repositories.gradle"))
         plugin('idea')
         plugin('java')
         plugin('java-library')
@@ -43,7 +46,8 @@ subprojects {
         plugin('io.spring.dependency-management')
         plugin('org.jetbrains.kotlin.jvm')
         plugin('org.jetbrains.kotlin.plugin.spring')
-        from(file("$configDir/repositories.gradle"))
+        plugin('org.jetbrains.kotlin.plugin.lombok')
+        plugin('org.jetbrains.kotlin.plugin.jpa')
         from(file("$configDir/dependencyManagement.gradle"))
     }
     group = 'com.gewuyou'
@@ -61,10 +65,12 @@ subprojects {
     }
 
     // region 声明模块
-    final base_forge_admin = project(":base-forge-admin")
-    final base_forge_admin_api = project(":base-forge-admin-api")
+    // final base_forge_admin = project(":base-forge-admin")
+    // final base_forge_admin_api = project(":base-forge-admin-api")
     final base_forge_auth = project(":base-forge-auth")
-    // final base_forge_auth_api = project(":base-forge-auth-api")
+    final base_forge_auth_api = project(":base-forge-auth-api")
+    final base_forge_data_dictionary = project(":base-forge-data-dictionary")
+    // final base_forge_data_dictionary_api = project(":base-forge-data-dictionary-api")
     final base_forge_user = project(':base-forge-user')
     final base_forge_user_api = project(':base-forge-user-api')
     final base_forge_common = project(":base-forge-common")
@@ -84,7 +90,7 @@ subprojects {
     // region 定义任务对象
     // 复制banner到各个服务模块的资源目录
     Set<Project> NeedCopyBannerResourceProjects = [
-            base_forge_admin,
+            // base_forge_admin,
             base_forge_discovery,
             base_forge_file,
             base_forge_gateway,
@@ -92,7 +98,8 @@ subprojects {
             base_forge_scheduler,
             base_forge_search,
             base_forge_config,
-            base_forge_notification
+            base_forge_notification,
+            base_forge_data_dictionary
     ]
     // endregion
     // region 注册任务
@@ -115,27 +122,25 @@ subprojects {
     // 设置需要grpc客户端依赖的模块
     Set<Project> GrpcClientProjects = [
             base_forge_log_api,
-            base_forge_admin_api
+            // base_forge_admin_api
     ]
     // 设置需要grpc服务端依赖的模块
     Set<Project> GrpcServerProjects = [
             // 9090
-            base_forge_admin,
+            // base_forge_admin,
             // 9091
             base_forge_log,
-            // 9092
-            base_forge_config,
             // 9093
 
     ]
     // 设置需要公共模块依赖的模块
     Set<Project> CommonProjects = [
-            base_forge_admin,
-            base_forge_admin_api,
-            base_forge_config,
-            base_forge_discovery,
+            base_forge_auth,
+            base_forge_auth_api,
+            base_forge_data_dictionary,
+            // base_forge_admin,
+            // base_forge_admin_api,
             base_forge_file,
-            base_forge_gateway,
             base_forge_log,
             base_forge_log_api,
             base_forge_scheduler,
@@ -144,16 +149,17 @@ subprojects {
             base_forge_notification_api
     ]
     // 设置需要导入Admin api依赖的模块
-    Set<Project> AdminProjects = [
-            base_forge_gateway
-    ]
+    // Set<Project> AdminProjects = [
+    //         base_forge_gateway
+    // ]
     // 设置需要启用配置提示处理的模块
     Set<Project> ConfigProcessorProjects = [
-            base_forge_admin_api
+            // base_forge_admin_api
     ]
-    // 设置需要导入Swagger依赖的模块
-    Set<Project> SwaggerProjects = [
+    // 设置需要导入SpringDoc依赖的模块
+    Set<Project> SpringDocProjects = [
             base_forge_common,
+            base_forge_data_dictionary,
             base_forge_notification,
             base_forge_scheduler,
             base_forge_user,
@@ -161,35 +167,29 @@ subprojects {
     // 设置需要导入日志服务的模块
     Set<Project> LogProjects = [
     ]
-    // 设置需要导入配置服务的模块
-    Set<Project> ConfigProjects = [
-    ]
     // 设置需要导入MybatisPlus依赖的模块
     Set<Project> MybatisPlusProjects = [
             base_forge_common,
-            base_forge_log,
-            base_forge_config,
-            base_forge_scheduler,
-            base_forge_admin,
-            base_forge_user
-    ]
-    // 设置需要导入mybatisStarter依赖的模块
-    Set<Project> MybatisExtensionStarterProjects = [
-            base_forge_user,
     ]
     // 设置需要导入Jpa依赖的模块
     Set<Project> JpaProjects = [
             base_forge_user,
+            base_forge_auth,
+            base_forge_data_dictionary,
+            base_forge_common
     ]
 
     // 设置需要导入postgresql依赖的模块
     Set<Project> PostgresqlProjects = [
+            base_forge_common,
             base_forge_user,
+            base_forge_auth,
+            base_forge_data_dictionary,
     ]
 
     // 设置需要导入尤里卡客户端依赖的模块
     Set<Project> EurekaClientProjects = [
-            base_forge_admin,
+            // base_forge_admin,
             base_forge_file,
             base_forge_gateway,
             base_forge_log,
@@ -197,11 +197,12 @@ subprojects {
             base_forge_search,
             base_forge_notification,
             base_forge_user,
-            base_forge_auth
+            base_forge_auth,
+            base_forge_data_dictionary,
     ]
     // 设置需要导入配置中心客户端依赖的模块
     Set<Project> ConfigClientProjects = [
-            base_forge_admin,
+            // base_forge_admin,
             base_forge_discovery,
             base_forge_file,
             base_forge_gateway,
@@ -210,14 +211,16 @@ subprojects {
             base_forge_search,
             base_forge_notification,
             base_forge_user,
-            base_forge_auth
+            base_forge_auth,
+            base_forge_data_dictionary,
     ]
     // 设置需要导入openfeign依赖的模块
     Set<Project> OpenFeignProjects = [
             base_forge_notification_api,
-            base_forge_admin_api,
+            // base_forge_admin_api,
             base_forge_log_api,
-            base_forge_user_api
+            base_forge_user_api,
+            base_forge_auth_api
     ]
     // 设置需要导入rabbitmq依赖的模块
     Set<Project> RabbitmqProjects = [
@@ -226,26 +229,27 @@ subprojects {
     ]
     // 设置需要导入security core依赖的模块
     Set<Project> SecurityCoreProjects = [
-            base_forge_admin,
-            base_forge_admin_api,
-            base_forge_gateway,
+            // base_forge_admin,
+            // base_forge_admin_api,
+            // base_forge_gateway,
             base_forge_common
     ]
-
+    // 设置需要打包成可执行jar的模块
+    Set<Project> ExecutableJarProjects = [
+            // base_forge_admin,
+    ]
     // region base-forge-spring-boot-starter
     // 设置需要导入webStarter依赖的模块
     Set<Project> WebStarterProjects = [
-            base_forge_admin,
-            base_forge_config,
-            base_forge_discovery,
+            // base_forge_admin,
             base_forge_file,
-            base_forge_gateway,
             base_forge_log,
             base_forge_scheduler,
             base_forge_search,
             base_forge_notification,
             base_forge_user,
-            base_forge_auth
+            base_forge_auth,
+            base_forge_data_dictionary,
     ]
     // 设置需要导入redisStarter依赖的模块
     Set<Project> RedisStarterProjects = [
@@ -257,20 +261,36 @@ subprojects {
     ]
     // 设置需要导入grpcStarter依赖的模块
     Set<Project> GrpcStarterProjects = [
-            base_forge_admin_api,
+            // base_forge_admin_api,
             base_forge_log_api,
             base_forge_notification_api
     ]
-    // 设置需要打包成可执行jar的模块
-    Set<Project> ExecutableJarProjects = [
-            base_forge_admin,
+    // 设置需要导入utilStarter依赖的模块
+    Set<Project> UtilStarterProjects = [
+            base_forge_data_dictionary,
+            base_forge_gateway,
     ]
-    if (ExecutableJarProjects.contains(project)) {
-        apply {
-            from("${configDir}/bulid.gradle")
-        }
-    }
-
+    // 设置需要导入i18nStarter依赖的模块
+    Set<Project> I18nStarterProjects = [
+            base_forge_data_dictionary
+    ]
+    // 设置需要导入coreStarter依赖的模块
+    Set<Project> CoreStarterProjects = [
+            base_forge_data_dictionary,
+            base_forge_config,
+            base_forge_gateway,
+            base_forge_discovery
+    ]
+    // 设置需要导入mybatisExtensionStarter依赖的模块
+    Set<Project> MybatisExtensionStarterProjects = [
+            base_forge_user,
+            base_forge_auth,
+            base_forge_data_dictionary,
+            base_forge_log,
+            base_forge_scheduler,
+            // base_forge_admin,
+            base_forge_user,
+    ]
     // endregion
     // region 设置依赖
     dependencies {
@@ -313,12 +333,23 @@ subprojects {
         // region 设置公共的依赖
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testCompileOnly('org.projectlombok:lombok')
-        testAnnotationProcessor 'org.projectlombok:lombok'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        implementation 'org.jetbrains.kotlin:kotlin-reflect'
         // endregion
         // region 设置导入依赖的逻辑
+        if(UtilStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-util-spring-boot-starter')
+        }
+        if(CoreStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-core-spring-boot-starter')
+        }
+        if(I18nStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-i18n-spring-boot-starter')
+        }
+        if (ExecutableJarProjects.contains(project)) {
+            apply {
+                from("${configDir}/bulid.gradle")
+            }
+        }
         if (ActuatorProjects.contains(project)) {
             // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
             implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -349,7 +380,7 @@ subprojects {
             // 添加配置提示处理依赖
             annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
         }
-        if (SwaggerProjects.contains(project)) {
+        if (SpringDocProjects.contains(project)) {
             implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
         }
         if (CommonProjects.contains(project)) {
@@ -391,9 +422,9 @@ subprojects {
             implementation("com.google.protobuf:protobuf-java")
             implementation("com.google.protobuf:protobuf-java-util")
         }
-        if (AdminProjects.contains(project)) {
-            implementation base_forge_admin_api
-        }
+        // if (AdminProjects.contains(project)) {
+        //     implementation base_forge_admin_api
+        // }
         if (LogProjects.contains(project)) {
             implementation base_forge_log_api
         }
@@ -416,14 +447,19 @@ subprojects {
         if (JpaProjects.contains(project)) {
             implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         }
-        if(MybatisExtensionStarterProjects.contains(project)){
+        if (MybatisExtensionStarterProjects.contains(project)) {
             implementation('com.gewuyou:base-forge-mybatis-extension-spring-boot-starter')
         }
-        if(SecurityStarterProjects.contains(project)){
+        if (SecurityStarterProjects.contains(project)) {
+            // 认证依赖
             implementation('com.gewuyou:base-forge-security-authentication-spring-boot-starter')
             implementation('com.gewuyou:base-forge-security-authentication-spring-boot-starter-autoconfigure')
+            // 授权依赖
             implementation('com.gewuyou:base-forge-security-authorization-spring-boot-starter')
             implementation('com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure')
+            // jwt依赖
+            implementation('com.gewuyou:base-forge-jwt-spring-boot-starter')
+            implementation('com.gewuyou:base-forge-jwt-spring-boot-starter-autoconfigure')
         }
         // endregion
     }

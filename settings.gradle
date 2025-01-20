@@ -2,11 +2,12 @@ rootProject.name = 'base-forge'
 include(
         'base-forge-common',
         'base-forge-auth',
+        'base-forge-auth-api',
         // 8081端口
         'base-forge-user',
         'base-forge-user-api',
-        'base-forge-admin',
-        'base-forge-admin-api',
+        // 'base-forge-admin',
+        // 'base-forge-admin-api',
         // 8082端口
         'base-forge-gateway',
         // 8083端口
@@ -26,5 +27,6 @@ include(
         // 8888端口
         'base-forge-config',
         // 'base-forge-config-api',
+        "base-forge-data-dictionary"
 )
 

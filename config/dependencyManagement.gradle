@@ -3,7 +3,7 @@ ext {
     set('springCloudVersion', "2023.0.3")
     set('springBootVersion', "3.3.4")
     set('lombokVersion', "1.18.34")
-    set('grpcVersion', "1.68.0")
+    set('grpcVersion', "1.69.0")
     set('protobufVersion', "3.25.5")
     set('grpcSpringBootStarterVersion', "3.1.0.RELEASE")
     set('tomcatVersion', "6.0.53")
@@ -27,6 +27,7 @@ ext {
     set('baseForgeGrpcVersion', '1.0.0')
     set('baseForgeSecurityAuthenticationVersion', '1.0.0')
     set('baseForgeSecurityAuthorizationVersion', '1.0.0')
+    set('baseForgeJwtVersion', '1.0.0')
     // set('postgresqlVersion','42.7.4')
 }
 dependencyManagement {
@@ -78,6 +79,8 @@ dependencyManagement {
         dependency("com.gewuyou:base-forge-security-authentication-spring-boot-starter-autoconfigure:${baseForgeSecurityAuthenticationVersion}")
         dependency("com.gewuyou:base-forge-security-authorization-spring-boot-starter:${baseForgeSecurityAuthorizationVersion}")
         dependency("com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure:${baseForgeSecurityAuthorizationVersion}")
+        dependency("com.gewuyou:base-forge-jwt-spring-boot-starter:${baseForgeJwtVersion}")
+        dependency("com.gewuyou:base-forge-jwt-spring-boot-starter-autoconfigure:${baseForgeJwtVersion}")
     }
     jar {
         enabled = true
