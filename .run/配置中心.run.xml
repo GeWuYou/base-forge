@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="配置中心" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="基础服务">
+    <module name="base-forge.base-forge-config.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.gewuyou.baseforge.config.BaseForgeConfigApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
