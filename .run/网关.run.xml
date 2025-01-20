@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="网关" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="基础服务">
+    <module name="base-forge.base-forge-gateway.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.gewuyou.baseforge.gateway.BaseForgeGatewayApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
