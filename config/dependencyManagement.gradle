@@ -28,6 +28,7 @@ ext {
     set('baseForgeSecurityAuthenticationVersion', '1.0.0')
     set('baseForgeSecurityAuthorizationVersion', '1.0.0')
     set('baseForgeJwtVersion', '1.0.0')
+    set('kotlinxVersion', '1.10.1')
     // set('postgresqlVersion','42.7.4')
 }
 dependencyManagement {
@@ -44,6 +45,8 @@ dependencyManagement {
         dependency("org.apache:org.apache.commons.lang3:${commonsLang3Version}")
         dependency("org.redisson:redisson-spring-boot-starter:${redissonVersion}")
         dependency("cn.easy-es:easy-es-boot-starter:${easyEsVersion}")
+
+        dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxVersion}")
 
         // postgresql
         // dependency("org.postgresql:postgresql:${postgresqlVersion}")

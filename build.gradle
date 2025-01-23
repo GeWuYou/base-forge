@@ -178,6 +178,10 @@ subprojects {
             base_forge_data_dictionary,
             base_forge_common
     ]
+    // 设置需要引入redis依赖的模块
+    Set<Project> RedisProjects = [
+            base_forge_data_dictionary
+    ]
 
     // 设置需要导入postgresql依赖的模块
     Set<Project> PostgresqlProjects = [
@@ -239,6 +243,10 @@ subprojects {
             // base_forge_admin,
     ]
     // region base-forge-spring-boot-starter
+    // 设置需要导入Async starter依赖的模块
+    Set<Project> AsyncStarterProjects = [
+            base_forge_data_dictionary,
+    ]
     // 设置需要导入webStarter依赖的模块
     Set<Project> WebStarterProjects = [
             // base_forge_admin,
@@ -291,8 +299,18 @@ subprojects {
             // base_forge_admin,
             base_forge_user,
     ]
+    // 导入kt的协程
+    Set<Project> CoroutineStarterProjects = [
+            base_forge_data_dictionary,
+    ]
+
     // endregion
     // region 设置依赖
+    if (ExecutableJarProjects.contains(project)) {
+        apply {
+            from("${configDir}/bulid.gradle")
+        }
+    }
     dependencies {
         // region 文档注释
         /*
@@ -333,9 +351,16 @@ subprojects {
         // region 设置公共的依赖
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        implementation 'org.jetbrains.kotlin:kotlin-reflect'
         // endregion
         // region 设置导入依赖的逻辑
+        if(CoroutineStarterProjects.contains(project)){
+            // 核心协程库
+            // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+            implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core'
+        }
+        if(AsyncStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-async-spring-boot-starter')
+        }
         if(UtilStarterProjects.contains(project)){
             implementation('com.gewuyou:base-forge-util-spring-boot-starter')
         }
@@ -345,10 +370,8 @@ subprojects {
         if(I18nStarterProjects.contains(project)){
             implementation('com.gewuyou:base-forge-i18n-spring-boot-starter')
         }
-        if (ExecutableJarProjects.contains(project)) {
-            apply {
-                from("${configDir}/bulid.gradle")
-            }
+        if(RedisProjects.contains(project)){
+            implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         }
         if (ActuatorProjects.contains(project)) {
             // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
