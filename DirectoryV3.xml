@@ -4,7 +4,6 @@
     <tree path="/base-forge-gateway" title="8082"/>
     <tree path="/base-forge-search" title="8083"/>
     <tree path="/base-forge-log" title="8084"/>
-    <tree path="/base-forge-cache" title="8085"/>
     <tree path="/base-forge-file" title="8087" extension="" presentableText="" tooltipTitle="" icon="" textColor=""
           backgroundColor=""/>
     <tree path="/base-forge-scheduler" title="8085" extension="" presentableText="" tooltipTitle="" icon="" textColor=""
