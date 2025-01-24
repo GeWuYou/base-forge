@@ -2,4 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gewuyou.baseforge.dictionary.mapper.DictionaryItemMapper">
 
+    <select id="getDictionaryItemByCodeAndCategoryName"
+            resultType="com.gewuyou.baseforge.dictionary.model.DictionaryItem">
+        select bdi.id,
+               category_id,
+               code,
+               bdi.name,
+               value,
+               bdi.description,
+               bdi.is_enabled,
+               bdi.is_deleted,
+               environment,
+               effective_date,
+               expiration_date,
+               bdi.created_at,
+               bdi.updated_at,
+               type,
+               bdi.created_by,
+               bdi.updated_by
+        from bf_dictionary_item bdi
+                 left join bf_dictionary_category bdc
+                           on bdi.category_id = bdc.id
+                               and bdc.is_deleted = false
+                               and bdc.is_enabled = true
+        where bdi.code = #{code}
+          and bdc.name = #{categoryName}
+          and bdi.is_deleted = false
+          and bdi.is_enabled = true
+    </select>
+    <select id="getDictionaryItemByValueAndCategoryName"
+            resultType="com.gewuyou.baseforge.dictionary.model.DictionaryItem">
+        select bdi.id,
+               category_id,
+               code,
+               bdi.name,
+               value,
+               bdi.description,
+               bdi.is_enabled,
+               bdi.is_deleted,
+               environment,
+               effective_date,
+               expiration_date,
+               bdi.created_at,
+               bdi.updated_at,
+               type,
+               bdi.created_by,
+               bdi.updated_by
+        from bf_dictionary_item bdi
+                 left join bf_dictionary_category bdc
+                           on bdi.category_id = bdc.id
+                               and bdc.is_deleted = false
+                               and bdc.is_enabled = true
+        where bdi.value = #{value}
+          and bdc.name = #{categoryName}
+          and bdi.is_deleted = false
+          and bdi.is_enabled = true
+    </select>
 </mapper>

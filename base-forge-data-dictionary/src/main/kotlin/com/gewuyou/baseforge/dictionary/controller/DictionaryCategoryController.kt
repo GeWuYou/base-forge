@@ -3,9 +3,11 @@ package com.gewuyou.baseforge.dictionary.controller
 
 import com.gewuyou.baseforge.dictionary.dto.DictionaryCategoryDto
 import com.gewuyou.baseforge.dictionary.query.DictionaryCategoryQuery
-import com.gewuyou.baseforge.dictionary.request.DictionaryCategoryDeleteReq
+
 import com.gewuyou.baseforge.dictionary.request.DictionaryCategorySaveReq
 import com.gewuyou.baseforge.dictionary.service.DictionaryCategoryService
+import com.gewuyou.baseforge.entities.web.annotation.MethodRecording
+import com.gewuyou.baseforge.entities.web.entity.DeleteByIdsReq
 import com.gewuyou.baseforge.entities.web.entity.PageQuery
 import com.gewuyou.baseforge.entities.web.entity.PageResult
 import com.gewuyou.baseforge.entities.web.entity.Result
@@ -34,8 +36,9 @@ class DictionaryCategoryController(
      * @return 字典类别列表
      */
     @GetMapping("/list")
-    fun getCategoryList(@Valid @RequestBody query: PageQuery<DictionaryCategoryQuery>): Result<PageResult<DictionaryCategoryDto>> {
-        return Result.success(dictionaryCategoryService.getCategoryList(query), i18nMessageSource)
+    @MethodRecording
+    fun getDictionaryCategoryList(@Valid @RequestBody query: PageQuery<DictionaryCategoryQuery>): Result<PageResult<DictionaryCategoryDto>> {
+        return Result.success(dictionaryCategoryService.getDictionaryCategoryList(query), i18nMessageSource)
     }
 
     /**
@@ -44,6 +47,7 @@ class DictionaryCategoryController(
      * @return 新增结果
      */
     @PostMapping
+    @MethodRecording
     fun addDictionaryCategory(@Validated(AddValidationGroup::class) @Valid @RequestBody req: DictionaryCategorySaveReq): Result<String> {
         dictionaryCategoryService.saveDictionaryCategory(req)
         return Result.success(i18nMessageSource)
@@ -55,6 +59,7 @@ class DictionaryCategoryController(
      * @return 新增结果
      */
     @PutMapping
+    @MethodRecording
     fun updateDictionaryCategory(@Validated(UpdateValidationGroup::class) @Valid @RequestBody req: DictionaryCategorySaveReq): Result<String> {
         dictionaryCategoryService.saveDictionaryCategory(req)
         return Result.success(i18nMessageSource)
@@ -66,7 +71,8 @@ class DictionaryCategoryController(
      * @return 删除结果
      */
     @DeleteMapping("/physical")
-    fun physicalDeleteDictionaryCategory(@Valid @RequestBody req: DictionaryCategoryDeleteReq): Result<String> {
+    @MethodRecording
+    fun physicalDeleteDictionaryCategory(@Valid @RequestBody req: DeleteByIdsReq): Result<String> {
         dictionaryCategoryService.physicalDeleteDictionaryCategory(req)
         return Result.success(i18nMessageSource)
     }
@@ -77,7 +83,8 @@ class DictionaryCategoryController(
      * @return 删除结果
      */
     @DeleteMapping("/logical")
-    fun logicalDeleteDictionaryCategory(@Valid @RequestBody req: DictionaryCategoryDeleteReq): Result<String> {
+    @MethodRecording
+    fun logicalDeleteDictionaryCategory(@Valid @RequestBody req: DeleteByIdsReq): Result<String> {
         dictionaryCategoryService.logicalDeleteDictionaryCategory(req)
         return Result.success(i18nMessageSource)
     }

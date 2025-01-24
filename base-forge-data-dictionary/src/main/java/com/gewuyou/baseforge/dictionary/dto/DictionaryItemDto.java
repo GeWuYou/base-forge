@@ -9,23 +9,37 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- *
- * @author gewuyou DTO for {@link com.gewuyou.baseforge.dictionary.model.DictionaryCategory}
- *
+ * @author gewuyou DTO for {@link com.gewuyou.baseforge.dictionary.model.DictionaryItem}
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DictionaryCategoryDto implements Serializable {
+public class DictionaryItemDto implements Serializable {
     /**
      * 主键
      */
     private Long id;
     /**
-     * 类别名称
+     * 类别id
+     */
+    private Long categoryId;
+    /**
+     * 字典代码
+     */
+    private String code;
+    /**
+     * 字典项名
      */
     private String name;
+    /**
+     * 字典项值(可为配置、正则表达式，枚举值...)
+     */
+    private String value;
+    /**
+     * 字典类型
+     */
+    private String type;
     /**
      * 描述
      */
@@ -34,6 +48,18 @@ public class DictionaryCategoryDto implements Serializable {
      * 是否启用
      */
     private Boolean isEnabled;
+    /**
+     * 环境
+     */
+    private String environment;
+    /**
+     * 生效日期
+     */
+    private LocalDateTime effectiveDate;
+    /**
+     * 过期日期
+     */
+    private LocalDateTime expirationDate;
     /**
      * 创建时间
      */

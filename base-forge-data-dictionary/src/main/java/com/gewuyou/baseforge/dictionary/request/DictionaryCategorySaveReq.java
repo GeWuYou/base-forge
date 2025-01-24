@@ -25,8 +25,8 @@ public class DictionaryCategorySaveReq implements Serializable {
     /**
      * 主键
      */
-    @Null(groups = AddValidationGroup.class, message = "data.dictionaryCategory.id.must.null")
-    @NotNull(groups = UpdateValidationGroup.class, message = "data.dictionaryCategory.id.must.not.null")
+    @Null(groups = AddValidationGroup.class, message = "data.dictionary.entity.id.must.null")
+    @NotNull(groups = UpdateValidationGroup.class, message = "data.dictionary.entity.id.must.not.null")
     private Long id;
     /**
      * 类别名称
@@ -41,6 +41,6 @@ public class DictionaryCategorySaveReq implements Serializable {
     /**
      * 是否启用
      */
-    @NotNull(message = "data.dictionaryCategory.isEnabled.notNull")
+    @NotNull(message = "data.dictionary.entity.isEnabled.notNull")
     private Boolean isEnabled;
 }

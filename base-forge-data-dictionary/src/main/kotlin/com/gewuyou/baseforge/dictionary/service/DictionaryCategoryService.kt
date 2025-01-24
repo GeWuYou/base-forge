@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService
 import com.gewuyou.baseforge.dictionary.dto.DictionaryCategoryDto
 import com.gewuyou.baseforge.dictionary.model.DictionaryCategory
 import com.gewuyou.baseforge.dictionary.query.DictionaryCategoryQuery
-import com.gewuyou.baseforge.dictionary.request.DictionaryCategoryDeleteReq
+
 import com.gewuyou.baseforge.dictionary.request.DictionaryCategorySaveReq
+import com.gewuyou.baseforge.entities.web.entity.DeleteByIdsReq
 import com.gewuyou.baseforge.entities.web.entity.PageQuery
 import com.gewuyou.baseforge.entities.web.entity.PageResult
 
@@ -23,7 +24,7 @@ interface DictionaryCategoryService : IService<DictionaryCategory> {
      * @param query 查询条件
      * @return 字典类别列表
      */
-    fun getCategoryList(query: PageQuery<DictionaryCategoryQuery>): PageResult<DictionaryCategoryDto>
+    fun getDictionaryCategoryList(query: PageQuery<DictionaryCategoryQuery>): PageResult<DictionaryCategoryDto>
 
 
     /**
@@ -36,12 +37,12 @@ interface DictionaryCategoryService : IService<DictionaryCategory> {
      * 物理删除字典类别
      * @param req 删除请求
      */
-    fun physicalDeleteDictionaryCategory(req: DictionaryCategoryDeleteReq)
+    fun physicalDeleteDictionaryCategory(req: DeleteByIdsReq)
 
     /**
      * 逻辑删除字典类别
      * @param req 删除请求
      */
-    fun logicalDeleteDictionaryCategory(req: DictionaryCategoryDeleteReq)
+    fun logicalDeleteDictionaryCategory(req: DeleteByIdsReq)
 
 }
