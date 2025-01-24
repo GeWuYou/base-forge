@@ -8,9 +8,9 @@ import com.gewuyou.baseforge.dictionary.mapper.DictionaryCategoryMapper
 import com.gewuyou.baseforge.dictionary.model.DictionaryCategory
 import com.gewuyou.baseforge.dictionary.query.DictionaryCategoryQuery
 import com.gewuyou.baseforge.dictionary.repository.DictionaryCategoryRepository
-import com.gewuyou.baseforge.dictionary.request.DictionaryCategoryDeleteReq
 import com.gewuyou.baseforge.dictionary.request.DictionaryCategorySaveReq
 import com.gewuyou.baseforge.dictionary.service.DictionaryCategoryService
+import com.gewuyou.baseforge.entities.web.entity.DeleteByIdsReq
 import com.gewuyou.baseforge.entities.web.entity.PageQuery
 import com.gewuyou.baseforge.entities.web.entity.PageResult
 import com.gewuyou.baseforge.entities.web.extension.getPredicates
@@ -37,22 +37,21 @@ class DictionaryCategoryServiceImpl(
      * @param query 查询条件
      * @return 字典类别列表
      */
-    override fun getCategoryList(query: PageQuery<DictionaryCategoryQuery>): PageResult<DictionaryCategoryDto> {
+    override fun getDictionaryCategoryList(query: PageQuery<DictionaryCategoryQuery>): PageResult<DictionaryCategoryDto> {
         try {
-            log.debug("查询字典类别列表")
+            log.debug("query: $query")
             val content = dictionaryCategoryRepository.findAll(
                 { root, _, criteriaBuilder ->
-                    log.debug("query: $query")
                     val predicates = query.getPredicates(criteriaBuilder, root)
-                    if (StringUtils.isNotBlank(query.filter?.name)) {
+                    val filter = query.filter
+                    if (StringUtils.isNotBlank(filter?.name)) {
                         predicates.add(
                             criteriaBuilder.like(
                                 root[DictionaryCategory.FIELD_NAME],
-                                "%${query.filter.name}%"
+                                "%${filter.name}%"
                             )
                         )
                     }
-                    log.debug("predicates: $predicates")
                     criteriaBuilder.and(*predicates.toTypedArray())
                 },
                 query.toPageable()
@@ -95,7 +94,7 @@ class DictionaryCategoryServiceImpl(
      * 物理删除字典类别
      * @param req 删除请求
      */
-    override fun physicalDeleteDictionaryCategory(req: DictionaryCategoryDeleteReq) {
+    override fun physicalDeleteDictionaryCategory(req: DeleteByIdsReq) {
         dictionaryCategoryRepository.deleteAllById(req.ids)
     }
 
@@ -103,7 +102,7 @@ class DictionaryCategoryServiceImpl(
      * 逻辑删除字典类别
      * @param req 删除请求
      */
-    override fun logicalDeleteDictionaryCategory(req: DictionaryCategoryDeleteReq) {
+    override fun logicalDeleteDictionaryCategory(req: DeleteByIdsReq) {
         dictionaryCategoryRepository
             .saveAll(
                 dictionaryCategoryRepository
