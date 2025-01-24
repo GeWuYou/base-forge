@@ -27,6 +27,7 @@ include(
         // 8888端口
         'base-forge-config',
         // 'base-forge-config-api',
-        "base-forge-data-dictionary"
+        "base-forge-data-dictionary",
+        "base-forge-data-dictionary-api"
 )
 

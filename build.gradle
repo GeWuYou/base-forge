@@ -5,6 +5,8 @@ plugins {
     id 'java'
     // 应用 Java Library 插件，支持库开发，提供 API 和实现分离的能力
     id 'java-library'
+    // 应用 Maven 发布插件，支持项目的构建产物发布到 Maven 仓库
+    id 'maven-publish'
     // 应用 Spring Boot 插件，提供 Spring Boot 应用的开发和运行能力
     id 'org.springframework.boot' version '3.3.4'
     // Spring 依赖管理插件，简化依赖版本管理
@@ -36,11 +38,13 @@ subprojects {
         }
     }
     def configDir = "$rootDir/config/"
+    def tasksDir = "$configDir/tasks/"
     apply {
         from(file("$configDir/repositories.gradle"))
         plugin('idea')
         plugin('java')
         plugin('java-library')
+        plugin('maven-publish')
         plugin('org.springframework.boot')
         plugin('com.google.protobuf')
         plugin('io.spring.dependency-management')
@@ -49,6 +53,10 @@ subprojects {
         plugin('org.jetbrains.kotlin.plugin.lombok')
         plugin('org.jetbrains.kotlin.plugin.jpa')
         from(file("$configDir/dependencyManagement.gradle"))
+        // 导入源代码任务
+        from(file("$tasksDir/sourceTask.gradle"))
+        // 导入发布配置
+        from(file("$configDir/publishing.gradle"))
     }
     group = 'com.gewuyou'
     version = '0.1.0'
@@ -70,7 +78,7 @@ subprojects {
     final base_forge_auth = project(":base-forge-auth")
     final base_forge_auth_api = project(":base-forge-auth-api")
     final base_forge_data_dictionary = project(":base-forge-data-dictionary")
-    // final base_forge_data_dictionary_api = project(":base-forge-data-dictionary-api")
+    final base_forge_data_dictionary_api = project(":base-forge-data-dictionary-api")
     final base_forge_user = project(':base-forge-user')
     final base_forge_user_api = project(':base-forge-user-api')
     final base_forge_common = project(":base-forge-common")
@@ -103,7 +111,6 @@ subprojects {
     ]
     // endregion
     // region 注册任务
-    def tasksDir = "$rootDir/config/tasks/"
     if (NeedCopyBannerResourceProjects.contains(project)) {
         apply {
             from("${tasksDir}/bannerTask.gradle")
@@ -138,6 +145,7 @@ subprojects {
             base_forge_auth,
             base_forge_auth_api,
             base_forge_data_dictionary,
+            base_forge_data_dictionary_api,
             // base_forge_admin,
             // base_forge_admin_api,
             base_forge_file,
@@ -224,7 +232,8 @@ subprojects {
             // base_forge_admin_api,
             base_forge_log_api,
             base_forge_user_api,
-            base_forge_auth_api
+            base_forge_auth_api,
+            base_forge_data_dictionary_api,
     ]
     // 设置需要导入rabbitmq依赖的模块
     Set<Project> RabbitmqProjects = [
@@ -353,30 +362,29 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         // endregion
         // region 设置导入依赖的逻辑
-        if(CoroutineStarterProjects.contains(project)){
+        if (CoroutineStarterProjects.contains(project)) {
             // 核心协程库
             // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
             implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core'
         }
-        if(AsyncStarterProjects.contains(project)){
+        if (AsyncStarterProjects.contains(project)) {
             implementation('com.gewuyou:base-forge-async-spring-boot-starter')
         }
-        if(UtilStarterProjects.contains(project)){
+        if (UtilStarterProjects.contains(project)) {
             implementation('com.gewuyou:base-forge-util-spring-boot-starter')
         }
-        if(CoreStarterProjects.contains(project)){
+        if (CoreStarterProjects.contains(project)) {
             implementation('com.gewuyou:base-forge-core-spring-boot-starter')
         }
-        if(I18nStarterProjects.contains(project)){
+        if (I18nStarterProjects.contains(project)) {
             implementation('com.gewuyou:base-forge-i18n-spring-boot-starter')
         }
-        if(RedisProjects.contains(project)){
+        if (RedisProjects.contains(project)) {
             implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         }
         if (ActuatorProjects.contains(project)) {
             // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
             implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
         }
         if (GrpcStarterProjects.contains(project)) {
             implementation('com.gewuyou:base-forge-grpc-spring-boot-starter')
