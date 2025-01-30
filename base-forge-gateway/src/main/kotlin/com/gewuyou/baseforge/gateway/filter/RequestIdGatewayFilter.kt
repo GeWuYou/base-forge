@@ -17,15 +17,15 @@ import reactor.core.publisher.Mono
  * @author gewuyou
  */
 class RequestIdGatewayFilter : GatewayFilter {
-    override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Unit> {
+    override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
         val request = exchange.request
         // 检测请求是否需要跳过
         if (shouldSkipRequest(request)) {
-            return chain.filter(exchange).then(Mono.empty())
+            return chain.filter(exchange)
         }
         request.headers[WebCommonConstant.REQUEST_ID_HEADER]?.let {
             // 如果请求头中已有 requestId，直接设置到 RequestIdUtil 中
-            it.firstOrNull()?.let { RequestIdUtil::setRequestId } ?: RequestIdUtil.generateRequestId().also {
+            it.firstOrNull()?.let(RequestIdUtil::setRequestId) ?: RequestIdUtil.generateRequestId().also {
                 request.mutate()
                     // 将 requestId 添加到请求头
                     .header(WebCommonConstant.REQUEST_ID_HEADER, RequestIdUtil.getRequestId())
@@ -43,7 +43,7 @@ class RequestIdGatewayFilter : GatewayFilter {
                 MDC.remove(WebCommonConstant.REQUEST_ID_MDC_KEY)
                 // 将 requestId 清除
                 RequestIdUtil.removeRequestId()
-            }.then(Mono.empty())
+            }
     }
 
     /**
