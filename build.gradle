@@ -53,10 +53,6 @@ subprojects {
         plugin('org.jetbrains.kotlin.plugin.lombok')
         plugin('org.jetbrains.kotlin.plugin.jpa')
         from(file("$configDir/dependencyManagement.gradle"))
-        // 导入源代码任务
-        from(file("$tasksDir/sourceTask.gradle"))
-        // 导入发布配置
-        from(file("$configDir/publishing.gradle"))
     }
     group = 'com.gewuyou'
     version = '0.1.0'
@@ -251,6 +247,10 @@ subprojects {
     Set<Project> ExecutableJarProjects = [
             // base_forge_admin,
     ]
+    // 设置需要字典服务的模块
+    Set<Project> DataDictionaryProjects = [
+            base_forge_auth
+    ]
     // region base-forge-spring-boot-starter
     // 设置需要导入Async starter依赖的模块
     Set<Project> AsyncStarterProjects = [
@@ -270,7 +270,7 @@ subprojects {
     ]
     // 设置需要导入redisStarter依赖的模块
     Set<Project> RedisStarterProjects = [
-
+        base_forge_auth,
     ]
     // 设置需要导入security 认证和鉴权 starter依赖的模块
     Set<Project> SecurityStarterProjects = [
@@ -289,14 +289,16 @@ subprojects {
     ]
     // 设置需要导入i18nStarter依赖的模块
     Set<Project> I18nStarterProjects = [
-            base_forge_data_dictionary
+            base_forge_data_dictionary,
+            base_forge_auth
     ]
     // 设置需要导入coreStarter依赖的模块
     Set<Project> CoreStarterProjects = [
             base_forge_data_dictionary,
             base_forge_config,
             base_forge_gateway,
-            base_forge_discovery
+            base_forge_discovery,
+            base_forge_auth,
     ]
     // 设置需要导入mybatisExtensionStarter依赖的模块
     Set<Project> MybatisExtensionStarterProjects = [
@@ -362,6 +364,12 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         // endregion
         // region 设置导入依赖的逻辑
+        if(RedisStarterProjects.contains(project)){
+            implementation('com.gewuyou:base-forge-redis-spring-boot-starter')
+        }
+        if(DataDictionaryProjects.contains(project)){
+            implementation base_forge_data_dictionary_api
+        }
         if (CoroutineStarterProjects.contains(project)) {
             // 核心协程库
             // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core

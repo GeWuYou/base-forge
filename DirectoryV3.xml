@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?> 
  <trees>
-    <tree path="/base-forge-admin" title="8081"/>
-    <tree path="/base-forge-gateway" title="8082"/>
-    <tree path="/base-forge-search" title="8083"/>
-    <tree path="/base-forge-log" title="8084"/>
-    <tree path="/base-forge-file" title="8087" extension="" presentableText="" tooltipTitle="" icon="" textColor=""
-          backgroundColor=""/>
-    <tree path="/base-forge-scheduler" title="8085" extension="" presentableText="" tooltipTitle="" icon="" textColor=""
-          backgroundColor=""/>
-    <tree path="/base-forge-discovery" title="8761"/>
-    <tree path="/base-forge-config" title="8888"/>
-    <tree path="/base-forge-common" title="公共模块"/>
-</trees>
+
+    <tree path="/base-forge-config/src/main/resources/conf/base-forge-config" title="port:8888" extension=""
+          presentableText="" tooltipTitle="" icon="" textColor="" backgroundColor=""/>
+    <tree path="/base-forge-config/src/main/resources/conf/base-forge-data-dictionary" title="port:8081"/>
+    <tree path="/base-forge-config/src/main/resources/conf/base-forge-discovery" title="port:8761"/>
+    <tree path="/base-forge-config/src/main/resources/conf/base-forge-gateway" title="port:8082" extension=""
+          presentableText="" tooltipTitle="" icon="" textColor="" backgroundColor=""/>
+    <tree path="/base-forge-config/src/main/resources/conf/base-forge-auth" title="port:8083"/>
+ </trees>
