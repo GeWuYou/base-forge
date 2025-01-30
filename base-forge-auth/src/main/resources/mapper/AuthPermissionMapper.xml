@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gewuyou.baseforge.auth.mapper.AuthPermissionMapper">
+    <resultMap id="securityResourceRoleResultMap" type="com.gewuyou.baseforge.auth.dto.AuthPermissionRoleDto">
+        <id property="id" column="id"/>
+        <result property="url" column="url"/>
+        <result property="requestMethod" column="request_method"/>
+        <collection property="roles" ofType="java.lang.String">
+            <constructor>
+                <arg column="role_name"/>
+            </constructor>
+        </collection>
+    </resultMap>
+    <select id="getAuthPermissionRoleDtoList"
+            resultType="com.gewuyou.baseforge.auth.dto.AuthPermissionRoleDto">
+        select bap.id as id,
+               url,
+               request_method,
+               role_name
+        from base_forge.public.bf_auth_permission bap
+                 left join base_forge.public.bf_auth_role_permission barp
+                           on bap.id = barp.permission_id
+                 left join base_forge.public.bf_auth_role bar
+                           on barp.role_id = bar.id
+                               and bar.is_deleted = false
+                               and bar.is_active = false
+        where bap.is_deleted = false
+          and bap.is_active = false
+    </select>
+</mapper>
