@@ -17,11 +17,11 @@ import reactor.core.publisher.Mono
  * @author gewuyou
  */
 class RequestIdGatewayFilter : GatewayFilter {
-    override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
+    override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Unit> {
         val request = exchange.request
         // 检测请求是否需要跳过
         if (shouldSkipRequest(request)) {
-            return chain.filter(exchange)
+            return chain.filter(exchange).then(Mono.empty())
         }
         request.headers[WebCommonConstant.REQUEST_ID_HEADER]?.let {
             // 如果请求头中已有 requestId，直接设置到 RequestIdUtil 中
@@ -43,7 +43,7 @@ class RequestIdGatewayFilter : GatewayFilter {
                 MDC.remove(WebCommonConstant.REQUEST_ID_MDC_KEY)
                 // 将 requestId 清除
                 RequestIdUtil.removeRequestId()
-            }
+            }.then(Mono.empty())
     }
 
     /**
@@ -55,13 +55,13 @@ class RequestIdGatewayFilter : GatewayFilter {
         val method = httpRequest.method
         return when {
             // 跳过 OPTIONS 请求
-            HttpMethod.OPTIONS.equals(method) -> true
+            HttpMethod.OPTIONS == method -> true
             // 跳过 静态资源请求 (例如图片、CSS、JavaScript 文件)
-            HttpMethod.GET.equals(method) && httpRequest.uri.path.matches(Regex(".*\\.(css|js|png|jpg|jpeg|gif|svg)")) -> true
+            HttpMethod.GET == method && httpRequest.uri.path.matches(Regex(".*\\.(css|js|png|jpg|jpeg|gif|svg)")) -> true
             // 跳过 HEAD 请求
-            HttpMethod.HEAD.equals(method) -> true
+            HttpMethod.HEAD == method -> true
             // 跳过 TRACE 请求
-            HttpMethod.TRACE.equals(method) -> true
+            HttpMethod.TRACE == method -> true
             // 跳过健康检查请求
             httpRequest.uri.path.startsWith("/actuator/health") || httpRequest.uri.path == "/health" -> true
             else -> false
