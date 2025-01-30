@@ -16,6 +16,13 @@ spring:
           filters:
             - StripPrefix=2
             - name: RequestId
+        - id: base-forge-auth
+          uri: lb://base-forge-auth
+          predicates:
+            - Path=/api/v1/auth/**
+          filters:
+            - StripPrefix=2
+            - name: RequestId
       # 全局的跨域处理
       global-cors:
         # 解决options请求被拦截问题
