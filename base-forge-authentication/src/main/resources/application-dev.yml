@@ -1,0 +1,11 @@
+spring:
+  config:
+    import: configserver:http://localhost:8888/
+  cloud:
+    config:
+      profile: dev
+      name: >
+        ${spring.application.name},
+         common-log,common-eureka,
+         common-rabbitmq,common-bus,
+         common-redis,common-datasource

@@ -1,4 +1,4 @@
-package com.gewuyou.baseforge.auth.entity
+package com.gewuyou.baseforge.authentication.entity
 
 import org.springframework.security.core.GrantedAuthority
 
