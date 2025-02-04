@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam
  */
 @FeignClient(name = "base-forge-data-dictionary")
 interface BaseForgeDataDictionaryOpenfeignClient {
+    companion object{
+        private const val BASE_URL = "/dictionary"
+        const val ITEM_URL = BASE_URL.plus("/item")
+    }
     /**
      * 根据字典项代码与类别名获取字典项
      * @param code 字典代码
      * @param categoryName 字典项类别
      * @return 字典项
      */
-    @GetMapping("/code")
+    @GetMapping("$ITEM_URL/code")
     fun getDictionaryItemById(@RequestParam code: String, @RequestParam categoryName: String): DictionaryItem?
 
     /**
@@ -28,7 +32,7 @@ interface BaseForgeDataDictionaryOpenfeignClient {
      * @param categoryName 字典项类别
      * @return 字典项
      */
-    @GetMapping("/value")
+    @GetMapping("$ITEM_URL/value")
     fun getDictionaryItemByCode(@RequestParam value: String, @RequestParam categoryName: String): DictionaryItem?
 
     /**
@@ -37,6 +41,6 @@ interface BaseForgeDataDictionaryOpenfeignClient {
      * @param name 字典项名称
      * @return 字典项
      */
-    @GetMapping
+    @GetMapping(ITEM_URL)
     fun getDictionaryItemByCodeAndName(@RequestParam code: String, @RequestParam name: String): DictionaryItem?
 }
