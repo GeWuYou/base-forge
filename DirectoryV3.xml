@@ -7,5 +7,6 @@
     <tree path="/base-forge-config/src/main/resources/conf/base-forge-discovery" title="port:8761"/>
     <tree path="/base-forge-config/src/main/resources/conf/base-forge-gateway" title="port:8082" extension=""
           presentableText="" tooltipTitle="" icon="" textColor="" backgroundColor=""/>
-    <tree path="/base-forge-config/src/main/resources/conf/base-forge-auth" title="port:8083"/>
+    <tree path="/base-forge-config/src/main/resources/conf/base-forge-authentication" title="port:8083"/>
+     <tree path="/base-forge-config/src/main/resources/conf/base-forge-authorization" title="port:8084"/>
  </trees>
