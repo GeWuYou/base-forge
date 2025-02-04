@@ -8,4 +8,5 @@ spring:
             classpath:/conf/base-forge-discovery,
             classpath:/conf/base-forge-gateway,
             classpath:/conf/base-forge-data-dictionary,
-            classpath:/conf/base-forge-auth,
+            classpath:/conf/base-forge-authentication,
+            classpath:/conf/base-forge-authorization,

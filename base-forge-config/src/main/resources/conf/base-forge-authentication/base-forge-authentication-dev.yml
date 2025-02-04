@@ -1,0 +1,6 @@
+server:
+  port: 8083
+base-forge:
+  security:
+    authentication:
+      base-login-url: /auth/login
