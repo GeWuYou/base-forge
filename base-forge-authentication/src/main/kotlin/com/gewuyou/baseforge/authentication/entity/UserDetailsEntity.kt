@@ -1,6 +1,6 @@
-package com.gewuyou.baseforge.auth.entity
+package com.gewuyou.baseforge.authentication.entity
 
-import com.gewuyou.baseforge.auth.model.AuthRole
+import com.gewuyou.baseforge.authorization.model.AuthRole
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

@@ -1,8 +1,8 @@
-package com.gewuyou.baseforge.auth.service.impl
+package com.gewuyou.baseforge.authentication.service.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.gewuyou.baseforge.auth.constant.AuthConstant
-import com.gewuyou.baseforge.auth.entity.UserDetailsEntity
+import com.gewuyou.baseforge.authentication.constant.AuthenticationConstant
+import com.gewuyou.baseforge.authentication.entity.UserDetailsEntity
 import com.gewuyou.baseforge.redis.service.CacheService
 import org.springframework.security.core.userdetails.UserCache
 import org.springframework.security.core.userdetails.UserDetails
@@ -32,7 +32,7 @@ class UserCacheImpl(
     override fun getUserFromCache(username: String?): UserDetails? {
         return username?.let {
             objectMapper.readValue(
-                cacheService.get(AuthConstant.USER_CACHE_PREFIX + username).toString(),
+                cacheService.get(AuthenticationConstant.USER_CACHE_PREFIX + username).toString(),
                 UserDetailsEntity::class.java
             )
         }
@@ -45,7 +45,7 @@ class UserCacheImpl(
      */
     override fun putUserInCache(user: UserDetails?) {
         user?.let {
-            cacheService.set(AuthConstant.USER_CACHE_PREFIX + user.username, objectMapper.writeValueAsString(user), expiration)
+            cacheService.set(AuthenticationConstant.USER_CACHE_PREFIX + user.username, objectMapper.writeValueAsString(user), expiration)
         }
     }
 
@@ -61,7 +61,7 @@ class UserCacheImpl(
      */
     override fun removeUserFromCache(username: String?) {
         username?.let {
-            cacheService.delete(AuthConstant.USER_CACHE_PREFIX + username)
+            cacheService.delete(AuthenticationConstant.USER_CACHE_PREFIX + username)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.gewuyou.baseforge.auth.config
+package com.gewuyou.baseforge.authentication.config
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Configuration
@@ -11,4 +11,4 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 @EnableAutoConfiguration
-class AuthConfiguration
+class AuthenticationConfiguration
