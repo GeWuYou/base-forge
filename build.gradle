@@ -104,7 +104,9 @@ subprojects {
             base_forge_search,
             base_forge_config,
             base_forge_notification,
-            base_forge_data_dictionary
+            base_forge_data_dictionary,
+            base_forge_authorization,
+            base_forge_authentication
     ]
     // endregion
     // region 注册任务
