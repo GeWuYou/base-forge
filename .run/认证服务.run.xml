@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="认证服务" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="通用服务">
+  <configuration default="false" name="认证服务" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="安全服务">
     <module name="base-forge.base-forge-authentication.main" />
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.gewuyou.baseforge.authentication.BaseForgeAuthenticationApplication" />
