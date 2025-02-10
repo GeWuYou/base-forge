@@ -10,3 +10,5 @@ base-forge:
   security:
     authorization:
       is-web-flux: true
+      request-url: /api/v1/**
+      ignored: /api/v1/auth/c/**
