@@ -10,6 +10,7 @@ import com.gewuyou.baseforge.dictionary.query.DictionaryItemQuery
 import com.gewuyou.baseforge.dictionary.request.DictionaryItemSaveReq
 import com.gewuyou.baseforge.dictionary.service.DictionaryCategoryService
 import com.gewuyou.baseforge.dictionary.service.DictionaryItemService
+import com.gewuyou.baseforge.entities.web.annotation.ApiVersion
 import com.gewuyou.baseforge.entities.web.annotation.MethodRecording
 import com.gewuyou.baseforge.entities.web.entity.DeleteByIdsReq
 import com.gewuyou.baseforge.entities.web.entity.PageQuery
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.*
  * @since 2025-01-16
  */
 @RestController
+@ApiVersion
 @RequestMapping("/dictionary/item")
 class DictionaryItemController(
     private val dictionaryItemService: DictionaryItemService,
