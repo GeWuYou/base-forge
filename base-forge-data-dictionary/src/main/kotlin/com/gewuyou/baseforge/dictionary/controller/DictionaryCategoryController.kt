@@ -6,6 +6,7 @@ import com.gewuyou.baseforge.dictionary.query.DictionaryCategoryQuery
 
 import com.gewuyou.baseforge.dictionary.request.DictionaryCategorySaveReq
 import com.gewuyou.baseforge.dictionary.service.DictionaryCategoryService
+import com.gewuyou.baseforge.entities.web.annotation.ApiVersion
 import com.gewuyou.baseforge.entities.web.annotation.MethodRecording
 import com.gewuyou.baseforge.entities.web.entity.DeleteByIdsReq
 import com.gewuyou.baseforge.entities.web.entity.PageQuery
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*
  * @since 2025-01-16
  */
 @RestController
+@ApiVersion
 @RequestMapping("/dictionary/category")
 class DictionaryCategoryController(
     private val dictionaryCategoryService: DictionaryCategoryService,
