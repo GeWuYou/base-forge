@@ -2,6 +2,7 @@ package com.gewuyou.baseforge.authorization.controller
 
 import com.gewuyou.baseforge.authorization.model.AuthRole
 import com.gewuyou.baseforge.authorization.service.AuthUserRoleService
+import com.gewuyou.baseforge.entities.web.annotation.ApiVersion
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
  * @since 2025-01-15
  */
 @RestController
-@RequestMapping("/auth/userRole")
+@ApiVersion
+@RequestMapping("/auth/z/userRole")
 class AuthUserRoleController(
     private val authUserRoleService: AuthUserRoleService
 ){

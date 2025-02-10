@@ -1,5 +1,6 @@
 package com.gewuyou.baseforge.authorization.controller
 
+import com.gewuyou.baseforge.entities.web.annotation.ApiVersion
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -12,5 +13,6 @@ import org.springframework.web.bind.annotation.RestController
  * @since 2025-01-15
  */
 @RestController
-@RequestMapping("/auth/authRole")
+@ApiVersion
+@RequestMapping("/auth/z/role")
 class AuthRoleController
