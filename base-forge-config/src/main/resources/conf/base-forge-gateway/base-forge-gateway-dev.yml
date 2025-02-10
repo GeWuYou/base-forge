@@ -9,20 +9,27 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: base-forge-data-dictionary
+        # 字典服务
+        - id: base-forge-data-dictionary-v1
           uri: lb://base-forge-data-dictionary
           predicates:
             - Path=/api/v1/dictionary/**
-          filters:
-            - StripPrefix=2
-            - name: RequestId
-        - id: base-forge-auth
-          uri: lb://base-forge-auth
+          # filters:
+          #   - name: RequestId
+        # 认证服务
+        - id: base-forge-authentication-v1
+          uri: lb://base-forge-authentication
           predicates:
-            - Path=/api/v1/auth/**
-          filters:
-            - StripPrefix=2
-            - name: RequestId
+            - Path=/api/v1/auth/c/**
+          # filters:
+          #   - name: RequestId
+        # 授权资源服务
+        - id: base-forge-authorization-v1
+          uri: lb://base-forge-authorization
+          predicates:
+            - Path=/api/v1/auth/z/**
+          # filters:
+          #   - name: RequestId
       # 全局的跨域处理
       global-cors:
         # 解决options请求被拦截问题
@@ -30,7 +37,7 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOrigins: # 允许哪些网站的跨域请求
-              # - "http://localhost:8081"
+            # - "http://localhost:8081"
             allowedMethods: # 允许的跨域ajax的请求方式
               - "GET"
               - "POST"
