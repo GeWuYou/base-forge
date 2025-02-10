@@ -2,6 +2,7 @@ package com.gewuyou.baseforge.authorization.controller
 
 import com.gewuyou.baseforge.authorization.model.AuthUser
 import com.gewuyou.baseforge.authorization.service.AuthUserService
+import com.gewuyou.baseforge.entities.web.annotation.ApiVersion
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
  * @since 2025-01-15
  */
 @RestController
+@ApiVersion
 @RequestMapping("/auth/z/user")
 class AuthUserController(
     private val authUserService: AuthUserService
