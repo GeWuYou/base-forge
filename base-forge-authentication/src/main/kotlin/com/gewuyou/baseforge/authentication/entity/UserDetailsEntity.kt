@@ -1,8 +1,9 @@
 package com.gewuyou.baseforge.authentication.entity
 
 import com.gewuyou.baseforge.authorization.model.AuthRole
+import com.gewuyou.baseforge.security.authentication.entities.entity.UserDetails
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
+
 
 /**
  *用户详细信息实体
@@ -14,6 +15,10 @@ data class UserDetailsEntity(
     val userAuthId: Long,
     private val username: String,
     private val password: String,
+    /**
+     * 用户身份标识
+     */
+    private val principal: Any,
     val roles: List<AuthRole>,
     val enabled: Boolean,
 ) : UserDetails {
@@ -25,20 +30,17 @@ data class UserDetailsEntity(
         return this.roles.stream().map{GrantedAuthorityEntity(it.roleName)}.toList()
     }
 
-    /**
-     * Returns the password used to authenticate the user.
-     * @return the password
-     */
-    override fun getPassword(): String {
+    override fun getCredentials(): Any {
         return this.password
     }
 
-    /**
-     * Returns the username used to authenticate the user. Cannot return
-     * `null`.
-     * @return the username (never `null`)
-     */
-    override fun getUsername(): String {
-        return this.username
+    override fun getPrincipal(): Any {
+       return this.principal
     }
+
+    override fun getUserOnlyIdentity(): Any {
+        return this.userAuthId
+    }
+
+
 }
