@@ -7,4 +7,5 @@ spring:
       name: >
        ${spring.application.name},common-log,
         common-eureka,common-rabbitmq,
-        common-bus,common-redis,common-datasource
+        common-bus,common-redis,common-datasource,
+        security-jwt-secret-key
