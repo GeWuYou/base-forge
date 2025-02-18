@@ -9,21 +9,25 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: base-forge-data-dictionary
+        # 字典服务
+        - id: base-forge-data-dictionary-v1
           uri: lb://base-forge-data-dictionary
           predicates:
-            - Path=/api/v1/auth/z/dictionary/**
-          filters:
-            - StripPrefix=2
-            - name: RequestId
-        - id: base-forge-authentication
+            - Path=/api/v1/dictionary/**
+          # filters:
+          #   - name: RequestId
+        # 认证服务
+        - id: base-forge-authentication-v1
           uri: lb://base-forge-authentication
           predicates:
-            - Path=/api/v1/auth/c/**
-          filters:
-            - StripPrefix=2
-            - name: RequestId
-
+            - Path=/api/auth/c/**
+          # filters:
+          #   - name: RequestId
+        # 授权资源服务
+        - id: base-forge-authorization-v1
+          uri: lb://base-forge-authorization
+          predicates:
+            - Path=/api/v1/auth/z/**
       # 全局的跨域处理
       global-cors:
         # 解决options请求被拦截问题
