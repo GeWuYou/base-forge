@@ -5,8 +5,9 @@ import com.gewuyou.baseforge.authentication.entity.UserDetailsEntity
 import com.gewuyou.baseforge.authorization.api.client.BaseForgeAuthorizationOpenfeignClient
 import com.gewuyou.baseforge.authorization.model.AuthUser
 import com.gewuyou.baseforge.dictionary.api.client.BaseForgeDataDictionaryOpenfeignClient
-import com.gewuyou.baseforge.security.authentication.autoconfigure.service.AuthenticationUserDetailsService
-import org.springframework.security.core.userdetails.UserDetails
+import com.gewuyou.baseforge.security.authentication.autoconfigure.service.UserDetailsService
+import com.gewuyou.baseforge.security.authentication.entities.entity.UserDetails
+
 import org.springframework.stereotype.Service
 
 /**
@@ -15,20 +16,11 @@ import org.springframework.stereotype.Service
  * @since 2025-01-10 16:17:51
  * @author gewuyou
  */
-@Service
+@Service("userDetailsService")
 class UserDetailsServiceImpl(
     private val dataDictionaryOpenfeignClient: BaseForgeDataDictionaryOpenfeignClient,
     private val authorizationOpenfeignClient: BaseForgeAuthorizationOpenfeignClient,
-) :  AuthenticationUserDetailsService {
-    /**
-     * 根据用户唯一标识查询用户唯一标识
-     * @param principal 用户唯一标识 通常为用户名 手机号 邮箱等
-     * @apiNote 用于支持多种唯一标识登录时，根据登录时用户唯一标识查询用户确定的唯一标识
-     * @return 用户唯一标识 此实现使用用户id作为用户确定的唯一标识
-     */
-    override fun getUserPrincipal(principal: Any): String? {
-       return getAuthUser(principal).id.toString()
-    }
+) : UserDetailsService {
     private fun getAuthUser(principal: Any): AuthUser {
         // 从数据字典中获取邮箱正则
         val emailRegular = dataDictionaryOpenfeignClient.getDictionaryItemByCode(
@@ -66,13 +58,13 @@ class UserDetailsServiceImpl(
      * @param principal 用户唯一标识 通常为用户名 手机号 邮箱等
      * @return UserDetails 用户详细信息
      */
-    override fun loadUserByPrincipal(principal: Any): UserDetails? {
+    override fun loadUserByPrincipal(principal: Any): UserDetails {
         // 先获取用户认证信息
-        val authUser = getAuthUser(principal)
+        val authUser =  authorizationOpenfeignClient.findByUsername(principal as String)?: throw IllegalArgumentException("用户不存在")
         val userAuthId = authUser.id
         // 再获取用户角色信息
         val roles = authorizationOpenfeignClient.getRoleByUserAuthId(userAuthId)
         // 再装配用户详细信息
-        return UserDetailsEntity(userAuthId,authUser.username,authUser.password,roles,authUser.isEnabled)
+        return UserDetailsEntity(userAuthId,authUser.username,authUser.password,principal,roles,authUser.isEnabled)
     }
 }
