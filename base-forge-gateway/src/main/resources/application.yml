@@ -12,3 +12,5 @@ base-forge:
       is-web-flux: true
       request-url: /api/v1/**
       ignored: /api/v1/auth/c/**
+  i18n:
+    is-web-flux: true
