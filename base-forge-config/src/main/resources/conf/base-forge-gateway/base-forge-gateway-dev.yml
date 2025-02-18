@@ -20,7 +20,7 @@ spring:
         - id: base-forge-authentication-v1
           uri: lb://base-forge-authentication
           predicates:
-            - Path=/api/v1/auth/c/**
+            - Path=/api/auth/c/**
           # filters:
           #   - name: RequestId
         # 授权资源服务
@@ -28,8 +28,6 @@ spring:
           uri: lb://base-forge-authorization
           predicates:
             - Path=/api/v1/auth/z/**
-          # filters:
-          #   - name: RequestId
       # 全局的跨域处理
       global-cors:
         # 解决options请求被拦截问题
