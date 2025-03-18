@@ -22,6 +22,7 @@ public class InternalException extends RuntimeException {
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
+     *
      * @param errorMessage the detail message.
      */
     public InternalException(String errorMessage) {
@@ -29,7 +30,19 @@ public class InternalException extends RuntimeException {
         this.internalInformation = null;
     }
 
-    public InternalException(String errorMessage,InternalInformation internalInformation) {
+    public InternalException(String errorMessage, Throwable cause) {
+        super(errorMessage, cause);
+        this.errorMessage = errorMessage;
+        this.internalInformation = null;
+    }
+
+    public InternalException(String errorMessage, InternalInformation internalInformation) {
+        this.errorMessage = errorMessage;
+        this.internalInformation = internalInformation;
+    }
+
+    public InternalException(String errorMessage, Throwable cause, InternalInformation internalInformation) {
+        super(errorMessage, cause);
         this.errorMessage = errorMessage;
         this.internalInformation = internalInformation;
     }
