@@ -1,0 +1,7 @@
+dependencies {
+    // pgSQL 数据库驱动
+    runtimeOnly('org.postgresql:postgresql')
+    // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-generator
+    implementation 'com.baomidou:mybatis-plus-generator'
+}
+
