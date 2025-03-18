@@ -1,8 +1,8 @@
 package com.gewuyou.baseforge.security.authentication.autoconfigure.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.gewuyou.baseforge.core.extension.log
 import com.gewuyou.baseforge.entities.web.entity.Result
-import com.gewuyou.baseforge.security.authentication.entities.i18n.enums.SecurityAuthenticationResponseInformation
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.MessageSource
@@ -26,10 +26,11 @@ class AuthenticationExceptionHandler(
         response: HttpServletResponse,
         authException: AuthenticationException
     ) {
-        response.status = HttpStatus.UNAUTHORIZED.value()
+        log.error("身份验证异常: ", authException)
+        response.status = HttpStatus.OK.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         val writer = response.writer
-        writer.print(objectMapper.writeValueAsString(Result.failure<String>(SecurityAuthenticationResponseInformation.LoginFailed,i18nMessageSource)))
+        writer.print(objectMapper.writeValueAsString(Result.failure<String>(authException.message,i18nMessageSource)))
         writer.flush()
         writer.close()
     }

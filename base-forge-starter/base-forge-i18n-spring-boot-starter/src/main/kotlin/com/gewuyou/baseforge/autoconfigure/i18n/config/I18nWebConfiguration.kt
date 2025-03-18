@@ -1,6 +1,5 @@
 package com.gewuyou.baseforge.autoconfigure.i18n.config
 
-import com.gewuyou.baseforge.autoconfigure.i18n.config.I18nAutoConfiguration.BASE_NAME_PREFIX
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -16,7 +15,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
  * @author gewuyou
  */
 @Configuration
-@ConditionalOnProperty(prefix = BASE_NAME_PREFIX, name = ["is-web-flux"], havingValue = "false")
+@ConditionalOnProperty(name = ["spring.main.web-application-type"], havingValue = "servlet", matchIfMissing = true)
 class I18nWebConfiguration(
     @Autowired
     private val localeChangeInterceptor: LocaleChangeInterceptor

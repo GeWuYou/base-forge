@@ -5,6 +5,7 @@ import com.gewuyou.baseforge.autoconfigure.i18n.filter.ReactiveLocaleResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,7 +36,6 @@ import java.util.Locale;
 @Slf4j
 public class I18nAutoConfiguration {
     public static final String MESSAGE_SOURCE_BEAN_NAME = "i18nMessageSource";
-    public static final String BASE_NAME_PREFIX = "base-forge.i18n";
 
     @Bean(name = MESSAGE_SOURCE_BEAN_NAME)
     @ConditionalOnMissingBean(name = MESSAGE_SOURCE_BEAN_NAME)
@@ -74,7 +74,7 @@ public class I18nAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = BASE_NAME_PREFIX, name = "is-web-flux", havingValue = "false")
+    @ConditionalOnClass(name = {"org.springframework.web.servlet.DispatcherServlet"})
     public LocaleResolver localeResolver(I18nProperties i18nProperties) {
         return new AcceptHeaderLocaleResolver() {
             @NotNull
@@ -95,7 +95,7 @@ public class I18nAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = BASE_NAME_PREFIX, name = "is-web-flux", havingValue = "false")
+    @ConditionalOnProperty(name = {"spring.main.web-application-type"}, havingValue = "servlet", matchIfMissing = true)
     public LocaleChangeInterceptor localeChangeInterceptor(I18nProperties i18nProperties) {
         log.info("创建区域设置更改拦截器...");
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
@@ -105,7 +105,7 @@ public class I18nAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = BASE_NAME_PREFIX, name = "is-web-flux", havingValue = "true")
+    @ConditionalOnProperty(name = {"spring.main.web-application-type"}, havingValue = "reactive")
     public ReactiveLocaleResolver createReactiveLocaleResolver(I18nProperties i18nProperties) {
         log.info("创建 WebFlux 区域设置解析器...");
         return new ReactiveLocaleResolver(i18nProperties);

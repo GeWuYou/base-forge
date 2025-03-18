@@ -34,5 +34,6 @@ out/
 
 ### VS Code ###
 .vscode/
-### Gradle ###
-gradle.properties
+
+### Kotlin ###
+.kotlin

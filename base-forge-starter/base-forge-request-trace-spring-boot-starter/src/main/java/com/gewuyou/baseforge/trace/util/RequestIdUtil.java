@@ -1,4 +1,4 @@
-package com.gewuyou.baseforge.autoconfigure.util;
+package com.gewuyou.baseforge.trace.util;
 
 import java.util.UUID;
 
