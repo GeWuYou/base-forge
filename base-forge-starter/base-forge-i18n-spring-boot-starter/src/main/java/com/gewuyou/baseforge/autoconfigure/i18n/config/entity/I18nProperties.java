@@ -17,10 +17,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @NoArgsConstructor
 public class I18nProperties {
     /**
-     * 是否为响应式应用
-     */
-    private boolean isWebFlux = false;
-    /**
      * 默认语言
      */
     private String defaultLocale = "zh_CN";

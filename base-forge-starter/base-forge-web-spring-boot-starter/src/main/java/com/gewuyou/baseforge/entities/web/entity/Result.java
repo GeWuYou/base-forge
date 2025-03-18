@@ -2,8 +2,8 @@ package com.gewuyou.baseforge.entities.web.entity;
 
 
 import com.gewuyou.baseforge.autoconfigure.i18n.entity.ResponseInformation;
-import com.gewuyou.baseforge.autoconfigure.util.RequestIdUtil;
 import com.gewuyou.baseforge.entities.web.i18n.enums.WebResponseInformation;
+import com.gewuyou.baseforge.trace.util.RequestIdUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.context.MessageSource;

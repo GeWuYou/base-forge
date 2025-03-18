@@ -15,6 +15,10 @@ public class I18nBaseException extends RuntimeException {
         super();
         this.responseInformation = responseInformation;
     }
+    public I18nBaseException(ResponseInformation responseInformation, Throwable cause) {
+        super(cause);
+        this.responseInformation = responseInformation;
+    }
 
     public int getErrorCode() {
         return responseInformation.getResponseCode();

@@ -42,7 +42,7 @@ class ReactiveGlobalExceptionHandler(
     fun handleException(exchange: ServerWebExchange, e: Exception): Mono<Void> {
         log.error("其它异常:", e)
         // 设置响应状态码为 500 Internal Server Error
-        exchange.response.statusCode = HttpStatus.INTERNAL_SERVER_ERROR
+        exchange.response.statusCode = HttpStatus.OK
         exchange.response.headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         return exchange.response.writeWith(
             Mono.just(

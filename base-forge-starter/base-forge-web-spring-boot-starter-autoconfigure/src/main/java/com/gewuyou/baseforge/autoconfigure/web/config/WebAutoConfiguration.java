@@ -7,21 +7,23 @@ import com.gewuyou.baseforge.autoconfigure.web.aspect.MethodRecordingAspect;
 import com.gewuyou.baseforge.autoconfigure.web.aspect.ReadWriteLockAspect;
 import com.gewuyou.baseforge.autoconfigure.web.config.entity.PageProperties;
 import com.gewuyou.baseforge.autoconfigure.web.config.entity.ReadWriteLockProperties;
-import com.gewuyou.baseforge.autoconfigure.web.filter.RequestIdFilter;
 import com.gewuyou.baseforge.autoconfigure.web.handler.GlobalExceptionHandler;
 import com.gewuyou.baseforge.autoconfigure.web.interceptor.AccessLimitInterceptor;
 import com.gewuyou.baseforge.autoconfigure.web.interceptor.PaginationInterceptor;
 import com.gewuyou.baseforge.autoconfigure.web.mapping.ApiVersionRequestMappingHandlerMapping;
 import com.gewuyou.baseforge.redis.service.CacheService;
+import com.gewuyou.baseforge.trace.filter.RequestIdFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 /**
  * Web 自动 配置类
@@ -119,14 +121,22 @@ public class WebAutoConfiguration {
         return new GlobalExceptionHandler(i18nMessageSource);
     }
 
+    /**
+     * 创建 RequestIdFilter
+     * @param requestIdFilter 请求 ID 过滤器
+     * @return FilterRegistrationBean
+     */
     @Bean
-    public FilterRegistrationBean<RequestIdFilter> createFilterRegistrationBean() {
+    @ConditionalOnProperty(name = {"spring.main.web-application-type"}, havingValue = "servlet", matchIfMissing = true)
+    @ConditionalOnMissingBean
+    public FilterRegistrationBean<RequestIdFilter> createFilterRegistrationBean(RequestIdFilter requestIdFilter) {
         log.info("创建 RequestIdFilter");
         FilterRegistrationBean<RequestIdFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new RequestIdFilter());
+        registrationBean.setFilter(requestIdFilter);
         // 默认拦截所有请求
         registrationBean.addUrlPatterns("/*");
-        registrationBean.setOrder(1);
+        // 设置最高优先级
+        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registrationBean;
     }
 }
