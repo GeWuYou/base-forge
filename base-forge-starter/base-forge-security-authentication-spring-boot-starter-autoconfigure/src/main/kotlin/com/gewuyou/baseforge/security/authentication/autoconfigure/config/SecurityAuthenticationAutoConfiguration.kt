@@ -201,7 +201,7 @@ class SecurityAuthenticationAutoConfiguration {
         log.info("创建默认登录认证过滤器...")
         return DefaultAuthenticationFilter(
             AntPathRequestMatcher(
-                properties.loginUrl,
+                properties.baseUrl+properties.loginUrl,
                 HttpMethod.POST.name()
             ),
             ProviderManager(

@@ -5,7 +5,6 @@ import com.gewuyou.baseforge.security.authentication.entities.entity.request.Def
 import com.gewuyou.baseforge.security.authentication.entities.entity.request.LoginRequest
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.MediaType
-import java.util.stream.Collectors
 
 
 /**
@@ -22,18 +21,11 @@ import java.util.stream.Collectors
  */
 class JsonLoginRequestParser(
     private val mapper: ObjectMapper
-):LoginRequestParser {
+) : LoginRequestParser {
     override fun parse(request: HttpServletRequest): LoginRequest {
-        // 读取请求体中的数据
-        val jsonBody = request
-            .reader
-            .lines()
-            .collect(
-                Collectors
-                    .joining(System.lineSeparator())
-            )
-        // 反序列化
-        return mapper.readValue(jsonBody, DefaultLoginRequest::class.java)
+        request.inputStream.use {
+            return mapper.readValue(it,DefaultLoginRequest::class.java)
+        }
     }
 
     /**
@@ -50,10 +42,11 @@ class JsonLoginRequestParser(
  *
  * 解析 Form 格式的登录请求，生成相应的 LoginRequest 对象。
  */
- class FormLoginRequestParser : LoginRequestParser {
+class FormLoginRequestParser : LoginRequestParser {
     override fun parse(request: HttpServletRequest): LoginRequest {
         val principal = request.getParameter("principal") ?: throw IllegalArgumentException("Principal is required")
-        val credentials = request.getParameter("credentials") ?: throw IllegalArgumentException("Credentials are required")
+        val credentials =
+            request.getParameter("credentials") ?: throw IllegalArgumentException("Credentials are required")
         val loginType = request.getParameter("loginType") ?: throw IllegalArgumentException("LoginType is required")
         return DefaultLoginRequest(principal, credentials, loginType)
     }
