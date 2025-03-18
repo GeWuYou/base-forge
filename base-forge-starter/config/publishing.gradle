@@ -5,6 +5,14 @@ publishing {
             name = 'localRepo'
             url = "file://D:/Maven/mvn_repository"
         }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/GeWuYou/base-forge-starter")
+            credentials {
+                username = findProperty("gprUser")  ?: System.getenv("USERNAME")
+                password = findProperty("gprToken") ?: System.getenv("TOKEN")
+            }
+        }
     }
 }
 /**
@@ -15,13 +23,13 @@ publishing {
  * @param version 版本号
  * @return 发布配置
  */
-def configurePublishing(String name, String groupId, String artifactId, String version) {
+def configurePublishing(PublishProject project) {
     publishing {
         publications {
-            create(name, MavenPublication) {
-                it.groupId = groupId
-                it.artifactId = artifactId
-                it.version = version
+            create(project.name, MavenPublication) {
+                it.groupId = project.groupId
+                it.artifactId = project.artifactId
+                it.version = project.version
                 from components.java
                 // 定义版本映射
                 versionMapping {
@@ -39,14 +47,14 @@ def configurePublishing(String name, String groupId, String artifactId, String v
                 artifact sourceTask
                 // 配置POM文件
                 pom {
-                    it.name = 'base-forge-starter'
-                    description = 'A concise description of my library'
+                    it.name = project.artifactId
+                    description = 'a starter project for Spring Boot'
                     url = ''
                     properties = [
                             'inceptionYear': '2024',
-                            'artifactId': artifactId,
-                            'groupId': groupId,
-                            'projectUrl': 'https://github.com/gewuyou/base-forge-starter',
+                            'artifactId': project.artifactId,
+                            'groupId': project.groupId,
+                            'projectUrl': project.getProjectUrl(),
                     ]
                     licenses {
                         license {
@@ -62,9 +70,9 @@ def configurePublishing(String name, String groupId, String artifactId, String v
                         }
                     }
                     scm {
-                        connection = 'scm:git:git://github.com/gewuyou/base-forge.git'
-                        developerConnection = 'scm:git:ssh://github.com/gewuyou/base-forge.git'
-                        url = 'http://github.com/gewuyou/base-forge/'
+                        connection = 'scm:git:git://github.com/gewuyou/base-forge-starter.git'
+                        developerConnection = 'scm:git:ssh://github.com/gewuyou/base-forge-starter.git'
+                        url = 'http://github.com/gewuyou/base-forge-starter/'
                     }
                 }
             }
@@ -90,27 +98,30 @@ List.of(
         new PublishProject("util", "base-forge-util-spring-boot-starter", "1.0.1"),
         new PublishProject("web", "base-forge-web-spring-boot-starter", "1.0.0"),
         new PublishProject("webAutoconfigure", "base-forge-web-spring-boot-starter-autoconfigure", "1.0.0"),
-
+        new PublishProject("requestTrace", "base-forge-request-trace-spring-boot-starter", "1.0.0")
 )
         .stream()
         .filter { (project.name == it.artifactId) }
         .forEach { project ->
-            configurePublishing(project.publicationName, project.groupId, project.artifactId, project.version)
+            configurePublishing(project)
         }
 // 发布项目配置
 /**
  * 发布项目配置类
  */
 class PublishProject {
-    String publicationName
+    String name
     String groupId = "com.gewuyou"
     String artifactId
     String version
 
-    PublishProject(String publicationName, String artifactId, String version) {
-        this.publicationName = publicationName
+    PublishProject(String name, String artifactId, String version) {
+        this.name = name
         this.artifactId = artifactId
         this.version = version
+    }
+    String getProjectUrl() {
+        return "https://github.com/gewuyou/base-forge-starter/" + artifactId
     }
 
 }
