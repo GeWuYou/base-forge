@@ -2,7 +2,6 @@ package com.gewuyou.baseforge.security.authorization.autoconfigure.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gewuyou.baseforge.entities.web.entity.Result
-import com.gewuyou.baseforge.security.authorization.entities.i18n.enums.SecurityAuthorizationResponseInformation
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.MessageSource
@@ -26,13 +25,13 @@ class AuthorizationExceptionHandler(
         response: HttpServletResponse,
         accessDeniedException: AccessDeniedException
     ) {
-        response.status = HttpStatus.UNAUTHORIZED.value()
+        response.status = HttpStatus.OK.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         val writer = response.writer
         writer.print(
             objectMapper.writeValueAsString(
                 Result.failure<String>(
-                    SecurityAuthorizationResponseInformation.PROHIBITION_OF_ACCESS,
+                    accessDeniedException.message,
                     i18nMessageSource
                 )
             )

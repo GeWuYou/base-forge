@@ -8,7 +8,6 @@ import com.gewuyou.baseforge.security.authorization.autoconfigure.config.entity.
 import com.gewuyou.baseforge.security.authorization.autoconfigure.config.entity.SecurityAuthorizationProperties
 import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.AuthorizationFilter
 import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.JwtAuthorizationFilter
-import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.RequestIdFilter
 import com.gewuyou.baseforge.security.authorization.autoconfigure.handler.AuthorizationExceptionHandler
 import com.gewuyou.baseforge.security.authorization.autoconfigure.handler.AuthorizationHandler
 import com.gewuyou.baseforge.security.authorization.autoconfigure.handler.GlobalExceptionHandler
@@ -38,15 +37,9 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 @Configuration
 @AutoConfigureBefore(AuthorizationSpringSecurityConfiguration::class)
 @EnableConfigurationProperties(SecurityAuthorizationProperties::class, JwtProperties::class)
-@ConditionalOnProperty(prefix = "base-forge.security.authorization", name = ["is-web-flux"], havingValue = "false")
+@ConditionalOnProperty(name = ["spring.main.web-application-type"], havingValue = "servlet", matchIfMissing = true)
 class SecurityAuthorizationAutoConfiguration {
-    /**
-    * 请求id过滤器
-    */
-    @Bean
-    fun createRequestIdFilter():RequestIdFilter {
-        return RequestIdFilter()
-    }
+
     /**
     * 全局异常处理
     */

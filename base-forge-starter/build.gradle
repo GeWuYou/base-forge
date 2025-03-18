@@ -9,6 +9,8 @@ plugins {
     id 'maven-publish'
     // Spring 依赖管理插件，简化依赖版本管理
     id 'io.spring.dependency-management' version '1.1.6'
+    // id 'org.jetbrains.kotlin.jvm' version '1.9.25'
+    // id 'org.jetbrains.kotlin.plugin.spring' version '1.9.25'
     // 引入kt
     id 'org.jetbrains.kotlin.jvm' version '2.1.0'
     id 'org.jetbrains.kotlin.plugin.spring' version '2.1.0'
@@ -23,15 +25,22 @@ plugins {
 configurations.configureEach {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
 }
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+def configDir = "$rootDir/config/"
+def tasksDir = "$configDir/tasks/"
+apply{
+    from (file("$tasksDir/gradleTask.gradle"))
 }
 subprojects {
-    def configDir = "$rootDir/config/"
-    def tasksDir = "$configDir/tasks/"
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.addAll '-Xjsr305=strict'
+        }
+    }
     apply {
         plugin('idea')
         plugin('java')

@@ -104,7 +104,7 @@ public abstract class AbstractPrincipalPasswordAuthenticationProvider implements
             log.debug("由于未提供凭据，身份验证失败");
             throw new AuthenticationException(SecurityAuthenticationResponseInformation.PASSWORD_NOT_PROVIDED);
         }
-        if (!passwordEncoder.matches((String) credentials, (String)userDetails.getCredentials())) {
+        if (!passwordEncoder.matches((String) credentials, (String) userDetails.getCredentials())) {
             log.debug("密码不匹配，身份验证失败");
             throw new AuthenticationException(SecurityAuthenticationResponseInformation.PASSWORD_NOT_MATCH);
         }

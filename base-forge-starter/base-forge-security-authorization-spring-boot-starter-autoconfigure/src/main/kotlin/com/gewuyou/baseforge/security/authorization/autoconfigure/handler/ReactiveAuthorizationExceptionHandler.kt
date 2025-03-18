@@ -25,8 +25,8 @@ class ReactiveAuthorizationExceptionHandler(
 ) : ServerAccessDeniedHandler {
     override fun handle(exchange: ServerWebExchange, denied: AccessDeniedException): Mono<Void> {
         log.error("反应式授权异常 路径：${exchange.request.uri}", denied)
-        // 设置响应状态码为 403 Forbidden
-        exchange.response.statusCode = HttpStatus.FORBIDDEN
+        // 设置响应状态码为 200 OK
+        exchange.response.statusCode = HttpStatus.OK
         // 设置响应内容类型为 application/json
         exchange.response.headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         // 将错误响应体写入响应

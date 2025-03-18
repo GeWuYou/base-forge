@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.List;
-
 /**
  * 安全性身份验证属性
  *
@@ -30,8 +28,4 @@ public class SecurityAuthenticationProperties {
      * 登出地址
      */
     private String logoutUrl = "/logout";
-    /**
-     * 登录策略
-     */
-    private List<String> loginStrategies = List.of("username");
 }

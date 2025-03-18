@@ -8,7 +8,6 @@ import com.gewuyou.baseforge.security.authorization.autoconfigure.config.entity.
 import com.gewuyou.baseforge.security.authorization.autoconfigure.config.entity.SecurityAuthorizationProperties
 import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.ReactiveAuthorizationFilter
 import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.ReactiveJwtAuthorizationFilter
-import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.ReactiveRequestIdFilter
 import com.gewuyou.baseforge.security.authorization.autoconfigure.handler.ReactiveAuthorizationExceptionHandler
 import com.gewuyou.baseforge.security.authorization.autoconfigure.handler.ReactiveAuthorizationHandler
 import com.gewuyou.baseforge.security.authorization.autoconfigure.handler.ReactiveGlobalExceptionHandler
@@ -42,15 +41,8 @@ import reactor.core.publisher.Mono
 @Configuration
 @AutoConfigureBefore(ReactiveAuthorizationSpringSecurityConfiguration::class)
 @EnableConfigurationProperties(SecurityAuthorizationProperties::class, JwtProperties::class)
-@ConditionalOnProperty(prefix = "base-forge.security.authorization", name = ["is-web-flux"], havingValue = "true")
+@ConditionalOnProperty(name = ["spring.main.web-application-type"], havingValue = "reactive")
 class ReactiveSecurityAuthorizationAutoConfiguration {
-    /**
-    * 反应式安全请求id过滤器
-    */
-    @Bean
-    fun createReactiveRequestIdFilter():ReactiveRequestIdFilter {
-        return ReactiveRequestIdFilter()
-    }
     /**
     * 反应式全局异常处理器
     */
@@ -123,9 +115,9 @@ class ReactiveSecurityAuthorizationAutoConfiguration {
     */
     @Bean
     @ConditionalOnMissingBean(ReactiveAuthorizationFilter::class)
-    fun createReactiveJwtAuthorizationFilter(jwtAuthorizationService: JwtAuthorizationService):ReactiveAuthorizationFilter {
+    fun createReactiveJwtAuthorizationFilter(jwtAuthorizationService: JwtAuthorizationService,securityAuthorizationProperties: SecurityAuthorizationProperties):ReactiveAuthorizationFilter {
         log.info("创建反应式授权过滤器...")
-        return ReactiveJwtAuthorizationFilter(jwtAuthorizationService)
+        return ReactiveJwtAuthorizationFilter(jwtAuthorizationService,securityAuthorizationProperties)
     }
 
     /**

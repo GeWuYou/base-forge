@@ -1,0 +1,8 @@
+
+dependencies {
+    implementation project(":base-forge-core-spring-boot-starter")
+    // https://mvnrepository.com/artifact/io.projectreactor/reactor-core
+    implementation 'io.projectreactor:reactor-core'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
