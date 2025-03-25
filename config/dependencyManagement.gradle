@@ -9,7 +9,7 @@ ext {
     set('tomcatVersion', "6.0.53")
     set('mybatisPlusVersion', "3.5.8")
     set('springDocVersion', "2.6.0")
-    set('commonsLang3Version', "3.4.0")
+    set('commonsLang3Version', "3.17.0")
     set('redissonVersion', "3.37.0")
     set('easyEsVersion', "1.1.1")
     set('jjwtVersion', '0.12.6')
@@ -29,7 +29,7 @@ ext {
     set('baseForgeSecurityAuthorizationVersion', '1.0.0')
     set('baseForgeJwtVersion', '1.0.0')
     set('kotlinxVersion', '1.10.1')
-    // set('postgresqlVersion','42.7.4')
+    set('postgresqlVersion','42.7.4')
 }
 dependencyManagement {
     imports {
@@ -40,16 +40,16 @@ dependencyManagement {
         mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
     dependencies {
+        dependency("org.apache.commons:commons-lang3:${commonsLang3Version}")
         dependency("org.projectlombok:lombok:${lombokVersion}")
         dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}")
-        dependency("org.apache:org.apache.commons.lang3:${commonsLang3Version}")
         dependency("org.redisson:redisson-spring-boot-starter:${redissonVersion}")
         dependency("cn.easy-es:easy-es-boot-starter:${easyEsVersion}")
 
         dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxVersion}")
 
         // postgresql
-        // dependency("org.postgresql:postgresql:${postgresqlVersion}")
+        dependency("org.postgresql:postgresql:${postgresqlVersion}")
         // grpc need to add this dependency
         dependency("org.apache.tomcat:annotations-api:${tomcatVersion}")
         // grpc by net.devh
