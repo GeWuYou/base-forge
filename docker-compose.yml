@@ -1,0 +1,27 @@
+services:
+  # 配置中心
+  base-forge-config:
+    image: ${IMAGE_REGISTRY:-localhost:5000}/base-forge-config
+    container_name: base-forge-config
+    ports:
+      - "8888:8888"
+    networks:
+      - base-forge-network
+    volumes:
+      - base-forge-config-volume:/app/volume
+  # 注册中心
+  base-forge-discovery:
+    image: ${IMAGE_REGISTRY:-localhost:5000}/base-forge-discovery
+    container_name: base-forge-discovery
+    ports:
+      - "8761:8761"
+    networks:
+      - base-forge-network
+    volumes:
+      - base-forge-discovery-volume:/app/volume
+networks:
+  base-forge-network:
+    driver: bridge
+volumes:
+  base-forge-config-volume:
+  base-forge-discovery-volume:

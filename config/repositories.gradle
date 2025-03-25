@@ -1,5 +1,9 @@
+// This file is used to define the repositories used by the project.
 repositories {
     mavenLocal()
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
+    }
     maven {
         url 'https://raw.githubusercontent.com/eurotech/kura_addons/mvn-repo/'
     }
