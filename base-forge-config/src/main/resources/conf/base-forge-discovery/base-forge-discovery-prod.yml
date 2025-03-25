@@ -3,7 +3,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://192.168.200.129:8761/eureka
+      defaultZone: http://172.24.165.5:8761/eureka
     # 防止Eureka启动时注册本身服务
     register-with-eureka: false
     fetch-registry: false

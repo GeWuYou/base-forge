@@ -20,7 +20,7 @@ spring:
         - id: base-forge-authentication-v1
           uri: lb://base-forge-authentication
           predicates:
-            - Path=/api/auth/c/**
+            - Path=/api/v1/auth/c/**
           # filters:
           #   - name: RequestId
         # 授权资源服务
@@ -36,6 +36,7 @@ spring:
           '[/**]':
             allowedOrigins: # 允许哪些网站的跨域请求
               # - "http://192.168.200.131:8081"
+              - "http://localhost:5173"
             allowedMethods: # 允许的跨域ajax的请求方式
               - "GET"
               - "POST"
