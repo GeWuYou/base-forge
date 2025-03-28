@@ -1,6 +1,6 @@
 spring:
   config:
-    import: configserver:http://192.168.200.131:8888
+    import: configserver:http://172.24.165.5:8888
   cloud:
     config:
       profile: prod
