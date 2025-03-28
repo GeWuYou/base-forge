@@ -50,6 +50,13 @@ List.of(
                                 "/entrypoint.sh -d base-forge-config:8888 -c " +
                                 "'java -cp \$( cat /app/jib-classpath-file ) \$( cat /app/jib-main-class-file )'"
                 ]),
+        new JibProject("base-forge-gateway", ["8082"], ["SPRING_PROFILES_ACTIVE": "prod"],
+                [
+                        "/bin/sh", "-c",
+                        "apt-get update && apt-get install -y netcat-openbsd && " +
+                                "/entrypoint.sh -d base-forge-config:8888,base-forge-discovery:8761 -c " +
+                                "'java -cp \$( cat /app/jib-classpath-file ) \$( cat /app/jib-main-class-file )'"
+                ]),
 ).stream()
         .filter { (project.name == it.projectName) }
         .forEach {
