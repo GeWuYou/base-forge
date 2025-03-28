@@ -2,7 +2,7 @@
 properties([
         parameters([
                 // 选择构建操作
-                choice(name: 'ACTION', choices: ['构建并部署', '管理服务'], description: '选择执行操作', defaultValue: '构建并部署'),
+                choice(name: 'ACTION', choices: ['构建并部署', '管理服务'], description: '选择执行操作'),
 
                 // 选择要操作的服务（可多选）
                 [$class: 'CascadeChoiceParameter',
@@ -24,6 +24,9 @@ properties([
 
 pipeline {
     agent any
+    tools {
+        gradle 'gradle_8.11'
+    }
 
     environment {
         PRIVATE_DOCKER_REGISTRY_PASSWORD = credentials('PRIVATE_DOCKER_REGISTRY_PASSWORD') // Jenkins 凭证管理
@@ -97,7 +100,9 @@ pipeline {
                             sh "docker stop ${service} || true"
                             sh "docker rm ${service} || true"
                             withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
-                                sh "./gradlew :${service}:jib"
+                                // ✅ 添加权限
+                                sh "chmod +x ./gradlew"
+                                sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
                             }
                         }
                         else if (params.MANAGE_TYPE == '重新构建并部署') {
@@ -109,7 +114,9 @@ pipeline {
                                 sh "docker rm ${service} || true"
                                 sh "docker rmi ${env.IMAGE_REGISTRY}/${service}:latest || true"
                                 withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
-                                    sh "./gradlew :${service}:jib"
+                                    // ✅ 添加权限
+                                    sh "chmod +x ./gradlew"
+                                    sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
                                 }
                                 sh "${env.DEPLOY_COMMAND} up -d ${service}"
                             }
@@ -173,8 +180,10 @@ pipeline {
                     }
                     for (service in services) {
                         echo "开始构建: ${service}"
+                        // ✅ 添加权限
+                        sh "chmod +x ./gradlew"
                         withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
-                            sh "./gradlew :${service}:jib"
+                            sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
                         }
                     }
                 }
