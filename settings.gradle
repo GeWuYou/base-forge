@@ -23,6 +23,9 @@ include(
         'base-forge-notification-api',
         // 8087端口
         'base-forge-file',
+        'base-forge-file-api',
+        // 8088端口
+        'base-forge-code-generator',
         // 8761端口
         'base-forge-discovery',
         // 8888端口
