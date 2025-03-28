@@ -24,9 +24,9 @@ properties([
 
 pipeline {
     agent any
-    tools {
-        gradle 'gradle_8.11'
-    }
+    // tools {
+    //     gradle 'gradle_8.11'
+    // }
 
     environment {
         PRIVATE_DOCKER_REGISTRY_PASSWORD = credentials('PRIVATE_DOCKER_REGISTRY_PASSWORD') // Jenkins 凭证管理
@@ -96,30 +96,30 @@ pipeline {
                             }
                         }
                         else if (params.MANAGE_TYPE == '重新构建') {
-                            echo "重新构建 ${service}"
-                            sh "docker stop ${service} || true"
-                            sh "docker rm ${service} || true"
-                            withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
-                                // ✅ 添加权限
-                                sh "chmod +x ./gradlew"
-                                sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
-                            }
+                            // echo "重新构建 ${service}"
+                            // sh "docker stop ${service} || true"
+                            // sh "docker rm ${service} || true"
+                            // withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
+                            //     // ✅ 添加权限
+                            //     sh "chmod +x ./gradlew"
+                            //     sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
+                            // }
                         }
                         else if (params.MANAGE_TYPE == '重新构建并部署') {
-                            echo "尝试增量更新 ${service}"
-                            def updateSuccess = sh(script: "${env.DEPLOY_COMMAND} up -d --no-deps ${service} || echo 'FAILED'", returnStdout: true).trim()
-                            if (updateSuccess.contains('FAILED')) {
-                                echo "增量更新失败，执行完整重启"
-                                sh "docker stop ${service} || true"
-                                sh "docker rm ${service} || true"
-                                sh "docker rmi ${env.IMAGE_REGISTRY}/${service}:latest || true"
-                                withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
-                                    // ✅ 添加权限
-                                    sh "chmod +x ./gradlew"
-                                    sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
-                                }
-                                sh "${env.DEPLOY_COMMAND} up -d ${service}"
-                            }
+                            // echo "尝试增量更新 ${service}"
+                            // def updateSuccess = sh(script: "${env.DEPLOY_COMMAND} up -d --no-deps ${service} || echo 'FAILED'", returnStdout: true).trim()
+                            // if (updateSuccess.contains('FAILED')) {
+                            //     echo "增量更新失败，执行完整重启"
+                            //     sh "docker stop ${service} || true"
+                            //     sh "docker rm ${service} || true"
+                            //     sh "docker rmi ${env.IMAGE_REGISTRY}/${service}:latest || true"
+                            //     withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
+                            //         // ✅ 添加权限
+                            //         sh "chmod +x ./gradlew"
+                            //         sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
+                            //     }
+                            //     sh "${env.DEPLOY_COMMAND} up -d ${service}"
+                            // }
                         }
                     }
                 }
@@ -138,57 +138,57 @@ pipeline {
             }
         }
 
-        stage('Detect Changed Services') {
-            when {
-                expression { params.ACTION == '构建并部署' }
-            }
-            steps {
-                script {
-                    def changedFiles = sh(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim().split("\n")
-                    echo "变更的文件: ${changedFiles}"
+        // stage('Detect Changed Services') {
+        //     when {
+        //         expression { params.ACTION == '构建并部署' }
+        //     }
+        //     steps {
+        //         script {
+        //             def changedFiles = sh(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim().split("\n")
+        //             echo "变更的文件: ${changedFiles}"
+        //
+        //             def servicesToBuild = []
+        //             def allServicesList = ["base-forge-config", "base-forge-discovery", "base-forge-gateway", "base-forge-user"]
+        //
+        //             for (service in allServicesList) {
+        //                 if (changedFiles.any { it.startsWith("${service}/") }) {
+        //                     servicesToBuild.add(service)
+        //                 }
+        //             }
+        //
+        //             if (!servicesToBuild.isEmpty()) {
+        //                 echo "需要构建的服务: ${servicesToBuild.join(', ')}"
+        //                 env.SERVICES_TO_BUILD = servicesToBuild.join(',')
+        //             } else {
+        //                 echo "没有检测到需要构建的服务，跳过构建"
+        //                 env.SERVICES_TO_BUILD = ''
+        //             }
+        //         }
+        //     }
+        // }
 
-                    def servicesToBuild = []
-                    def allServicesList = ["base-forge-config", "base-forge-discovery", "base-forge-gateway", "base-forge-user"]
-
-                    for (service in allServicesList) {
-                        if (changedFiles.any { it.startsWith("${service}/") }) {
-                            servicesToBuild.add(service)
-                        }
-                    }
-
-                    if (!servicesToBuild.isEmpty()) {
-                        echo "需要构建的服务: ${servicesToBuild.join(', ')}"
-                        env.SERVICES_TO_BUILD = servicesToBuild.join(',')
-                    } else {
-                        echo "没有检测到需要构建的服务，跳过构建"
-                        env.SERVICES_TO_BUILD = ''
-                    }
-                }
-            }
-        }
-
-        stage('Build with Jib') {
-            when {
-                expression { params.ACTION == '构建并部署' }
-            }
-            steps {
-                script {
-                    def services = env.SERVICES_TO_BUILD ? env.SERVICES_TO_BUILD.split(',') : []
-                    if (services.isEmpty()) {
-                        echo "没有需要构建的服务，跳过 Jib 构建。"
-                        return
-                    }
-                    for (service in services) {
-                        echo "开始构建: ${service}"
-                        // ✅ 添加权限
-                        sh "chmod +x ./gradlew"
-                        withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
-                            sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Build with Jib') {
+        //     when {
+        //         expression { params.ACTION == '构建并部署' }
+        //     }
+        //     steps {
+        //         script {
+        //             def services = env.SERVICES_TO_BUILD ? env.SERVICES_TO_BUILD.split(',') : []
+        //             if (services.isEmpty()) {
+        //                 echo "没有需要构建的服务，跳过 Jib 构建。"
+        //                 return
+        //             }
+        //             for (service in services) {
+        //                 echo "开始构建: ${service}"
+        //                 // ✅ 添加权限
+        //                 sh "chmod +x ./gradlew"
+        //                 withEnv(["IMAGE_REGISTRY=${env.IMAGE_REGISTRY}", "PRIVATE_DOCKER_REGISTRY_PASSWORD=${env.PRIVATE_DOCKER_REGISTRY_PASSWORD}"]) {
+        //                     sh "./gradlew --gradle-user-home /opt/gradle :${service}:jib"
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Deploy Services') {
             when {
