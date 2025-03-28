@@ -19,9 +19,20 @@ services:
       - base-forge-network
     volumes:
       - base-forge-discovery-volume:/app/volume
+  # 网关
+  base-forge-gateway:
+    image: ${IMAGE_REGISTRY:-localhost:5000}/base-forge-gateway
+    container_name: base-forge-gateway
+    ports:
+      - "8082:8082"
+    networks:
+      - base-forge-network
+    volumes:
+      - base-forge-gateway-volume:/app/volume
 networks:
   base-forge-network:
     driver: bridge
 volumes:
   base-forge-config-volume:
   base-forge-discovery-volume:
+  base-forge-gateway-volume:
