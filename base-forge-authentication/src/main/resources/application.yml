@@ -5,3 +5,8 @@ spring:
     name: base-forge-authentication
   profiles:
     active: dev
+base-forge:
+  security:
+    authentication:
+      base-login-url: /api/auth/c
+      logout-url:

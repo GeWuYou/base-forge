@@ -19,12 +19,19 @@ plugins {
     // 让kt支持访问java的lombok注解
     id 'org.jetbrains.kotlin.plugin.lombok' version '2.1.0'
     id 'org.jetbrains.kotlin.plugin.jpa' version '2.1.0'
+    // 引入jib插件
+    id 'com.google.cloud.tools.jib' version '3.4.2'
 }
 /**
  * 由于 Kotlin 插件被引入时会自动添加依赖，但根项目不需要 Kotlin 依赖，因此需要排除 Kotlin 依赖
  */
 configurations.implementation {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+}
+def configDir = "$rootDir/config/"
+def tasksDir = "$configDir/tasks/"
+apply{
+    from (file("$tasksDir/gradleTask.gradle"))
 }
 subprojects {
     idea {
@@ -37,8 +44,6 @@ subprojects {
             downloadSources = true
         }
     }
-    def configDir = "$rootDir/config/"
-    def tasksDir = "$configDir/tasks/"
     apply {
         from(file("$configDir/repositories.gradle"))
         plugin('idea')
@@ -52,13 +57,20 @@ subprojects {
         plugin('org.jetbrains.kotlin.plugin.spring')
         plugin('org.jetbrains.kotlin.plugin.lombok')
         plugin('org.jetbrains.kotlin.plugin.jpa')
+        plugin('com.google.cloud.tools.jib')
         from(file("$configDir/dependencyManagement.gradle"))
+        from(file("$configDir/jib.gradle"))
     }
     group = 'com.gewuyou'
     version = '0.1.0'
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.addAll '-Xjsr305=strict'
         }
     }
 
@@ -89,6 +101,7 @@ subprojects {
     final base_forge_search = project(":base-forge-search")
     final base_forge_notification = project(":base-forge-notification")
     final base_forge_notification_api = project(":base-forge-notification-api")
+    final base_forge_code_generator = project(":base-forge-code-generator")
     // endregion
 
 
@@ -106,7 +119,8 @@ subprojects {
             base_forge_notification,
             base_forge_data_dictionary,
             base_forge_authorization,
-            base_forge_authentication
+            base_forge_authentication,
+            base_forge_code_generator
     ]
     // endregion
     // region 注册任务
@@ -154,7 +168,8 @@ subprojects {
             base_forge_scheduler,
             base_forge_search,
             base_forge_notification,
-            base_forge_notification_api
+            base_forge_notification_api,
+            base_forge_code_generator
     ]
     // 设置需要导入Admin api依赖的模块
     // Set<Project> AdminProjects = [
@@ -171,6 +186,7 @@ subprojects {
             base_forge_notification,
             base_forge_scheduler,
             base_forge_user,
+            base_forge_code_generator
     ]
     // 设置需要导入日志服务的模块
     Set<Project> LogProjects = [
@@ -184,7 +200,8 @@ subprojects {
             base_forge_user,
             base_forge_authorization,
             base_forge_data_dictionary,
-            base_forge_common
+            base_forge_common,
+            base_forge_code_generator
     ]
     // 设置需要引入redis依赖的模块
     Set<Project> RedisProjects = [
@@ -197,6 +214,7 @@ subprojects {
             base_forge_user,
             base_forge_authorization,
             base_forge_data_dictionary,
+            base_forge_code_generator
     ]
 
     // 设置需要导入尤里卡客户端依赖的模块
@@ -212,6 +230,7 @@ subprojects {
             base_forge_authentication,
             base_forge_authorization,
             base_forge_data_dictionary,
+            base_forge_code_generator
     ]
     // 设置需要导入配置中心客户端依赖的模块
     Set<Project> ConfigClientProjects = [
@@ -227,6 +246,7 @@ subprojects {
             base_forge_authentication,
             base_forge_authorization,
             base_forge_data_dictionary,
+            base_forge_code_generator
     ]
     // 设置需要导入openfeign依赖的模块
     Set<Project> OpenFeignProjects = [
@@ -279,6 +299,7 @@ subprojects {
             base_forge_authentication,
             base_forge_authorization,
             base_forge_data_dictionary,
+            base_forge_code_generator
     ]
     // 设置需要导入redisStarter依赖的模块
     Set<Project> RedisStarterProjects = [
@@ -309,6 +330,7 @@ subprojects {
             base_forge_data_dictionary,
             base_forge_authentication,
             base_forge_authorization,
+            base_forge_code_generator
     ]
     // 设置需要导入coreStarter依赖的模块
     Set<Project> CoreStarterProjects = [
@@ -318,6 +340,7 @@ subprojects {
             base_forge_discovery,
             base_forge_authentication,
             base_forge_authorization,
+            base_forge_code_generator
     ]
     // 设置需要导入mybatisExtensionStarter依赖的模块
     Set<Project> MybatisExtensionStarterProjects = [
@@ -328,10 +351,12 @@ subprojects {
             base_forge_scheduler,
             // base_forge_admin,
             base_forge_user,
+            base_forge_code_generator
     ]
     // 导入kt的协程
     Set<Project> CoroutineStarterProjects = [
             base_forge_data_dictionary,
+            base_forge_code_generator
     ]
 
     // endregion
@@ -502,7 +527,7 @@ subprojects {
         }
         if (PostgresqlProjects.contains(project)) {
             // https://mvnrepository.com/artifact/org.postgresql/postgresql
-            implementation 'org.postgresql:postgresql'
+            runtimeOnly 'org.postgresql:postgresql'
         }
         if (JpaProjects.contains(project)) {
             implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

@@ -3,7 +3,7 @@ package com.gewuyou.baseforge.security.authorization.autoconfigure.config
 import com.gewuyou.baseforge.security.authentication.entities.extension.cleanUnNeedConfig
 import com.gewuyou.baseforge.security.authorization.autoconfigure.config.entity.SecurityAuthorizationProperties
 import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.AuthorizationFilter
-import com.gewuyou.baseforge.security.authorization.autoconfigure.filter.RequestIdFilter
+import com.gewuyou.baseforge.trace.filter.RequestIdFilter
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -12,6 +12,7 @@ import org.springframework.security.authorization.AuthorizationManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
+import org.springframework.security.web.access.channel.ChannelProcessingFilter
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -23,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @AutoConfigureAfter(SecurityAuthorizationAutoConfiguration::class)
-@ConditionalOnProperty(prefix = "base-forge.security.authorization", name = ["is-web-flux"], havingValue = "false")
+@ConditionalOnProperty(name = ["spring.main.web-application-type"], havingValue = "servlet", matchIfMissing = true)
 class AuthorizationSpringSecurityConfiguration(
     private val dynamicAuthorizationManager: AuthorizationManager<RequestAuthorizationContext>,
     private val jwtAuthorizationFilter: AuthorizationFilter,
@@ -59,8 +60,10 @@ class AuthorizationSpringSecurityConfiguration(
                 it.accessDeniedHandler(authorizationExceptionHandler)
             }
             .securityMatcher(authorizationProperties.requestUrl)
-            .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterAfter(jwtAuthorizationFilter, RequestIdFilter::class.java)
+            // 将请求ID过滤器添加到过滤器链最前面
+            .addFilterBefore(requestIdFilter, ChannelProcessingFilter::class.java)
+            // 将授权过滤器添加到UsernamePasswordAuthenticationFilter前面
+            .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
 }

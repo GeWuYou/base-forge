@@ -1,9 +1,9 @@
 spring:
   rabbitmq:
-    host: 192.168.200.131
+    host: 172.24.165.5
     port: 5672
     username: gewuyou
-    password: youyong21126
+    password: E93NN8ziTtAxjD@
     listener:
       simple:
         retry:
