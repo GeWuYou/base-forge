@@ -1,26 +1,25 @@
 plugins {
     // 用于生成 IntelliJ IDEA 的项目文件，便于在 IDEA 中打开和管理项目
-    id 'idea'
+    alias(libs.plugins.idea)
     // 应用 Java 插件，提供基本的 Java 代码编译和构建能力
-    id 'java'
+    alias(libs.plugins.java)
     // 应用 Java Library 插件，支持库开发，提供 API 和实现分离的能力
-    id 'java-library'
+    alias(libs.plugins.java.library)
     // 应用 Maven 发布插件，支持项目的构建产物发布到 Maven 仓库
-    id 'maven-publish'
+    alias(libs.plugins.maven.publish)
     // 应用 Spring Boot 插件，提供 Spring Boot 应用的开发和运行能力
-    id 'org.springframework.boot' version '3.3.4'
+    alias(libs.plugins.spring.boot)
     // Spring 依赖管理插件，简化依赖版本管理
-    id 'io.spring.dependency-management' version '1.1.6'
+    alias(libs.plugins.spring.dependency.management)
     // 应用 Protobuf 插件，提供 Protobuf 文件的编译和生成能力
-    id 'com.google.protobuf' version '0.9.4'
+    alias(libs.plugins.protobuf)
     // 引入kt
-    id 'org.jetbrains.kotlin.jvm' version '2.1.0'
-    id 'org.jetbrains.kotlin.plugin.spring' version '2.1.0'
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.spring)
     // 让kt支持访问java的lombok注解
-    id 'org.jetbrains.kotlin.plugin.lombok' version '2.1.0'
-    id 'org.jetbrains.kotlin.plugin.jpa' version '2.1.0'
-    // 引入jib插件
-    id 'com.google.cloud.tools.jib' version '3.4.2'
+    alias(libs.plugins.kotlin.plugin.lombok)
+    // 引入jpa
+    alias(libs.plugins.kotlin.plugin.jpa)
 }
 /**
  * 由于 Kotlin 插件被引入时会自动添加依赖，但根项目不需要 Kotlin 依赖，因此需要排除 Kotlin 依赖
@@ -29,10 +28,11 @@ configurations.implementation {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
 }
 def configDir = "$rootDir/config/"
-def tasksDir = "$configDir/tasks/"
-apply{
-    from (file("$tasksDir/gradleTask.gradle"))
+apply {
+    plugin('com.gewuyou.gradle.plugin.task.gradle.file')
 }
+
+
 subprojects {
     idea {
         project {
@@ -44,6 +44,7 @@ subprojects {
             downloadSources = true
         }
     }
+
     apply {
         from(file("$configDir/repositories.gradle"))
         plugin('idea')
@@ -57,12 +58,15 @@ subprojects {
         plugin('org.jetbrains.kotlin.plugin.spring')
         plugin('org.jetbrains.kotlin.plugin.lombok')
         plugin('org.jetbrains.kotlin.plugin.jpa')
-        plugin('com.google.cloud.tools.jib')
+        // 导入自定义jib配置插件
+        plugin('com.gewuyou.gradle.plugin.jib.auto')
+        plugin('com.gewuyou.gradle.plugin.task.banner')
         from(file("$configDir/dependencyManagement.gradle"))
-        from(file("$configDir/jib.gradle"))
     }
+
     group = 'com.gewuyou'
     version = '0.1.0'
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
@@ -83,6 +87,8 @@ subprojects {
     // region 声明模块
     // final base_forge_admin = project(":base-forge-admin")
     // final base_forge_admin_api = project(":base-forge-admin-api")
+
+
     final base_forge_authentication = project(":base-forge-authentication")
     final base_forge_authorization = project(":base-forge-authorization")
     final base_forge_authorization_api = project(":base-forge-authorization-api")
@@ -106,6 +112,7 @@ subprojects {
 
 
     // region 定义任务对象
+    // 注册扩展
     // 复制banner到各个服务模块的资源目录
     Set<Project> NeedCopyBannerResourceProjects = [
             // base_forge_admin,
@@ -122,13 +129,9 @@ subprojects {
             base_forge_authentication,
             base_forge_code_generator
     ]
-    // endregion
-    // region 注册任务
-    if (NeedCopyBannerResourceProjects.contains(project)) {
-        apply {
-            from("${tasksDir}/bannerTask.gradle")
-        }
-    }
+    // extention.configure<BannerConfig>{
+    //     enableForProjectPaths(*NeedCopyBannerResourceProjects.map { it.path }.toTypedArray())
+    // }
     // endregion
     // region 设置子模块需要的依赖
     // 设置需要 actuator 依赖的模块
@@ -269,10 +272,6 @@ subprojects {
             // base_forge_gateway,
             // base_forge_common
     ]
-    // 设置需要打包成可执行jar的模块
-    Set<Project> ExecutableJarProjects = [
-            // base_forge_admin,
-    ]
     // 设置需要字典服务的模块
     Set<Project> DataDictionaryProjects = [
             base_forge_authentication,
@@ -361,11 +360,6 @@ subprojects {
 
     // endregion
     // region 设置依赖
-    if (ExecutableJarProjects.contains(project)) {
-        apply {
-            from("${configDir}/bulid.gradle")
-        }
-    }
     dependencies {
         // region 文档注释
         /*
