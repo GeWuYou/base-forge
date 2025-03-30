@@ -1,0 +1,105 @@
+[versions]
+protoc-version = "3.25.5"
+spring-cloud-version = "2023.0.3"
+spring-boot-version = "3.3.4"
+spring-dependency-management-version = "1.1.6"
+lombok-version = "1.18.34"
+grpc-version = "1.69.0"
+protobuf-version = "0.9.4"
+grpc-spring-boot-starter-version = "3.1.0.RELEASE"
+tomcat-version = "6.0.53"
+mybatis-plus-version = "3.5.8"
+spring-doc-version = "2.6.0"
+commons-lang3-version = "3.17.0"
+redisson-version = "3.37.0"
+easy-es-version = "1.1.1"
+jjwt-version = "0.12.6"
+kotlin-version = "2.1.0"
+kotlinx-version = "1.10.1"
+postgresql-version = "42.7.4"
+
+# Base Forge dependencies
+base-forge-i18n-version = "1.0.4"
+base-forge-util-version = "1.0.1"
+base-forge-core-version = "1.0.0"
+base-forge-log-version = "1.0.0"
+base-forge-json-version = "1.0.1"
+base-forge-async-version = "1.0.0"
+base-forge-redis-version = "1.0.1"
+base-forge-web-version = "1.0.0"
+base-forge-mybatis-extension-version = "1.0.0"
+base-forge-grpc-version = "1.0.0"
+base-forge-security-authentication-version = "1.0.0"
+base-forge-security-authorization-version = "1.0.0"
+base-forge-jwt-version = "1.0.0"
+
+[plugins]
+# 用于生成 IntelliJ IDEA 的项目文件，便于在 IDEA 中打开和管理项目
+idea = { id = "idea" }
+
+# 应用 Java 插件，提供基本的 Java 代码编译和构建能力
+java = { id = "java" }
+
+# 应用 Java Library 插件，支持库开发，提供 API 和实现分离的能力
+java-library = { id = "java-library" }
+
+# 应用 Maven 发布插件，支持项目的构建产物发布到 Maven 仓库
+maven-publish = { id = "maven-publish" }
+
+# 应用 Spring Boot 插件，提供 Spring Boot 应用的开发和运行能力
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-version" }
+
+# Spring 依赖管理插件，简化依赖版本管理
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management-version" }
+
+# 应用 Protobuf 插件，提供 Protobuf 文件的编译和生成能力
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-version" }
+
+# 引入 Kotlin 支持
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+
+# 支持 Spring 的 Kotlin 插件
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin-version" }
+
+# 让 Kotlin 支持访问 Java 的 Lombok 注解
+kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref = "kotlin-version" }
+
+# 支持 Kotlin JPA 插件
+kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin-version" }
+
+[libraries]
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3-version" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
+springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "spring-doc-version" }
+redisson = { module = "org.redisson:redisson-spring-boot-starter", version.ref = "redisson-version" }
+easy-es = { module = "cn.easy-es:easy-es-boot-starter", version.ref = "easy-es-version" }
+kotlinx-coroutines-core = { module = "org   .jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-version" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql-version" }
+tomcat-annotations-api = { module = "org.apache.tomcat:annotations-api", version.ref = "tomcat-version" }
+grpc-server = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpc-spring-boot-starter-version" }
+grpc-client = { module = "net.devh:grpc-client-spring-boot-starter", version.ref = "grpc-spring-boot-starter-version" }
+mybatis-plus-generator = { module = "com.baomidou:mybatis-plus-generator", version.ref = "mybatis-plus-version" }
+mybatis-plus-spring-boot3 = { module = "com.baomidou:mybatis-plus-spring-boot3-starter", version.ref = "mybatis-plus-version" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt-version" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt-version" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt-version" }
+
+# Base Forge dependencies
+base-forge-redis-starter = { module = "com.gewuyou:base-forge-redis-spring-boot-starter", version.ref = "base-forge-redis-version" }
+base-forge-web-starter = { module = "com.gewuyou:base-forge-web-spring-boot-starter", version.ref = "base-forge-web-version" }
+base-forge-web-starter-autoconfigure = { module = "com.gewuyou:base-forge-web-spring-boot-starter-autoconfigure", version.ref = "base-forge-web-version" }
+base-forge-i18n-starter = { module = "com.gewuyou:base-forge-i18n-spring-boot-starter", version.ref = "base-forge-i18n-version" }
+base-forge-util-starter = { module = "com.gewuyou:base-forge-util-spring-boot-starter", version.ref = "base-forge-util-version" }
+base-forge-core-starter = { module = "com.gewuyou:base-forge-core-spring-boot-starter", version.ref = "base-forge-core-version" }
+base-forge-mybatis-extension-starter = { module = "com.gewuyou:base-forge-mybatis-extension-spring-boot-starter", version.ref = "base-forge-mybatis-extension-version" }
+base-forge-json-starter = { module = "com.gewuyou:base-forge-json-spring-boot-starter", version.ref = "base-forge-json-version" }
+base-forge-log-starter = { module = "com.gewuyou:base-forge-log-spring-boot-starter", version.ref = "base-forge-log-version" }
+base-forge-log-starter-autoconfigure = { module = "com.gewuyou:base-forge-log-spring-boot-starter-autoconfigure", version.ref = "base-forge-log-version" }
+base-forge-async-starter = { module = "com.gewuyou:base-forge-async-spring-boot-starter", version.ref = "base-forge-async-version" }
+base-forge-grpc-starter = { module = "com.gewuyou:base-forge-grpc-spring-boot-starter", version.ref = "base-forge-grpc-version" }
+base-forge-security-authentication-starter = { module = "com.gewuyou:base-forge-security-authentication-spring-boot-starter", version.ref = "base-forge-security-authentication-version" }
+base-forge-security-authentication-starter-autoconfigure = { module = "com.gewuyou:base-forge-security-authentication-spring-boot-starter-autoconfigure", version.ref = "base-forge-security-authentication-version" }
+base-forge-security-authorization-starter = { module = "com.gewuyou:base-forge-security-authorization-spring-boot-starter", version.ref = "base-forge-security-authorization-version" }
+base-forge-security-authorization-starter-autoconfigure = { module = "com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure", version.ref = "base-forge-security-authorization-version" }
+base-forge-jwt-starter = { module = "com.gewuyou:base-forge-jwt-spring-boot-starter", version.ref = "base-forge-jwt-version" }
+base-forge-jwt-starter-autoconfigure = { module = "com.gewuyou:base-forge-jwt-spring-boot-starter-autoconfigure", version.ref = "base-forge-jwt-version" }
