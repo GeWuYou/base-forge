@@ -85,7 +85,4 @@ dependencyManagement {
         dependency("com.gewuyou:base-forge-jwt-spring-boot-starter:${baseForgeJwtVersion}")
         dependency("com.gewuyou:base-forge-jwt-spring-boot-starter-autoconfigure:${baseForgeJwtVersion}")
     }
-    jar {
-        enabled = true
-    }
 }

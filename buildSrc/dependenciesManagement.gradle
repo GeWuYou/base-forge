@@ -1,0 +1,8 @@
+ext{
+    set("jibVersion", "3.4.2")
+}
+
+dependencies {
+    // 导入 jib 依赖
+    implementation("com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin:${jibVersion}")
+}
