@@ -1,4 +1,4 @@
-package com.gewuyou.gradle.task.gradle
+package com.gewuyou.baseforge.task.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

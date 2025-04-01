@@ -1,4 +1,4 @@
-package com.gewuyou.gradle.jib.entity
+package com.gewuyou.baseforge.plugin.jib.entity
 
 
 /**

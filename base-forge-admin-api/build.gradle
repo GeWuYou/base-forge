@@ -1,4 +1,4 @@
 
 dependencies {
-
+    implementation('com.gewuyou:base-forge-web-spring-boot-starter')
 }

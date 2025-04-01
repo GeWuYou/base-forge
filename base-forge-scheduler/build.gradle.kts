@@ -1,5 +1,8 @@
 
 dependencies {
-    implementation ("org.springframework.boot:spring-boot-starter-quartz")
+    val libs = rootProject.libs
+    // web 模块依赖
+    implementation(libs.bundles.springBootStarter.baseforge.web.all)
+    implementation (libs.springBootStarter.quartz)
 
 }

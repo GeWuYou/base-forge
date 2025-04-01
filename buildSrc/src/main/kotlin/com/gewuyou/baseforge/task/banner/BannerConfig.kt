@@ -1,4 +1,4 @@
-package com.gewuyou.gradle.task.banner
+package com.gewuyou.baseforge.task.banner
 
 /**
  *横幅配置

@@ -1,6 +1,7 @@
-package com.gewuyou.gradle.jib.config
+package com.gewuyou.baseforge.plugin.jib.config
 
-import com.gewuyou.gradle.jib.entity.JibProject
+import com.gewuyou.baseforge.plugin.jib.entity.JibProject
+
 
 // 在此配置需要引入的项目
 val jibProjects = listOf(

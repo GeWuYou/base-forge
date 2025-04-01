@@ -1,6 +1,5 @@
-package com.gewuyou.gradle.task.banner
+package com.gewuyou.baseforge.task.banner
 
-import groovy.transform.Internal
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
@@ -39,7 +38,7 @@ abstract class CopyBannerTask : DefaultTask() {
 }
 
 abstract class CleanBannerTask : DefaultTask() {
-    @get:Internal
+    @get:InputFile
     abstract val targetBanner: RegularFileProperty
 
     @TaskAction

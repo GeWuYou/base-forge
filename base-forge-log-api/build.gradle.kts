@@ -1,9 +1,12 @@
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-configuration-processor")
-    implementation("org.springframework.boot:spring-boot-autoconfigure")
-    implementation("com.gewuyou:base-forge-log-spring-boot-starter")
-    implementation("com.gewuyou:base-forge-log-spring-boot-starter-autoconfigure")
-    implementation("org.springframework.security:spring-security-core")
+    val libs = rootProject.libs
+    // grpc模块依赖
+    implementation(libs.springBootStarter.baseforge.grpc)
+    // SpringBootStarter模块依赖
+    implementation(libs.springBootStarter)
+    // SpringBootStarterProcessor模块依赖
+    implementation(libs.springBoot.configuration.processor)
+    // 日志模块依赖
+    implementation(libs.bundles.springBootStarter.baseforge.log.all)
 }

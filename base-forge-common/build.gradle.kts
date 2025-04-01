@@ -1,24 +1,31 @@
+plugins {
+    // Protobuf 支持
+    alias(libs.plugins.protobuf)
+}
 dependencies {
-    api("com.gewuyou:base-forge-i18n-spring-boot-starter")
-    api(libs.base.forge.i18n.starter)
-    api("com.gewuyou:base-forge-core-spring-boot-starter")
-    api(libs.base.forge.core.starter)
-    api("com.gewuyou:base-forge-util-spring-boot-starter")
-    api(libs.base.forge.util.starter)
-    api("com.gewuyou:base-forge-json-spring-boot-starter")
-    api(libs.base.forge.json.starter)
-    api("org.springframework.boot:spring-boot-starter-web")
+    val libs = rootProject.libs
+    api(libs.springBootStarter.baseforge.i18n)
+    api(libs.springBootStarter.baseforge.core)
+    api(libs.springBootStarter.baseforge.util)
+    api(libs.springBootStarter.baseforge.json)
+    api(libs.springBootStarter.web)
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
-    api ("org.springframework.boot:spring-boot-configuration-processor")
+    api (libs.springBoot.configuration.processor)
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
-    api ("org.springframework.boot:spring-boot-starter-validation")
+    api (libs.springBootStarter.validation)
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     api (libs.commons.lang3)
-    api ("org.springframework.boot:spring-boot-starter-aop")
+    api (libs.springBootStarter.aop)
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-freemarker
-    implementation ("org.springframework.boot:spring-boot-starter-freemarker")
+    implementation (libs.springBootStarter.freemarker)
     // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-generator
     implementation (libs.mybatis.plus.generator)
+    // Springdoc OpenApi
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
+    implementation(libs.mybatis.plus.spring.boot3.starter)
+    // SpringBootStarter Data JPA
+    implementation(libs.springBootStarter.data.jpa)
+    compileOnly(libs.bundles.grpcBase)
 }
 protobuf {
     protoc {

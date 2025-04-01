@@ -1,5 +1,8 @@
 dependencies {
-    implementation ("org.springframework.cloud:spring-cloud-config-server")
-    implementation ("org.springframework.cloud:spring-cloud-starter-bus-amqp")
-    implementation ("org.springframework.boot:spring-boot-starter-actuator")
+    val libs = rootProject.libs
+    implementation (libs.springCloudStarter.config.server)
+    implementation (libs.springCloudStarter.bus.amqp)
+    implementation (libs.springBootStarter.actuator)
+    // 核心模块依赖
+    implementation(libs.springBootStarter.baseforge.core)
 }

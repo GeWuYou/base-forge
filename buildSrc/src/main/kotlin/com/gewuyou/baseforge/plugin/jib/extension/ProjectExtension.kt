@@ -1,6 +1,8 @@
-package com.gewuyou.gradle.jib.extension
+package com.gewuyou.baseforge.plugin.jib.extension
 
-import com.gewuyou.gradle.jib.entity.JibProject
+
+
+import com.gewuyou.baseforge.plugin.jib.entity.JibProject
 import com.google.cloud.tools.jib.gradle.JibExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
