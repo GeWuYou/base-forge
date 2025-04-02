@@ -9,8 +9,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/GeWuYou/base-forge-starter")
             credentials {
-                username = findProperty("gprUser")  ?: System.getenv("USERNAME")
-                password = findProperty("gprToken") ?: System.getenv("TOKEN")
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

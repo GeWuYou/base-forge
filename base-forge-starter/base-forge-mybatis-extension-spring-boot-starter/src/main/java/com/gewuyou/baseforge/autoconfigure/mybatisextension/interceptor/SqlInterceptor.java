@@ -1,6 +1,7 @@
 package com.gewuyou.baseforge.autoconfigure.mybatisextension.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -55,7 +56,11 @@ public class SqlInterceptor implements Interceptor {
         } catch (Exception e) {
             log.error("解析SQL语句出错", e);
         } finally {
-            log.info("\nSQL执行耗时：{}ms\nSQL语句：{}", executionTime, sql);
+            if (StringUtils.isNotBlank(sql)) {
+                log.info("\nSQL执行耗时：{}ms\nSQL语句：{}", executionTime, sql);
+            } else {
+                log.info("\nSQL执行耗时：{}ms", executionTime);
+            }
         }
         return proceed;
     }
@@ -119,10 +124,11 @@ public class SqlInterceptor implements Interceptor {
 
     /**
      * 处理参数映射
-     * @param sql             SQL语句
-     * @param boundSql        绑定SQL对象
-     * @param parameterObject 参数对象
-     * @param configuration   MyBatis配置信息
+     *
+     * @param sql              SQL语句
+     * @param boundSql         绑定SQL对象
+     * @param parameterObject  参数对象
+     * @param configuration    MyBatis配置信息
      * @param parameterMapping 参数映射
      * @return 处理后的SQL语句
      */

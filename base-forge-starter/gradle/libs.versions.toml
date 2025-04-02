@@ -19,6 +19,7 @@ kotlin-version = "2.1.0"
 kotlinx-version = "1.10.1"
 postgresql-version = "42.7.4"
 tools-jib-gradle-plugin-version = "3.4.2"
+userAgentUtils-version = "1.21"
 # Base Forge dependencies
 base-forge-i18n-version = "1.0.4"
 base-forge-util-version = "1.0.1"
@@ -67,6 +68,7 @@ kotlin-plugin-lombok = { id = "org.jetbrains.kotlin.plugin.lombok", version.ref 
 kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin-version" }
 
 [libraries]
+userAgentUtils = { module = "eu.bitwalker:UserAgentUtils", version.ref = "userAgentUtils-version" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3-version" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "spring-doc-version" }
@@ -85,6 +87,7 @@ jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt-ve
 springBootStarter-grpc-client = { group = "net.devh", name = "grpc-client-spring-boot-starter", version.ref = "grpc-spring-boot-starter-version" }
 springBootStarter-grpc-server = { group = "net.devh", name = "grpc-server-spring-boot-starter", version.ref = "grpc-spring-boot-starter-version" }
 comGoogleCloud-tools-jib-gradle-plugin = { module="com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin", version.ref = "tools-jib-gradle-plugin-version" }
+springBoot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "spring-boot-version" }
 # Bom
 grpc-bom = { module = "io.grpc:grpc-bom", version.ref = "grpc-version" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin-version" }
@@ -101,10 +104,12 @@ springBootStarter-data-redis = { group = "org.springframework.boot", name = "spr
 springBootStarter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 springBootStarter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 springBootStarter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+springBootStarter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
 springBootStarter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 springBootStarter-aop = { group = "org.springframework.boot", name = "spring-boot-starter-aop" }
 springBootStarter-thymeleaf = { group = "org.springframework.boot", name = "spring-boot-starter-thymeleaf" }
 springBootStarter-freemarker = { group = "org.springframework.boot", name = "spring-boot-starter-freemarker" }
+springBootStarter-amqp = { group = "org.springframework.boot", name = "spring-boot-starter-amqp" }
 springCloudStarter-gateway = { group = "org.springframework.cloud", name = "spring-cloud-starter-gateway" }
 springCloudStarter-config = { group = "org.springframework.cloud", name = "spring-cloud-starter-config" }
 springCloudStarter-eureka = { group = "org.springframework.cloud", name = "spring-cloud-starter-eureka" }
@@ -112,16 +117,21 @@ springCloudStarter-config-server = { group = "org.springframework.cloud", name =
 springCloudStarter-netflix-eureka-server = { group = "org.springframework.cloud", name = "spring-cloud-starter-netflix-eureka-server" }
 springCloudStarter-bus-amqp = { group = "org.springframework.cloud", name = "spring-cloud-starter-bus-amqp" }
 springCloudStarter-netflix-eureka-client = { group = "org.springframework.cloud", name = "spring-cloud-starter-netflix-eureka-client" }
-
-springBoot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
 springCloudStarter-openfeign = { group = "org.springframework.cloud", name = "spring-cloud-starter-openfeign" }
-springBootStarter-amqp = { group = "org.springframework.boot", name = "spring-boot-starter-amqp" }
 springRabbit-test = { group = "org.springframework.amqp", name = "spring-rabbit-test" }
 grpc-netty = { group = "io.grpc", name = "grpc-netty" }
 grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf" }
 grpc-stub = { group = "io.grpc", name = "grpc-stub" }
 grpc-services = { group = "io.grpc", name = "grpc-services" }
 grpc-netty-shaded = { group = "io.grpc", name = "grpc-netty-shaded" }
+
+json-core={group="com.fasterxml.jackson.core", name="jackson-core"}
+json-databind={group="com.fasterxml.jackson.core", name="jackson-databind"}
+json-annotations={group="com.fasterxml.jackson.core", name="jackson-annotations"}
+json-datatype-jsr310={group="com.fasterxml.jackson.datatype", name="jackson-datatype-jsr310"}
+json-module-kotlin={group="com.fasterxml.jackson.module", name="jackson-module-kotlin"}
+reactor-core={group="io.projectreactor", name="reactor-core"}
+
 annotations-api = { group = "org.apache.tomcat", name = "tomcat-annotations-api" }
 
 protobuf-java = { group = "com.google.protobuf", name = "protobuf-java" }
@@ -148,7 +158,6 @@ springBootStarter-baseforge-authorization = { module = "com.gewuyou:base-forge-s
 springBootStarter-baseforge-authorization-autoconfigure = { module = "com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure", version.ref = "base-forge-security-authorization-version" }
 springBootStarter-baseforge-jwt = { module = "com.gewuyou:base-forge-jwt-spring-boot-starter", version.ref = "base-forge-jwt-version" }
 springBootStarter-baseforge-jwt-autoconfigure = { module = "com.gewuyou:base-forge-jwt-spring-boot-starter-autoconfigure", version.ref = "base-forge-jwt-version" }
-
 #设置依赖组
 [bundles]
 springBootStarter-baseforge-web-all = [
@@ -186,4 +195,10 @@ grpcServer = [
     "grpc-stub", "grpc-services", "annotations-api",
     "springBootStarter-grpc-server", "protobuf-java",
     "protobuf-java-util"
+]
+jacksonAll = [
+   "json-core", "json-databind", "json-annotations","json-datatype-jsr310", "json-module-kotlin"
+]
+jjwtAll = [
+    "jjwt-api", "jjwt-impl", "jjwt-jackson"
 ]

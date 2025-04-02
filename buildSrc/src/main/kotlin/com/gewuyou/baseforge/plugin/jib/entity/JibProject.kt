@@ -6,10 +6,10 @@ package com.gewuyou.baseforge.plugin.jib.entity
  * @author gewuyou
  * @date 2025/03/30
  * @constructor 创建[JibProject]
- * @param [projectName]
- * @param [ports]
+ * @param [projectName] 项目名称
+ * @param [ports] 监听端口
  * @param [environment] 环境
- * @param [entrypoint] 入口点
+ * @param [entrypoint] 入口点(用于自定义启动命令)
  * @param [imageName] 图像名称
  * @param [version] 版本
  * @param [permissions] 权限

@@ -1,4 +1,0 @@
-
-dependencies {
-    implementation("io.grpc:grpc-stub")
-}

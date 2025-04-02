@@ -18,7 +18,7 @@ val jibProjects = listOf(
             "/bin/sh", "-c",
             "apt-get update && apt-get install -y netcat-openbsd && " +
                     "/entrypoint.sh -d base-forge-config:8888 -c " +
-                    "'java -cp \$( cat /app/jib-classpath-file ) \$( cat /app/jib-main-class-file )'"
+                    "'java -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )'"
         )
     ),
     JibProject(
@@ -29,7 +29,7 @@ val jibProjects = listOf(
             "/bin/sh", "-c",
             "apt-get update && apt-get install -y netcat-openbsd && " +
                     "/entrypoint.sh -d base-forge-discovery:8761 -c " +
-                    "'java -cp \$( cat /app/jib-classpath-file ) \$( cat /app/jib-main-class-file )'"
+                    "'java -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )'"
         )
     )
 )
