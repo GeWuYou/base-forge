@@ -20,20 +20,6 @@ kotlinx-version = "1.10.1"
 postgresql-version = "42.7.4"
 tools-jib-gradle-plugin-version = "3.4.2"
 userAgentUtils-version = "1.21"
-# Base Forge dependencies
-base-forge-i18n-version = "1.0.4"
-base-forge-util-version = "1.0.1"
-base-forge-core-version = "1.0.0"
-base-forge-log-version = "1.0.0"
-base-forge-json-version = "1.0.1"
-base-forge-async-version = "1.0.0"
-base-forge-redis-version = "1.0.1"
-base-forge-web-version = "1.0.0"
-base-forge-mybatis-extension-version = "1.0.0"
-base-forge-grpc-version = "1.0.0"
-base-forge-security-authentication-version = "1.0.0"
-base-forge-security-authorization-version = "1.0.0"
-base-forge-jwt-version = "1.0.0"
 [plugins]
 # 应用 Gradle 基础插件，提供项目的基础配置和插件管理能力
 java-gradle-plugin = { id = "java-gradle-plugin" }
@@ -139,45 +125,9 @@ protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util
 
 
 
-# Base Forge dependencies
-springBootStarter-baseforge-redis = { module = "com.gewuyou:base-forge-redis-spring-boot-starter", version.ref = "base-forge-redis-version" }
-springBootStarter-baseforge-web = { module = "com.gewuyou:base-forge-web-spring-boot-starter", version.ref = "base-forge-web-version" }
-springBootStarter-baseforge-web-autoconfigure = { module = "com.gewuyou:base-forge-web-spring-boot-starter-autoconfigure", version.ref = "base-forge-web-version" }
-springBootStarter-baseforge-i18n = { module = "com.gewuyou:base-forge-i18n-spring-boot-starter", version.ref = "base-forge-i18n-version" }
-springBootStarter-baseforge-util = { module = "com.gewuyou:base-forge-util-spring-boot-starter", version.ref = "base-forge-util-version" }
-springBootStarter-baseforge-core = { module = "com.gewuyou:base-forge-core-spring-boot-starter", version.ref = "base-forge-core-version" }
-springBootStarter-baseforge-mybatis-extension = { module = "com.gewuyou:base-forge-mybatis-extension-spring-boot-starter", version.ref = "base-forge-mybatis-extension-version" }
-springBootStarter-baseforge-json = { module = "com.gewuyou:base-forge-json-spring-boot-starter", version.ref = "base-forge-json-version" }
-springBootStarter-baseforge-log = { module = "com.gewuyou:base-forge-log-spring-boot-starter", version.ref = "base-forge-log-version" }
-springBootStarter-baseforge-log-autoconfigure = { module = "com.gewuyou:base-forge-log-spring-boot-starter-autoconfigure", version.ref = "base-forge-log-version" }
-springBootStarter-baseforge-async = { module = "com.gewuyou:base-forge-async-spring-boot-starter", version.ref = "base-forge-async-version" }
-springBootStarter-baseforge-grpc = { module = "com.gewuyou:base-forge-grpc-spring-boot-starter", version.ref = "base-forge-grpc-version" }
-springBootStarter-baseforge-authentication = { module = "com.gewuyou:base-forge-security-authentication-spring-boot-starter", version.ref = "base-forge-security-authentication-version" }
-springBootStarter-baseforge-authentication-autoconfigure = { module = "com.gewuyou:base-forge-security-authentication-spring-boot-starter-autoconfigure", version.ref = "base-forge-security-authentication-version" }
-springBootStarter-baseforge-authorization = { module = "com.gewuyou:base-forge-security-authorization-spring-boot-starter", version.ref = "base-forge-security-authorization-version" }
-springBootStarter-baseforge-authorization-autoconfigure = { module = "com.gewuyou:base-forge-security-authorization-spring-boot-starter-autoconfigure", version.ref = "base-forge-security-authorization-version" }
-springBootStarter-baseforge-jwt = { module = "com.gewuyou:base-forge-jwt-spring-boot-starter", version.ref = "base-forge-jwt-version" }
-springBootStarter-baseforge-jwt-autoconfigure = { module = "com.gewuyou:base-forge-jwt-spring-boot-starter-autoconfigure", version.ref = "base-forge-jwt-version" }
+
 #设置依赖组
 [bundles]
-springBootStarter-baseforge-web-all = [
-    "springBootStarter-baseforge-web", "springBootStarter-baseforge-web-autoconfigure"
-]
-springBootStarter-baseforge-authentication-all = [
-    "springBootStarter-baseforge-authentication",
-    "springBootStarter-baseforge-authentication-autoconfigure"
-]
-springBootStarter-baseforge-authorization-all = [
-    "springBootStarter-baseforge-authorization",
-    "springBootStarter-baseforge-authorization-autoconfigure"
-]
-springBootStarter-baseforge-jwt-all = [
-    "springBootStarter-baseforge-jwt", "springBootStarter-baseforge-jwt-autoconfigure"
-]
-springBootStarter-baseforge-log-all = [
-    "springBootStarter-baseforge-log", "springBootStarter-baseforge-log-autoconfigure"
-]
-
 springCloudStarter-configClient = [
     "springCloudStarter-config", "springCloudStarter-bus-amqp"
 ]

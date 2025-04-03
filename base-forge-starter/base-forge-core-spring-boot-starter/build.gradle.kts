@@ -1,4 +1,4 @@
 
 dependencies {
-    compileOnly (project(":base-forge-i18n-spring-boot-starter"))
+    compileOnly (project(Modules.I18N.SPRING_BOOT_STARTER))
 }

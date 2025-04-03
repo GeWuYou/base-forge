@@ -2,7 +2,7 @@ dependencies {
     val libs = rootProject.libs
 
     // Base Forge Core Starter
-    implementation(project(":base-forge-core-spring-boot-starter"))
+    implementation(project(Modules.CORE.SPRING_BOOT_STARTER))
 
     // Reactor Core (Compile Only)
     // https://mvnrepository.com/artifact/io.projectreactor/reactor-core

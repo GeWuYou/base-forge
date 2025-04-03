@@ -3,17 +3,18 @@ dependencies {
 
     // Security
     api(libs.springBootStarter.security)
-    api(project(":base-forge-jwt-spring-boot-starter"))
+    // JWT 认证模块 (API暴露)
+    api(project(Modules.JWT.SPRING_BOOT_STARTER))
 
-    // Base Forge Core Modules (Compile Only)
-    compileOnly(project(":base-forge-i18n-spring-boot-starter"))
-    compileOnly(project(":base-forge-core-spring-boot-starter"))
-    compileOnly(project(":base-forge-web-spring-boot-starter"))
-    compileOnly(project(":base-forge-security-authentication-spring-boot-starter"))
+    // ===== 基础核心模块 (仅编译期) =====
+    compileOnly(project(Modules.I18N.SPRING_BOOT_STARTER))
+    compileOnly(project(Modules.CORE.SPRING_BOOT_STARTER))
+    compileOnly(project(Modules.WEB.SPRING_BOOT_STARTER))
+    compileOnly(project(Modules.SECURITY.Authentication.SPRING_BOOT_STARTER))
 
-    // Base Forge Implementation Modules
-    implementation(project(":base-forge-redis-spring-boot-starter"))
-    implementation(project(":base-forge-json-spring-boot-starter"))
+    // ===== 实现模块 (运行时依赖) =====
+    implementation(project(Modules.REDIS.SPRING_BOOT_STARTER))
+    implementation(project(Modules.JSON.SPRING_BOOT_STARTER))
 
     // Commons Lang3
     implementation(libs.commons.lang3)

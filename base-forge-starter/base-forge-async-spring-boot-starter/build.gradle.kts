@@ -2,8 +2,8 @@ dependencies {
     val libs = rootProject.libs
 
     // 项目依赖
-    compileOnly(project(":base-forge-i18n-spring-boot-starter"))
-    compileOnly(project(":base-forge-core-spring-boot-starter"))
+    compileOnly(project(Modules.I18N.SPRING_BOOT_STARTER))
+    compileOnly(project(Modules.CORE.SPRING_BOOT_STARTER))
 
     // Spring Boot Starter AOP
     compileOnly(libs.springBootStarter.aop)

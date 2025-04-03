@@ -2,9 +2,14 @@ dependencies {
     val libs = rootProject.libs
 
     // Base Forge Modules (Compile Only)
-    compileOnly(project(":base-forge-i18n-spring-boot-starter"))
-    compileOnly(project(":base-forge-util-spring-boot-starter"))
-    compileOnly(project(":base-forge-request-trace-spring-boot-starter"))
+    // 国际化模块 (compileOnly)
+    compileOnly(project(Modules.I18N.SPRING_BOOT_STARTER))
+
+    // 工具模块 (compileOnly)
+    compileOnly(project(Modules.UTIL.SPRING_BOOT_STARTER))
+
+    // 请求追踪模块 (compileOnly)
+    compileOnly(project(Modules.TRACE.SPRING_BOOT_STARTER))
     // Spring Data JPA (Compile Only)
     compileOnly(libs.springBootStarter.data.jpa)
 

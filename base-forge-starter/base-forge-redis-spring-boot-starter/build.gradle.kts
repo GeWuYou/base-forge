@@ -5,7 +5,12 @@ dependencies {
     implementation(libs.springBootStarter.data.redis)
 
     // Base Forge Core Modules (Compile Only)
-    compileOnly(project(":base-forge-core-spring-boot-starter"))
-    compileOnly(project(":base-forge-i18n-spring-boot-starter"))
-    compileOnly(project(":base-forge-json-spring-boot-starter"))
+    // 核心模块 (compileOnly)
+    compileOnly(project(Modules.CORE.SPRING_BOOT_STARTER))
+
+    // 国际化模块 (compileOnly)
+    compileOnly(project(Modules.I18N.SPRING_BOOT_STARTER))
+
+    // JSON处理模块 (compileOnly)
+    compileOnly(project(Modules.JSON.SPRING_BOOT_STARTER))
 }
