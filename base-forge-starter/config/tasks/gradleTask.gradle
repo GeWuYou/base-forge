@@ -2,16 +2,16 @@ def gradleOperation = "gradleOperation"
 
 // 提供清理 Gradle 相关文件的任务
 tasks.register("cleanGradlew", Delete) { Delete delete ->
-    println("根路径为 ${rootDir}")
-    println("正在清理 Gradle 相关文件...")
+    logger.info("根路径为 ${rootDir}")
+    logger.info("正在清理 Gradle 相关文件...")
     def targets = []
 
     // 获取所有子模块路径
     def includedProjects = subprojects.collect { it.name }
-    println("子模块路径为 ${includedProjects}")
+    logger.info("子模块路径为 ${includedProjects}")
     includedProjects.each { subProject ->
         def projectDir = file("${rootDir}/${subProject}")
-        println("正在检查 ${projectDir} 目录下是否有Gradle相关文件...")
+        logger.info("正在检查 ${projectDir} 目录下是否有Gradle相关文件...")
         targets << file("${projectDir}/gradlew")
         targets << file("${projectDir}/gradlew.bat")
         targets << file("${projectDir}/gradle/wrapper/gradle-wrapper.jar")
@@ -19,13 +19,13 @@ tasks.register("cleanGradlew", Delete) { Delete delete ->
         targets << file("${projectDir}/.gradle") // Gradle 缓存目录
         targets << file("${projectDir}/gradle") // Gradle 目录
     }
-    println("清理目标文件列表为 ${targets}")
+    logger.info("清理目标文件列表为 ${targets}")
     // 过滤存在的文件并删除
     targets.findAll { it.exists() }.each { target ->
-        println("正在删除 ${target} 文件...")
+        logger.info("正在删除 ${target} 文件...")
         delete.delete(target)
     }
-    println("Gradle 相关文件清理完成.")
+    logger.info("Gradle 相关文件清理完成.")
 }.configure {
     group = gradleOperation
     description = '删除根目录及子模块的 Gradle 相关文件'
