@@ -15,12 +15,13 @@ package com.gewuyou.baseforge.plugin.jib.entity
  * @param [permissions] 权限
  */
 data class JibProject(
-    val projectName: String,
-    val ports: List<String> = listOf("8080"),
-    val environment: Map<String, String> = mapOf("SPRING_PROFILES_ACTIVE" to "prod"),
-    val entrypoint: List<String> = emptyList(),
-    val paths: List<String> = listOf("../scripts"),
-    val imageName: String = projectName,
-    val version: String = "latest",
-    val permissions: Map<String, String> = mapOf("/scripts/entrypoint.sh" to "755")
+    var projectName: String = "",
+    var ports: List<String> = listOf("8080"),
+    var environment: Map<String, String> = mapOf("SPRING_PROFILES_ACTIVE" to "prod"),
+    var entrypoint: List<String> = emptyList(),
+    var paths: List<String> = listOf("../scripts"),
+    var imageName: String = projectName,
+    var version: String = "latest",
+    var permissions: Map<String, String> = mapOf("/scripts/entrypoint.sh" to "755"),
+    var baseImage: String = "eclipse-temurin:21-jdk"
 )

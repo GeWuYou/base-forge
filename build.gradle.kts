@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.utils.extendsFrom
 
 plugins {
+    application
     // 基本 Java 支持
     alias(libs.plugins.java)
     // Java 库开发支持
@@ -23,6 +24,7 @@ plugins {
     alias(libs.plugins.kotlin.plugin.lombok)
     // Kotlin JPA 支持
     alias(libs.plugins.kotlin.plugin.jpa)
+    id("com.gewuyou.baseforge.plugin.jib")
 }
 
 // 排除根项目的 Kotlin 标准库依赖
@@ -58,10 +60,41 @@ subprojects {
     apply(plugin = "com.gewuyou.baseforge.plugin.task.banner")
 
     apply(from = "$configDir/repositories.gradle")
-
     configure<JavaPluginExtension> {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
+
+    jibConfig {
+        project {
+            projectName = "base-forge-config"
+            ports = listOf("8080")
+            environment = mapOf("SPRING_PROFILES_ACTIVE" to "native")
+        }
+
+        project {
+            projectName = "base-forge-discovery"
+            ports = listOf("8761")
+            environment = mapOf("SPRING_PROFILES_ACTIVE" to "prod")
+            entrypoint = listOf(
+                "/bin/sh", "-c",
+                "apt-get update && apt-get install -y netcat-openbsd && " +
+                        "/entrypoint.sh -d base-forge-config:8888 -c " +
+                        "'java -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )'"
+            )
+        }
+
+        project {
+            projectName = "base-forge-gateway"
+            ports = listOf("8082")
+            environment = mapOf("SPRING_PROFILES_ACTIVE" to "prod")
+            entrypoint = listOf(
+                "/bin/sh", "-c",
+                "apt-get update && apt-get install -y netcat-openbsd && " +
+                        "/entrypoint.sh -d base-forge-discovery:8761 -c " +
+                        "'java -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )'"
+            )
         }
     }
 
